@@ -2,6 +2,7 @@
 
 
 import pygame
+import pygame.locals as pg
 
 
 class HomeScreen():
@@ -11,16 +12,29 @@ class HomeScreen():
     background = pygame.image.load('../data/images/home/background.gif')
 
     def __init__(self):
-        pass
+        self.theme_playing = True
 
-    def start(self, window):
-        self.window = window
+    def start(self, surface, eventmanager):
+        self.surface = surface
+        self.eventmanager = eventmanager
         try:
-            soundtrack = pygame.mixer.Sound('../data/sound/dunwalls_theme.ogg')
+            self.soundtrack = pygame.mixer.Sound(
+                '../data/sound/dunwalls_theme.ogg')
         except pygame.error as e:
             print("Dismissed exception: ", e)
         else:
-            soundtrack.play(-1)
+            self.eventmanager.on_key_down(self.toggle_theme, pg.K_s)
+            self.toggle_theme(force=True)
+
+    def toggle_theme(self, *args, **kwargs):
+        try:
+            self.theme_playing = kwargs["force"]
+        except KeyError:
+            self.theme_playing = not self.theme_playing
+        if self.theme_playing:
+            self.soundtrack.play(-1)
+        else:
+            self.soundtrack.stop()
 
     def draw(self):
-        self.window.surface.blit(self.background, (0, 0))
+        self.surface.blit(self.background, (0, 0))
