@@ -3,6 +3,8 @@
 import pygame
 import pygame.locals as pg
 
+from event_manager import EventManager
+
 FPS = 30
 
 
@@ -15,27 +17,30 @@ class Window():
         """
         self.surface = pygame.display.set_mode((1024, 574), pg.DOUBLEBUF)
         pygame.display.set_caption("Dunwall's Gate")
+        self.eventmanager = EventManager()
         self._screen = None
         self.set_screen(screen)
         self.fpsClock = pygame.time.Clock()
+        self.do_run = True
 
     def set_screen(self, screen):
         """
         Define the screen to be displayed in the window
         """
         self._screen = screen
-        self._screen.start(self)
+        self._screen.start(self.surface, self.eventmanager)
+
+    def set_do_run(self, value=True):
+        self.do_run = value
 
     def run(self):
         """
         Run the game
         """
-        run = True
-        while run:
+        self.eventmanager.on_quit(lambda: self.set_do_run(False), True)
+        while self.do_run:
             self._screen.draw()
-            for event in pygame.event.get():
-                if event.type == pg.QUIT:
-                    run = False
+            self.eventmanager.run(pygame.event.get())
             pygame.display.flip()
             self.fpsClock.tick(FPS)
         pygame.quit()
