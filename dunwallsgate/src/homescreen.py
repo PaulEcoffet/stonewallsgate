@@ -13,8 +13,14 @@ class HomeScreen():
     def __init__(self):
         pass
 
-    def set_window(self, window):
+    def start(self, window):
         self.window = window
+        try:
+            soundtrack = pygame.mixer.Sound('../data/sound/dunwalls_theme.ogg')
+        except pygame.error as e:
+            print("Dismissed exception: ", e)
+        else:
+            soundtrack.play(-1)
 
     def draw(self):
         self.window.surface.blit(self.background, (0, 0))

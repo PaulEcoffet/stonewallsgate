@@ -24,7 +24,7 @@ class Window():
         Define the screen to be displayed in the window
         """
         self._screen = screen
-        self._screen.set_window(self)
+        self._screen.start(self)
 
     def run(self):
         """
