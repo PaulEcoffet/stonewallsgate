@@ -3,7 +3,7 @@
 import pygame
 
 from window import Window
-from homescreen import HomeScreen
+from screens.homescreen import HomeScreen
 
 
 def main():
