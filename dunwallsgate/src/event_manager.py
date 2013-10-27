@@ -33,6 +33,28 @@ class EventManager():
         except:
             callbacks["key"] = [(which, callback)]
 
+    def on_click_on(self, collidable, callback, button=1, global_=False):
+        """
+        Register a callback called when the collidable object is clicked.
+        collidable - The object that might be clicked, must implement a
+                     collidepoint method
+        callback - the callback to be triggered when the collidable is clicked
+        button - The mouse button to be clicked so as to trigger the event,
+                 must be either a int or a tuple.
+                 ex : 1 - left mouse button, (1, 2) - left and right mouse
+                 buttons, 0 : all mouse buttons (including scroll up & down)
+        """
+        if global_:
+            callbacks = self.globalCallbacks
+        else:
+            callbacks = self.screenCallbacks
+        if not isinstance(button, tuple):
+            button = (button,)
+        try:
+            callbacks["mouse"].append((button, collidable, callback))
+        except:
+            callbacks["mouse"] = [(button, collidable, callback)]
+
     def on_quit(self, callback, global_=False):
         if global_:
             callbacks = self.globalCallbacks
@@ -54,6 +76,11 @@ class EventManager():
             elif event.type == pg.QUIT:
                 for callback in self.both_callbacks("quit"):
                     callback()
+            elif event.type == pg.MOUSEBUTTONUP:
+                for callback in self.both_callbacks("mouse"):
+                    if (event.button in callback[0] and
+                        callback[1].collidepoint(event.pos)):
+                        callback[2]()
 
     def on_custom_event(self, event_name, data, callback, global_=False):
         if global_:
