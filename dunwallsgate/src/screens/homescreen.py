@@ -9,18 +9,37 @@ class HomeScreen():
     """
     The home screen of the game. It is displayed at start up
     """
-    background = pygame.image.load('../data/images/home/background.gif')
-    exit = pygame.image.load('../data/images/home/exit_button.gif')
-    load = pygame.image.load('../data/images/home/load_button.gif')
-    start = pygame.image.load('../data/images/home/start_button.gif')
+
+    # TODO UGLY
+    background = None
+    exit = None
+    load = None
+    start = None
 
     def __init__(self):
         self.theme_playing = True
+        self.first_draw = False
 
     def start(self, window, eventmanager):
         self.window = window
         self.surface = window.surface
         self.eventmanager = eventmanager
+        self.first_draw = True
+
+        if not self.background:
+            self.background = (pygame.image.load(
+                '../data/images/home/background.gif').convert())
+            self.exit = pygame.sprite.DirtySprite()
+            self.exit.image = (pygame.image.load(
+                '../data/images/home/exit_button.gif').convert())
+            self.load = pygame.sprite.DirtySprite()
+            self.load.image = (pygame.image.load(
+                '../data/images/home/load_button.gif').convert())
+            self.start = pygame.sprite.DirtySprite()
+            self.start.image = (pygame.image.load(
+                '../data/images/home/start_button.gif').convert())
+
+        # Soundtrack management
         try:
             self.soundtrack = pygame.mixer.Sound(
                 '../data/sound/dunwalls_theme.ogg')
@@ -29,7 +48,22 @@ class HomeScreen():
         else:
             self.eventmanager.on_key_down(self.toggle_theme, pg.K_s)
             self.toggle_theme(force=True)
-        self.eventmanager.on_click_on(self.exit, lambda: self.window.set_do_run(False))
+
+        # Sprites placement
+        self.exit.rect = self.exit.image.get_rect(
+            bottomright=(self.surface.get_width(),
+                         self.surface.get_height() - 15))
+        self.load.rect = self.load.image.get_rect(
+            bottomright=self.exit.rect.topright)
+        self.start.rect = self.start.image.get_rect(
+            bottomright=self.load.rect.topright)
+
+        self.buttons = pygame.sprite.RenderPlain(self.exit, self.load,
+                                                 self.start)
+
+        # Events registration
+        self.eventmanager.on_click_on(self.exit,
+                                      lambda: self.window.set_do_run(False))
 
     def toggle_theme(self, *args, **kwargs):
         try:
@@ -42,8 +76,8 @@ class HomeScreen():
             self.soundtrack.stop()
 
     def draw(self):
-        self.background.blit(self.exit, (
-            self.surface.get_width() - self.exit.get_width(),
-            self.surface.get_height() - self.exit.get_height()
-            ))
-        self.surface.blit(self.background, (0, 0))
+        if self.first_draw:
+            self.surface.blit(self.background, (0, 0))
+            self.first_draw = False
+        self.buttons.clear(self.surface, self.background)
+        self.buttons.draw(self.surface)
