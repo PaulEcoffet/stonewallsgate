@@ -37,7 +37,7 @@ class EventManager():
         """
         Register a callback called when the collidable object is clicked.
         collidable - The object that might be clicked, must implement a
-                     collidepoint method
+                     collidepoint method, a get_rect method or a rect property
         callback - the callback to be triggered when the collidable is clicked
         button - The mouse button to be clicked so as to trigger the event,
                  must be either a int or a tuple.
@@ -78,9 +78,18 @@ class EventManager():
                     callback()
             elif event.type == pg.MOUSEBUTTONUP:
                 for callback in self.both_callbacks("mouse"):
-                    if (event.button in callback[0] and
-                        callback[1].collidepoint(event.pos)):
-                        callback[2]()
+                    if event.button in callback[0]:
+                        try:
+                            if callback[1].collidepoint(event.pos):
+                                callback[2]()
+                        except AttributeError:
+                            try:
+                                if (callback[1].get_rect()
+                                    .collidepoint(event.pos)):
+                                    callback[2]()
+                            except AttributeError:
+                                if callback[1].rect.collidepoint(event.pos):
+                                    callback[2]()
 
     def on_custom_event(self, event_name, data, callback, global_=False):
         if global_:
