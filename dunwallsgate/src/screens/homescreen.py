@@ -10,11 +10,10 @@ class HomeScreen():
     The home screen of the game. It is displayed at start up
     """
 
-    # TODO UGLY
     background = None
-    exit = None
-    load = None
-    start = None
+    exit_btn = None
+    load_btn = None
+    start_btn = None
 
     def __init__(self):
         self.theme_playing = True
@@ -26,19 +25,7 @@ class HomeScreen():
         self.eventmanager = eventmanager
         self.first_draw = True
 
-        if not self.background:
-            self.background = (pygame.image.load(
-                '../data/images/home/background.gif').convert())
-            self.exit = pygame.sprite.DirtySprite()
-            self.exit.image = (pygame.image.load(
-                '../data/images/home/exit_button.gif').convert())
-            self.load = pygame.sprite.DirtySprite()
-            self.load.image = (pygame.image.load(
-                '../data/images/home/load_button.gif').convert())
-            self.start = pygame.sprite.DirtySprite()
-            self.start.image = (pygame.image.load(
-                '../data/images/home/start_button.gif').convert())
-
+        self.init_sprites()
         # Soundtrack management
         try:
             self.soundtrack = pygame.mixer.Sound(
@@ -50,19 +37,17 @@ class HomeScreen():
             self.toggle_theme(force=True)
 
         # Sprites placement
-        self.exit.rect = self.exit.image.get_rect(
+        self.exit_btn.rect = self.exit_btn.image.get_rect(
             bottomright=(self.surface.get_width(),
                          self.surface.get_height() - 15))
-        self.load.rect = self.load.image.get_rect(
-            bottomright=self.exit.rect.topright)
-        self.start.rect = self.start.image.get_rect(
-            bottomright=self.load.rect.topright)
-
-        self.buttons = pygame.sprite.RenderPlain(self.exit, self.load,
-                                                 self.start)
-
+        self.load_btn.rect = self.load_btn.image.get_rect(
+            bottomright=self.exit_btn.rect.topright)
+        self.start_btn.rect = self.start_btn.image.get_rect(
+            bottomright=self.load_btn.rect.topright)
+        self.buttons = pygame.sprite.RenderPlain(self.exit_btn, self.load_btn,
+                                                 self.start_btn)
         # Events registration
-        self.eventmanager.on_click_on(self.exit,
+        self.eventmanager.on_click_on(self.exit_btn,
                                       lambda: self.window.set_do_run(False))
 
     def toggle_theme(self, *args, **kwargs):
@@ -81,3 +66,20 @@ class HomeScreen():
             self.first_draw = False
         self.buttons.clear(self.surface, self.background)
         self.buttons.draw(self.surface)
+
+    def init_sprites(self):
+        if not self.background:
+            self.background = (pygame.image.load(
+                '../data/images/home/background.gif').convert())
+        if not self.exit_btn:
+            self.exit_btn = pygame.sprite.DirtySprite()
+            self.exit_btn.image = (pygame.image.load(
+                '../data/images/home/exit_button.gif').convert())
+        if not self.load_btn:
+            self.load_btn = pygame.sprite.DirtySprite()
+            self.load_btn.image = (pygame.image.load(
+                '../data/images/home/load_button.gif').convert())
+        if not self.start_btn:
+            self.start_btn = pygame.sprite.DirtySprite()
+            self.start_btn.image = (pygame.image.load(
+                '../data/images/home/start_button.gif').convert())
