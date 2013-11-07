@@ -1,0 +1,31 @@
+{
+	"evenements":
+		[
+			{"condition": "est_debut",
+			 "ref": "nom_event"},
+			{"condition": "defaut",
+			 "ref": "defaut_station"}
+		]
+}
+
+
+{
+	"déclenchement_début": ["monter_vie(30)", "supprimer_obj(CLÉ_MOLETTE)"]
+	"Dialogue" : "ref_diag"
+	"Déclenchement_fin": ["continuer_chemin"]
+	"actions": ["Fouillez", "Partir"]
+}
+
+{
+	"déclenchement": ["combatvsboss()"]
+}
+
+
+python:
+
+ev = new Evenement(ref);
+ev.declenche()
+ev.get_action_choisie
+
+
+Scène 1 ev 1 -> scène x ev 1 -> scène ev 2
