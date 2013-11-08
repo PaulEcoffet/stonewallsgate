@@ -7,7 +7,7 @@ est réalisé par Elias RHOUZLANE et Paul ECOFFET.
 Lancer le projet
 ----------------
 Le projet peut être lancé en éxecutant le fichier
-dunwallsgate/src/dunwallsgate.py avec Python3 et le module pygame d'installer.
+dunwallsgate/src/dunwallsgate.py avec Python3 et le module pygame d'installé.
 
 08/11/13
 --------
@@ -23,10 +23,10 @@ est défini dans un objet python. Ils se situent tous dans le dossier `screens`.
 
 Pour l'instant, seul l'écran "HomeScreen" est implémenté. Il permettra de
 commencer une nouvelle partie, d'en charger une, ou bien de quitter le jeu. Les
-images utilisées sont pour l'instant issues de jeux, que nous avons ensuite
-modifié. La musique, elle, est composée par Clément Maliet, exprès pour le jeu.
-Elle contient déjà les principaux thèmes musicaux qui seront déclinés en
-fonction des écrans.
+images utilisées sont pour l'instant issues de jeux que nous avons ensuite
+modifiées. La musique, elle, est composée par Clément Maliet, exprès pour notre
+projet. Elle contient déjà les principaux thèmes musicaux qui seront déclinés
+en fonction des écrans.
 
 Afin de gérer les évènements, nous avons coder un gestionnaire d'évènement,
 un objet `EventManager`. Il permet de simplifier l'enregistrement de callbacks
@@ -59,7 +59,7 @@ est nécessaire d'améliorer ceci ainsi que d'implémenter d'autres évènements
 ne sont pas encore gérés.
 
 Enfin, nous souhaiterions trouver des sprites pour notre jeu. Nous allons
-essayer de trouver des personnes à E-art sup pouvant nous les faire, puisque
+essayer de trouver des personnes à E-Art Sup pouvant nous les faire, puisque
 nous avons des connaissances là-bas. Sinon, nous prendrons des Sprites trouvés
 sur internet.
 
