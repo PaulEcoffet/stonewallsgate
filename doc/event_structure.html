@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1 id="structure-des-fichier-event.json">Structure des fichier event.json</h1>
+<pre class="sourceCode json"><code class="sourceCode json">{
+    <span class="dt">&quot;conditions&quot;</span>:
+        [
+            {
+                <span class="dt">&quot;test&quot;</span>: <span class="st">&quot;nom_du_test&quot;</span>,
+                <span class="dt">&quot;params&quot;</span>: [<span class="st">&quot;liste&quot;</span>, <span class="st">&quot;de&quot;</span>, <span class="st">&quot;params&quot;</span>]
+            },
+            {
+                <span class="dt">&quot;test&quot;</span>: <span class="st">&quot;vie_sup&quot;</span>,
+                <span class="dt">&quot;params&quot;</span>: [<span class="dv">30</span>]
+            }
+        ],
+    <span class="dt">&quot;dialogue&quot;</span>: <span class="st">&quot;ref_dialogue&quot;</span>,
+    <span class="dt">&quot;triggers&quot;</span>:
+        [
+            {
+                <span class="dt">&quot;trigger&quot;</span>: <span class="st">&quot;ajouter_vie&quot;</span>,
+                <span class="dt">&quot;params&quot;</span>: [<span class="dv">30</span>]
+            },
+            {
+                <span class="dt">&quot;trigger&quot;</span>: <span class="st">&quot;ajouter_obj&quot;</span>,
+                <span class="dt">&quot;params&quot;</span>: [<span class="st">&quot;munitions&quot;</span>, <span class="dv">30</span>]
+            },
+            {
+                <span class="dt">&quot;trigger&quot;</span>: <span class="st">&quot;ajouter_quete&quot;</span>,
+                <span class="dt">&quot;param&quot;</span>: <span class="st">&quot;ref_quete&quot;</span>
+            }
+        ]
+}</code></pre>
+</body>
+</html>
