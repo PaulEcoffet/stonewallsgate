@@ -1,7 +1,5 @@
 #!/bin/python3
 
-import itertools
-
 import pygame.locals as pg
 
 
@@ -11,10 +9,12 @@ class EventManager():
     """
 
     def __init__(self):
-        self.globalCallbacks = {"mouse": {}, "key": {}, "custom": {}}
-        self.screenCallbacks = {"mouse": {}, "key": {}, "custom": {}}
+        self.callbacks = CallbacksContainer()
 
-    def on_key_down(self, callback, which=None, global_=False):
+    def purge_callbacks(self, category):
+        self.callbacks.purge_category(category)
+
+    def on_key_down(self, callback, which=None, cat="screen"):
         """
         Register an event when a key is pressed
         callback - The function to call when the event occurs
@@ -24,18 +24,14 @@ class EventManager():
         global_ - specify if the callbacks are automatically deactivate when
                   the screen change or not
         """
-        if global_:
-            callbacks = self.globalCallbacks
-        else:
-            callbacks = self.screenCallbacks
-        try:
-            callbacks["key"].append((which, callback))
-        except:
-            callbacks["key"] = [(which, callback)]
+        return self.callbacks.add_callback("keydown", cat, callback,
+                                           {"key": which})
 
-    def on_click_on(self, collidable, callback, button=1, global_=False):
+    def on_click_on(self, collidable, callback, buttons=1, cat="screen"):
         """
         Register a callback called when the collidable object is clicked.
+        This means that the mouse click is down on the collidable, and it is
+        released while it is on the collidable.
         collidable - The object that might be clicked, must implement a
                      collidepoint method, a get_rect method or a rect property
         callback - the callback to be triggered when the collidable is clicked
@@ -44,81 +40,105 @@ class EventManager():
                  ex : 1 - left mouse button, (1, 2) - left and right mouse
                  buttons, 0 : all mouse buttons (including scroll up & down)
         """
-        if global_:
-            callbacks = self.globalCallbacks
-        else:
-            callbacks = self.screenCallbacks
-        if not isinstance(button, tuple):
-            button = (button,)
-        try:
-            callbacks["mouse"].append((button, collidable, callback))
-        except:
-            callbacks["mouse"] = [(button, collidable, callback)]
+        if not isinstance(buttons, tuple):
+            buttons = (buttons,)
+        return self.callbacks.add_callback(
+            "mouseup", cat,
+            callback,
+            {"buttons": buttons, "collidable": collidable})
 
-    def on_quit(self, callback, global_=False):
-        if global_:
-            callbacks = self.globalCallbacks
-        else:
-            callbacks = self.screenCallbacks
-        try:
-            callbacks["quit"].append(callback)
-        except KeyError:
-            callbacks["quit"] = [callback]
-        return (callbacks["quit"], callback)
+    def on_quit(self, callback, cat="screen"):
+        self.callbacks.add_callback("quit", cat, callback, None)
 
     def run(self, events):
         for event in events:
             if event.type == pg.KEYDOWN:
-                for callback in self.both_callbacks("key"):
-                    if callback[0] is None or callback[0] == event.key or\
-                            callback[0] == event.unicode:
-                        callback[1](event.key, event.unicode)
+                self.manage_key_event(event, "keydown")
             elif event.type == pg.QUIT:
-                for callback in self.both_callbacks("quit"):
+                for callback in self.callbacks.get_type("quit"):
                     callback()
             elif event.type == pg.MOUSEBUTTONUP:
-                for callback in self.both_callbacks("mouse"):
-                    if event.button in callback[0]:
+                self.manage_mouse_button_event(event, "mouseup")
+
+    def manage_key_event(self, event, type_):
+        for callback in self.callbacks.get_type(type_):
+            if callback.params["key"] is None or\
+                    callback.params["key"] == event.key or\
+                    callback.params["key"] == event.unicode:
+                callback.callback(event.key, event.unicode)
+
+    def manage_mouse_button_event(self, event, type_):
+        for callback in self.callbacks.get_type(type_):
+            if event.button in callback.params["buttons"]:
+                try:
+                    if (callback.params["collidable"]
+                            .collidepoint(event.pos)):
+                        callback.callback()
+                except AttributeError:
+                    try:
+                        if (callback.params["collidable"].get_rect()
+                                .collidepoint(event.pos)):
+                            callback.callback()
+                    except AttributeError:
                         try:
-                            if callback[1].collidepoint(event.pos):
-                                callback[2]()
-                        except AttributeError:
-                            try:
-                                if (callback[1].get_rect()
+                            if (callback.params["collidable"].rect
                                     .collidepoint(event.pos)):
-                                    callback[2]()
-                            except AttributeError:
-                                if callback[1].rect.collidepoint(event.pos):
-                                    callback[2]()
+                                callback.callback()
+                        except AttributeError:
+                            callback.callback()
 
-    def on_custom_event(self, event_name, data, callback, global_=False):
-        if global_:
-            callbacks = self.globalCallbacks
-        else:
-            callbacks = self.screenCallbacks
+    def on_custom_event(self, event_name, callback, cat="screen"):
+        return self.callbacks.add_callback(event_name, cat, callback)
+
+
+class CallbacksContainer():
+    """Contain the callbacks and can operate on them"""
+
+    def __init__(self):
+        self._callbacks = {}
+
+    def add_callback(self, type_, category, callback, params=None):
+        """
+            add a callback, return an id to remove this callback.
+        """
+        callbackObj = Callback(callback, params, category)
         try:
-            callbacks["custom"][event_name].append(callback)
+            self._callbacks[type_].append(callbackObj)
         except KeyError:
-            callbacks["custom"][event_name] = [callback]
-        return (callbacks["custom"][event_name], callback)  # ID used to remove
-                                                            # event
+            self._callbacks[type_] = [callbackObj]
+        return (type_, callbackObj)
 
-    def both_callbacks(self, *keys):
-        stop_gcall = False
-        stop_scall = False
-        gcall = self.globalCallbacks
-        scall = self.screenCallbacks
-        for key in keys:
-            if not stop_gcall:
-                try:
-                    gcall = gcall[key]
-                except KeyError:
-                    stop_gcall = True
-                    gcall = []
-            if not stop_scall:
-                try:
-                    scall = scall[key]
-                except KeyError:
-                    stop_scall = True
-                    scall = []
-        return itertools.chain(gcall, scall)
+    def remove_callback(self, id_):
+        try:
+            self._callbacks[id_[0]] = [x for x in self._callbacks[id_[0]]
+                                       if x != id_[1]]
+        except KeyError:
+            pass
+        except ValueError:
+            pass
+
+    def purge_category(self, cat):
+        for callbackslist in self._callbacks.values():
+            for i in range(len(callbackslist)):
+                if callbackslist[i].category == cat:
+                    del callbackslist[i]
+
+    def get_type(self, type_):
+        try:
+            return self._callbacks[type_]
+        except KeyError:
+            return []
+
+
+class Callback():
+    """Callback object"""
+
+    def __init__(self, callback, params, category):
+        self.callback = callback
+        self.params = params
+        self.category = category
+
+    def __repr__(self):
+        return ("callback: " + repr(self.callback) + " ; params: "
+                + repr(self.params)
+                + " ; category: " + repr(self.category))
