@@ -1,0 +1,10 @@
+{
+    "evenements":
+        [
+        	{"condition": "debut",
+	         "ref": "nom_event"}
+                 ,
+		{"condition": "defaut",
+		 "ref": "defaut_station"}
+	]
+}

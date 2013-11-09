@@ -3,6 +3,7 @@
 
 import pygame
 import pygame.locals as pg
+from screens.storyscreen import StoryScreen
 
 
 class HomeScreen():
@@ -14,6 +15,7 @@ class HomeScreen():
     exit_btn = None
     load_btn = None
     start_btn = None
+    storyscreen = StoryScreen()
 
     def __init__(self):
         self.theme_playing = True
@@ -49,6 +51,8 @@ class HomeScreen():
         # Events registration
         self.eventmanager.on_click_on(self.exit_btn,
                                       lambda: self.window.set_do_run(False))
+        self.eventmanager.on_click_on(self.start_btn,
+                                      lambda: self.window.set_screen(self.storyscreen)) #lambda est essentielle, pk ?
 
     def toggle_theme(self, *args, **kwargs):
         try:
@@ -66,6 +70,9 @@ class HomeScreen():
             self.first_draw = False
         self.buttons.clear(self.surface, self.background)
         self.buttons.draw(self.surface)
+
+    def shutdown(self):
+        self.surface.fill(0)
 
     def init_sprites(self):
         if not self.background:
