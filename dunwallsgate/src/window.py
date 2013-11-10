@@ -28,7 +28,7 @@ class Window():
         Define the screen to be displayed in the window
         """
         if self._screen is not None:
-            self._screen.shutdown()
+            self._screen.shutdown()   
         self._screen = screen
         self._screen.start(self, self.eventmanager)
 

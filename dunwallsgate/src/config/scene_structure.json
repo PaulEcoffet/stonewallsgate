@@ -1,0 +1,10 @@
+[
+
+    {
+        "background": "ref_character",
+        "events": [
+            "ref_event1",
+            "ref_event2"
+        ]
+    }
+]

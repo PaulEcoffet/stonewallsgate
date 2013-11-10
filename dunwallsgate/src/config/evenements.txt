@@ -1,10 +1,10 @@
 {
-    "evenements":
+    "__class__" : "SceneContener",
+    "name": "lol",
+    "background": "ref_to_scene_background",
+    "events":
         [
-        	{"condition": "debut",
-	         "ref": "nom_event"}
-                 ,
-		{"condition": "defaut",
-		 "ref": "defaut_station"}
-	]
+            "ref_event1",
+            "ref_event2"
+        ]
 }

@@ -7,7 +7,7 @@ import pygame.locals as pg
 
 class StoryScreen():
     """
-    The home screen of the game. It is displayed at start up
+    The story screen of the game.
     """
 
     scene_background = None
@@ -15,7 +15,11 @@ class StoryScreen():
     zone_box = None
     charac = None
 
-    def __init__(self):
+    def __init__(self, scene="", act="", round=""):
+        self._scene = scene
+        self._act = act
+        self._round = round
+        
         self.theme_playing = True
         self.first_draw = False
 
@@ -39,10 +43,10 @@ class StoryScreen():
         # Sprites placement
         self.text_box.rect = self.text_box.image.get_rect(
             bottomright=(self.surface.get_width(),
-                         self.surface.get_height() - 15))
+                         self.surface.get_height()))
         self.zone_box.rect = self.zone_box.image.get_rect(
             topleft=(0,0))
-        self.charac.rect = self.charac.image.get_rect(midtop=(250,125))
+        self.charac.rect = self.charac.image.get_rect(midtop=(250,140))
         self.buttons = pygame.sprite.RenderPlain(self.text_box,
                                                  self.zone_box,self.charac)
     def toggle_theme(self, *args, **kwargs):
