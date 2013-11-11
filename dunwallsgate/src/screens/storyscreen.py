@@ -3,6 +3,7 @@
 
 import pygame
 import pygame.locals as pg
+from decoders.json_structures import *
 
 
 class StoryScreen():
@@ -49,6 +50,9 @@ class StoryScreen():
         self.charac.rect = self.charac.image.get_rect(midtop=(250,140))
         self.buttons = pygame.sprite.RenderPlain(self.text_box,
                                                  self.zone_box,self.charac)
+
+        self.gameplay()
+        
     def toggle_theme(self, *args, **kwargs):
         try:
             self.theme_playing = kwargs["force"]
@@ -97,3 +101,23 @@ class StoryScreen():
                 '../data/images/storyscreen/characters/unknown.png').convert_alpha()
             self.charac.image = (pygame.transform.scale(self.charac.image,
                                                    (273, 221)))
+
+    def gameplay(self):
+        entry = "scene1"
+        self.current_scene = getScene(entry)
+        self.scene_background = pygame.image.load('../data/images/storyscreen/background/%s.jpg'%self.current_scene.background).convert()
+        self.scene_background = (pygame.transform.scale(self.scene_background,(1024, 361))) #screen backgorund
+        for event in self.current_scene.events:
+            if "test" in event.conditions: #event = dict
+                if event["test"] == "debut_scene":
+                    pass
+                else:
+                    pass
+            if event.dialogs is not None:
+                for dialog in event.dialogs:
+                    myfont = pygame.font.SysFont("monospace", 25)
+                    charac_label = myfont.render(dialog.character, 1, (255,255,0))
+                    message_label = myfont.render(dialog.message, 1, (255,200,0))
+                    self.text_box.image.blit(charac_label, (10, 20))
+                    self.text_box.image.blit(message_label, (15, 60))
+                    break
