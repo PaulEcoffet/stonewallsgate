@@ -1,12 +1,12 @@
 [
 
     {
-        "character": "ref_character",
+        "character": "Marshall",
         "message": "Tu dois manger du pain !"
     },
 
     {
-        "character": "gordon",
+        "character": "Gordon",
         "message": "Tout de suite, chef"
     }
 ]

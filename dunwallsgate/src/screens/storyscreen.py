@@ -16,11 +16,7 @@ class StoryScreen():
     zone_box = None
     charac = None
 
-    def __init__(self, scene="", act="", round=""):
-        self._scene = scene
-        self._act = act
-        self._round = round
-        
+    def __init__(self):        
         self.theme_playing = True
         self.first_draw = False
 
@@ -32,15 +28,7 @@ class StoryScreen():
 
         self.init_sprites()
         # Soundtrack management
-        try:
-            self.soundtrack = pygame.mixer.Sound(
-                '../data/sound/dunwalls_theme.ogg')
-        except pygame.error as e:
-            print("Dismissed exception: ", e)
-        else:
-            self.eventmanager.on_key_down(self.toggle_theme, pg.K_s)
-            self.toggle_theme(force=True)
-
+        
         # Sprites placement
         self.text_box.rect = self.text_box.image.get_rect(
             bottomright=(self.surface.get_width(),
@@ -50,18 +38,13 @@ class StoryScreen():
         self.charac.rect = self.charac.image.get_rect(midtop=(250,140))
         self.buttons = pygame.sprite.RenderPlain(self.text_box,
                                                  self.zone_box,self.charac)
-
-        self.gameplay()
         
+
+        
+        self.setScene()
+            
     def toggle_theme(self, *args, **kwargs):
-        try:
-            self.theme_playing = kwargs["force"]
-        except KeyError:
-            self.theme_playing = not self.theme_playing
-        if self.theme_playing:
-            self.soundtrack.play(-1)
-        else:
-            self.soundtrack.stop()
+        print("lol")
 
     def draw(self):
         if self.first_draw:
@@ -102,22 +85,61 @@ class StoryScreen():
             self.charac.image = (pygame.transform.scale(self.charac.image,
                                                    (273, 221)))
 
-    def gameplay(self):
+    def setScene(self):
         entry = "scene1"
+        
         self.current_scene = getScene(entry)
         self.scene_background = pygame.image.load('../data/images/storyscreen/background/%s.jpg'%self.current_scene.background).convert()
         self.scene_background = (pygame.transform.scale(self.scene_background,(1024, 361))) #screen backgorund
-        for event in self.current_scene.events:
-            if "test" in event.conditions: #event = dict
-                if event["test"] == "debut_scene":
-                    pass
-                else:
-                    pass
-            if event.dialogs is not None:
-                for dialog in event.dialogs:
-                    myfont = pygame.font.SysFont("monospace", 25)
-                    charac_label = myfont.render(dialog.character, 1, (255,255,0))
-                    message_label = myfont.render(dialog.message, 1, (255,200,0))
-                    self.text_box.image.blit(charac_label, (10, 20))
-                    self.text_box.image.blit(message_label, (15, 60))
+
+        self.event = self.findProperEvent(self.current_scene.events)
+        self.showDialog()
+        self.eventmanager.on_key_down(self.showDialog)
+        
+
+        
+    def showDialog(self, *args):
+        try:
+            self.dialog = self.event.dialogs[0]
+            self.text_box.image = pygame.image.load(
+        '../data/images/storyscreen/text_box.png').convert()
+            self.text_box.image = (pygame.transform.scale(self.text_box.image,
+                                                          (1024, 213)))                    
+            self.render_text(self.dialog.character, pygame.font.SysFont("monospace", 30), (255,255,0), (20, 0))
+            self.render_text(self.dialog.message, pygame.font.SysFont("monospace", 25), (255,200,10), (20, 38))
+            del self.event.dialogs[0]
+        except:
+            pass
+                    
+        
+    def render_text(self, string, font, color, placement):
+        x = 0
+        requested_lines = string.splitlines()
+        for requested_line in requested_lines: 
+            if requested_line != "":
+                tempsurface = font.render(requested_line, 1, color)
+                placement = list(placement)
+                placement[1] = placement[1]+30
+                self.text_box.image.blit(tempsurface, tuple(placement))
+
+    def findProperEvent(self, events):
+        return self.current_scene.events[0]
+        all_conditions_valid = True
+        for event in events:
+            for condition in event.conditions:
+                if condition != condition:
+                    all_conditions_valid = False
                     break
+            if all_conditions_valid:
+                return event
+                
+
+
+
+
+
+
+
+
+    
+    

@@ -10,7 +10,7 @@
                 "params": [30]
             }
         ],
-    "dialogs": "ref_dialogue2",
+    "dialogs": "ref_dialogue1",
     "triggers":
         [
             {
