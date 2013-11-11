@@ -41,7 +41,7 @@ class StoryScreen():
         
 
         
-        self.setScene()
+        self.setScene("scene1")
             
     def toggle_theme(self, *args, **kwargs):
         print("lol")
@@ -85,18 +85,15 @@ class StoryScreen():
             self.charac.image = (pygame.transform.scale(self.charac.image,
                                                    (273, 221)))
 
-    def setScene(self):
-        entry = "scene1"
-        
+    def setScene(self, entry):
+        self.end_scene = False
         self.current_scene = getScene(entry)
         self.scene_background = pygame.image.load('../data/images/storyscreen/background/%s.jpg'%self.current_scene.background).convert()
         self.scene_background = (pygame.transform.scale(self.scene_background,(1024, 361))) #screen backgorund
 
         self.event = self.findProperEvent(self.current_scene.events)
         self.showDialog()
-        self.eventmanager.on_key_down(self.showDialog)
-        
-
+        self.eventmanager.on_key_down(self.showDialog)      
         
     def showDialog(self, *args):
         try:
@@ -109,8 +106,8 @@ class StoryScreen():
             self.render_text(self.dialog.message, pygame.font.SysFont("monospace", 25), (255,200,10), (20, 38))
             del self.event.dialogs[0]
         except:
-            pass
-                    
+            self.end_scene = True
+            self.setScene("scene2")                     
         
     def render_text(self, string, font, color, placement):
         x = 0
