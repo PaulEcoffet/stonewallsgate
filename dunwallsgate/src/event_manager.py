@@ -166,9 +166,12 @@ class CallbacksContainer():
 
     def purge_category(self, cat):
         for callbackslist in self._callbacks.values():
-            for i in range(len(callbackslist)):
+            i = 0
+            while i < len(callbackslist):
                 if callbackslist[i].category == cat:
                     del callbackslist[i]
+                else:
+                    i += 1
 
     def get_callback_object(self, id_):
         """
