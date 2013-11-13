@@ -114,7 +114,7 @@ class EventManager():
                     return True
             except AttributeError:
                 try:
-                    if (collidable.rect.collidepoint(event.pos)):
+                    if (collidable.rect.collidepoint(coord)):
                         return True
                 except AttributeError:
                     pass
