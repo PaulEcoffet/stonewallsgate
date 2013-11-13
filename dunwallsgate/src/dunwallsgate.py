@@ -3,16 +3,12 @@
 import pygame
 
 from window import Window
-from screens.homescreen import HomeScreen
-from screens.storyscreen import StoryScreen
+
 
 
 def main():
     pygame.init()
-#   homeScreen = HomeScreen()
-#   window = Window(homeScreen)
-    storyScreen = StoryScreen()
-    window = Window(storyScreen)
+    window = Window()
     window.run()
 
 if __name__ == "__main__":
