@@ -43,8 +43,20 @@ class EventManager():
         if not isinstance(buttons, tuple):
             buttons = (buttons,)
         return self.callbacks.add_callback(
-            "mouseup", cat, callback,
+            "mousedown", cat,
+            lambda e: self._watch_click(collidable, callback, buttons, cat),
             {"buttons": buttons, "collidable": collidable})
+
+    def _watch_click(self, collidable, callback, buttons, cat):
+        def on_release(e, id_):
+            if self._collide_with(e.pos, collidable):
+                callback(e)
+            else:
+                self.callbacks.remove_callback(id_)
+        id_ = self.callbacks.add_callback(
+            "mouseup", cat, None, {"buttons": buttons})
+        call = self.callbacks.get_callback_object(id_)
+        call.callback = lambda e: on_release(e, id_)
 
     def on_mouse_up(self, callback, buttons=1, collidable=None, cat="screen"):
         if not isinstance(buttons, tuple):
@@ -84,6 +96,8 @@ class EventManager():
                     callback.callback(event)
             elif event.type == pg.MOUSEBUTTONUP:
                 self.manage_mouse_button_event(event, "mouseup")
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                self.manage_mouse_button_event(event, "mousedown")
 
     def manage_key_event(self, event, type_):
         for callback in self.callbacks.get_type(type_):
