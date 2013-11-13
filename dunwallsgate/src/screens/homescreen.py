@@ -15,7 +15,6 @@ class HomeScreen():
     exit_btn = None
     load_btn = None
     start_btn = None
-    storyscreen = StoryScreen()
 
     def __init__(self):
         self.theme_playing = True
@@ -50,9 +49,10 @@ class HomeScreen():
                                                  self.start_btn)
         # Events registration
         self.eventmanager.on_click_on(self.exit_btn,
-                                      lambda: self.window.set_do_run(False))
-        self.eventmanager.on_click_on(self.start_btn,
-                                      lambda: self.window.set_screen(self.storyscreen)) #lambda est essentielle, pk ?
+                                      lambda e: self.window.set_do_run(False))
+        self.eventmanager.on_click_on(
+			self.start_btn,
+            lambda e: self.window.set_screen(StoryScreen()))
 
     def toggle_theme(self, *args, **kwargs):
         try:
