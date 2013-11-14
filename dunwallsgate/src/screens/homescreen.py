@@ -3,7 +3,9 @@
 
 import pygame
 import pygame.locals as pg
+
 from screens.storyscreen import StoryScreen
+from game import Game
 
 
 class HomeScreen():
@@ -52,7 +54,7 @@ class HomeScreen():
                                       lambda e: self.window.set_do_run(False))
         self.eventmanager.on_click_on(
 			self.start_btn,
-            lambda e: self.window.set_screen(StoryScreen()))
+            lambda e: self.window.start_game(Game()))
 
     def toggle_theme(self, *args, **kwargs):
         try:
