@@ -20,6 +20,7 @@ class Window():
         pygame.display.set_caption("Dunwall's Gate")
         self.eventmanager = EventManager()
         self._screen = None
+        self.game = None
         self.set_screen(HomeScreen())
         self.fpsClock = pygame.time.Clock()
         self.do_run = True
@@ -30,11 +31,16 @@ class Window():
         """
         if self._screen is not None:
             self._screen.shutdown()
+            self.eventmanager.purge_callbacks("screen")
         self._screen = screen
         self._screen.start(self, self.eventmanager)
 
     def set_do_run(self, value=True):
         self.do_run = value
+    
+    def start_game(self, game):
+        self.game = game
+        game.start(self)
 
     def run(self):
         """
