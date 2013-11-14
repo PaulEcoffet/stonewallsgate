@@ -18,13 +18,13 @@ class StoryScreen():
 
     def __init__(self):        
         self.theme_playing = True
-        self.first_draw = False
+        self.end_scene = True
 
     def start(self, window, eventmanager):
         self.window = window
         self.surface = window.surface
         self.eventmanager = eventmanager
-        self.first_draw = True
+        self.end_scene = True
 
         self.init_sprites()
         # Soundtrack management
@@ -47,9 +47,9 @@ class StoryScreen():
         print("lol")
 
     def draw(self):
-        if self.first_draw:
+        if self.end_scene:
             self.surface.blit(self.scene_background, (0, 0))
-            self.first_draw = False
+            self.end_scene = False
         self.buttons.clear(self.surface, self.scene_background)
         self.buttons.draw(self.surface)
         
@@ -86,7 +86,6 @@ class StoryScreen():
                                                    (273, 221)))
 
     def setScene(self, entry):
-        self.end_scene = False
         self.current_scene = getScene(entry)
         self.scene_background = pygame.image.load('../data/images/storyscreen/background/%s.jpg'%self.current_scene.background).convert()
         self.scene_background = (pygame.transform.scale(self.scene_background,(1024, 361))) #screen backgorund
@@ -129,14 +128,3 @@ class StoryScreen():
                     break
             if all_conditions_valid:
                 return event
-                
-
-
-
-
-
-
-
-
-    
-    
