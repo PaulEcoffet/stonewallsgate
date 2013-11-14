@@ -4,8 +4,8 @@
 import pygame
 import pygame.locals as pg
 
-from screens.storyscreen import StoryScreen
 from game import Game
+from data import get_image_path
 
 
 class HomeScreen():
@@ -53,8 +53,7 @@ class HomeScreen():
         self.eventmanager.on_click_on(self.exit_btn,
                                       lambda e: self.window.set_do_run(False))
         self.eventmanager.on_click_on(
-			self.start_btn,
-            lambda e: self.window.start_game(Game()))
+            self.start_btn, lambda e: self.window.start_game(Game()))
 
     def toggle_theme(self, *args, **kwargs):
         try:
@@ -79,16 +78,16 @@ class HomeScreen():
     def init_sprites(self):
         if not self.background:
             self.background = (pygame.image.load(
-                '../data/images/home/background.gif').convert())
+                get_image_path("home/background.gif")).convert())
         if not self.exit_btn:
             self.exit_btn = pygame.sprite.DirtySprite()
             self.exit_btn.image = (pygame.image.load(
-                '../data/images/home/exit_button.gif').convert())
+                get_image_path('home/exit_button.gif')).convert())
         if not self.load_btn:
             self.load_btn = pygame.sprite.DirtySprite()
             self.load_btn.image = (pygame.image.load(
-                '../data/images/home/load_button.gif').convert())
+                get_image_path('home/load_button.gif')).convert())
         if not self.start_btn:
             self.start_btn = pygame.sprite.DirtySprite()
             self.start_btn.image = (pygame.image.load(
-                '../data/images/home/start_button.gif').convert())
+                get_image_path('home/start_button.gif')).convert())
