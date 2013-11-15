@@ -85,7 +85,7 @@ class StoryScreen():
                                                         (273, 221)))
 
     def setScene(self, entry):
-        self.current_scene = getScene(entry)
+        self.current_scene = get_scene(entry)
         self.scene_background = pygame.image.load(
             get_image_path('storyscreen/background/%s.jpg' %
                            self.current_scene.background)
