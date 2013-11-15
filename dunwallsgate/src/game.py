@@ -6,8 +6,8 @@ class Game():
     def __init__(self):
         self.window = None
         self.quests = []
-        self.hero = {}
-        self.screen = StoryScreen()
+        self.hero = {"current_scene" : "scene1"}
+        self.screen = StoryScreen(self.hero)
     
     def start(self, window):
         self.window = window

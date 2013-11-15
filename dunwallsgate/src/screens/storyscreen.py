@@ -17,9 +17,9 @@ class StoryScreen():
     zone_box = None
     charac = None
 
-    def __init__(self):
-        self.theme_playing = True
+    def __init__(self, hero):
         self.end_scene = True
+        self.hero = hero
 
     def start(self, window, eventmanager):
         self.window = window
@@ -28,7 +28,6 @@ class StoryScreen():
         self.end_scene = True
 
         self.init_sprites()
-        # Soundtrack management
 
         # Sprites placement
         self.text_box.rect = self.text_box.image.get_rect(
@@ -37,19 +36,16 @@ class StoryScreen():
         self.zone_box.rect = self.zone_box.image.get_rect(
             topleft=(0, 0))
         self.charac.rect = self.charac.image.get_rect(midtop=(250, 140))
-        self.buttons = pygame.sprite.RenderPlain(self.text_box,
+        self.graphic_elements = pygame.sprite.RenderPlain(self.text_box,
                                                  self.zone_box, self.charac)
-        self.setScene("scene1")
-
-    def toggle_theme(self, *args, **kwargs):
-        print("lol")
+        self.set_scene(self.hero["current_scene"])
 
     def draw(self):
         if self.end_scene:
             self.surface.blit(self.scene_background, (0, 0))
             self.end_scene = False
-        self.buttons.clear(self.surface, self.scene_background)
-        self.buttons.draw(self.surface)
+        self.graphic_elements.clear(self.surface, self.scene_background)
+        self.graphic_elements.draw(self.surface)
 
     def shutdown(self):
         """
@@ -84,7 +80,7 @@ class StoryScreen():
             self.charac.image = (pygame.transform.scale(self.charac.image,
                                                         (273, 221)))
 
-    def setScene(self, entry):
+    def set_scene(self, entry):
         self.current_scene = get_scene(entry)
         self.scene_background = pygame.image.load(
             get_image_path('storyscreen/background/%s.jpg' %
@@ -113,7 +109,7 @@ class StoryScreen():
             del self.event.dialogs[0]
         except:
             self.end_scene = True
-            self.setScene("scene2")
+            self.set_scene("scene2")
 
     def render_text(self, string, font, color, placement):
         requested_lines = string.splitlines()

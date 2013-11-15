@@ -34,7 +34,7 @@ def get_events(current_folder, ref_events):
                   encoding="latin-1") as file:
             dct = json.load(file)
             events[i].conditions = dct['conditions']
-            events[i].dialogs = getDialog(current_folder, dct['dialogs'])
+            events[i].dialogs = get_dialog(current_folder, dct['dialogs'])
             events[i].triggers = dct['triggers']
     return events
 
@@ -43,12 +43,12 @@ def get_dialog(current_folder, ref_dialogs):
     Get and decode the right json dialog file to fill
     each parameters in a Dialog object that is return.
     """
-    
-        with open("%s/events/dialogs/%s.json"%(current_folder, ref_dialogs), \
-                  "r", encoding="latin-1") as file:
-            list_dct = json.load(file)
-            dialogs = [Dialog() for dct in list_dct]
-            for i, dct in enumerate(list_dct):
-                dialogs[i].character = dct['character']
-                dialogs[i].message = dct['message']
-        return dialogs
+
+    with open("%s/events/dialogs/%s.json"%(current_folder, ref_dialogs), \
+              "r", encoding="latin-1") as file:
+        list_dct = json.load(file)
+        dialogs = [Dialog() for dct in list_dct]
+        for i, dct in enumerate(list_dct):
+            dialogs[i].character = dct['character']
+            dialogs[i].message = dct['message']
+    return dialogs
