@@ -1,4 +1,6 @@
 from screens.storyscreen import StoryScreen
+import quest
+from inventory import Inventory
 
 
 class Game():
