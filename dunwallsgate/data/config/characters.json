@@ -1,0 +1,29 @@
+[
+    {
+        "ref": "hero",
+        "name": "Gordon",
+        "front_image": "gordon_front.png",
+        "back_image": "gordon_back.png",
+        "maxhealth": 100,
+        "range_attack": 10,
+        "attack": 15,
+        "defense": 12,
+        "initiative": 13,
+        "inventory": null,
+        "abilities": ["attack", "heal"]
+    },
+    {
+        "ref": "unknown",
+        "name": "Who knows?",
+        "front_image": "unknown_front.png",
+        "back_image": "unknown_back.png",
+        "maxhealth": 0,
+        "range_attack": 0,
+        "attack": 0,
+        "defense": 0,
+        "initiative": 0,
+        "inventory": null,
+        "abilities": []
+    }
+
+]
