@@ -5,7 +5,7 @@ import pygame
 import pygame.locals as pg
 
 from game import Game
-from data import get_image_path
+from data import get_image_path, get_sound_path
 
 
 class HomeScreen():
@@ -32,7 +32,7 @@ class HomeScreen():
         # Soundtrack management
         try:
             self.soundtrack = pygame.mixer.Sound(
-                '../data/sound/dunwalls_theme.ogg')
+                get_sound_path('dunwalls_theme.ogg'))
         except pygame.error as e:
             print("Dismissed exception: ", e)
         else:
