@@ -97,7 +97,7 @@ class StoryScreen():
         try:
             self.dialog = self.event.dialogs[0]
             self.text_box.image = pygame.image.load(
-                '../data/images/storyscreen/text_box.png').convert()
+                get_image_path('storyscreen/text_box.png')).convert()
             self.text_box.image = (pygame.transform.scale(self.text_box.image,
                                                           (1024, 213)))
             self.render_text(self.dialog.character,
