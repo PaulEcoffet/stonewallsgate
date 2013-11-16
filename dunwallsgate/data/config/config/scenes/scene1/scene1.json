@@ -1,0 +1,10 @@
+[
+
+    {
+        "background": "scene1_1",
+        "events": [
+            "ref_event1",
+            "ref_event2"
+        ]
+    }
+]

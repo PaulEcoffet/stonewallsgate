@@ -1,0 +1,29 @@
+{
+    "conditions":
+        [
+            {
+                "test": "nom_du_test",
+                "params": ["liste", "de", "params"]
+            },
+            {
+                "test": "vie_sup",
+                "params": [30]
+            }
+        ],
+    "dialogs": "ref_dialogue2",
+    "triggers":
+        [
+            {
+                "trigger": "ajouter_vie",
+                "params": [30]
+            },
+            {
+                "trigger": "ajouter_obj",
+                "params": ["munitions", 30]
+            },
+            {
+                "trigger": "ajouter_quete",
+                "param": "ref_quete"
+            }
+        ]
+}

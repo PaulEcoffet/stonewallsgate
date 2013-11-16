@@ -1,0 +1,10 @@
+{
+    "__class__" : "SceneContener",
+    "name": "lol",
+    "background": "ref_to_scene_background",
+    "events":
+        [
+            "ref_event1",
+            "ref_event2"
+        ]
+}

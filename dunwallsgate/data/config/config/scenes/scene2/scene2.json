@@ -1,0 +1,10 @@
+[
+
+    {
+        "background": "demo",
+        "events": [
+            "ref_event1",
+            "ref_event2"
+        ]
+    }
+]
