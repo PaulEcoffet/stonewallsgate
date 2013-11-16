@@ -3,14 +3,16 @@
 import json
 
 from decoders.structures import *
+from data import get_config_path
+
 
 def get_scene(file):
     """
     Get and decode the right json scene file to fill it
     in a Scene object that is return.
     """
-    
-    current_folder = "./config/scenes/%s"%file
+
+    current_folder = get_config_path("scenes/{}".format(file))
     scene = Scene()
 
     with open("%s/%s.json"%(current_folder,file), "r", \
@@ -43,7 +45,6 @@ def get_dialog(current_folder, ref_dialogs):
     Get and decode the right json dialog file to fill
     each parameters in a Dialog object that is return.
     """
-
     with open("%s/events/dialogs/%s.json"%(current_folder, ref_dialogs), \
               "r", encoding="latin-1") as file:
         list_dct = json.load(file)
