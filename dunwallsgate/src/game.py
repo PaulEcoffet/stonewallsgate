@@ -1,6 +1,7 @@
 from screens.storyscreen import StoryScreen
 import quest
 from inventory import Inventory
+from character import Character
 
 
 class Game():
@@ -10,8 +11,10 @@ class Game():
         self.window = None
         self.quests = quest.get_quests_dict()
         self.base = Base()
-        self.hero = {"current_scene": "scene1"}
-        self.screen = StoryScreen(self.hero)
+        self.hero = Character("hero")
+        self.hero_location = "scene1"
+        self.hero_companions = []
+        self.screen = StoryScreen({"current_scene": self.hero_location})
 
     def start(self, window):
         self.window = window

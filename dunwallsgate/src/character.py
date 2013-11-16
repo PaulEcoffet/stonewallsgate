@@ -21,7 +21,7 @@ class Character():
         self.defense = custom.get("defense", data["defense"])
         self.initiative = custom.get("initiative", data["initiative"])
         self.inventory = custom.get("inventory", Inventory(data["inventory"]))
-        self.abilities = ["attack", "range_attack"]
+        self.abilities = custom.get("abilities", data["abilities"])
 
     def attack(self, opponent):
         pass
