@@ -48,8 +48,8 @@ def get_dialog(current_folder, ref_dialogs):
     with open("%s/events/dialogs/%s.json"%(current_folder, ref_dialogs), \
               "r", encoding="latin-1") as file:
         list_dct = json.load(file)
-        dialogs = [Dialog() for dct in list_dct]
-        for i, dct in enumerate(list_dct):
-            dialogs[i].character = dct['character']
-            dialogs[i].message = dct['message']
+        dialogs = Dialogs()
+        for dct in list_dct:
+            dialogs.characters.append(dct['character'])
+            dialogs.messages.append(dct['message'])
     return dialogs

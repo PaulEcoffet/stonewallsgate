@@ -47,6 +47,8 @@ class StoryScreen():
     def draw(self):
         if self.end_scene:
             self.surface.blit(self.scene_background, (0, 0))
+            self.test = TextRender((500,100), "lucidaconsole", 20, (0,0,10) , "Scene de demonstration : Dunwall's Gate (Rendered via TextRender)")
+            self.surface.blit(self.test.next(), (20,0))
             self.end_scene = False
         self.graphic_elements.clear(self.surface, self.scene_background)
         self.graphic_elements.draw(self.surface)
@@ -88,12 +90,14 @@ class StoryScreen():
                                                         (273, 221)))
 
     def update_textbox(self):
+        self.text_box.size = (924,163)
+        self.text_box.size_text = (904,163)
         self.text_box.image = pygame.image.load(
             get_image_path('storyscreen/text_box.png'))
         self.text_box.image = self.text_box.image.convert_alpha()
-        self.text_box.image = pygame.transform.scale(self.text_box.image, (924, 163))
+        self.text_box.image = pygame.transform.scale(self.text_box.image, self.text_box.size )
         self.text_box.image.set_alpha(0) 
-        self.transparent = pygame.Surface((1000,750), pygame.SRCALPHA)   
+        self.transparent = pygame.Surface(self.text_box.size , pygame.SRCALPHA)   
         self.transparent.fill((0,0,0,128))                         
         self.text_box.image.blit(self.transparent, (0,0))
         
@@ -102,23 +106,18 @@ class StoryScreen():
         self.update_textbox()
         self.event = self.scene.events[0]
         self.dialog_end = True
-        self.dialogs = self.event.next_dialog()
-        self.full_dialog = TextRender((680,70), "lucidaconsole", 20, (255,158,0) , self.dialogs.message)
+        self.dialogs = self.event.dialogs
+        self.text_render = TextRender(self.text_box.size_text, "lucidaconsole", 20, (255,158,0) , self.dialogs.next())
         self.show_dialog()
         self.eventmanager.on_key_down(self.show_dialog)
 
     def show_dialog(self, *args):
-        if self.dialogs:
-            next_dialog = self.full_dialog.next()
-            if not next_dialog:
-                self.dialogs = self.event.next_dialog()
-                if self.dialogs:
-                    self.full_dialog = TextRender((680,70), "lucidaconsole", 20, (255,158,0) , self.dialogs.message)
-                    self.dialog_end = True
-                    next_dialog = self.full_dialog.next()
-                else:
-                    return None
-            self.update_textbox()  
-            for i, line in enumerate(next_dialog):
-                self.text_box.image.blit(line, (20,20+i*35))
-
+        next_text = self.text_render.next()
+        if next_text is None:
+            self.text_to_render = self.dialogs.next()
+            if self.text_to_render is None:
+                return None
+            self.text_render = TextRender(self.text_box.size_text, "lucidaconsole", 20, (255,158,0) , self.text_to_render )
+            next_text = self.text_render.next()
+        self.update_textbox()
+        self.text_box.image.blit(next_text, (20,0))
