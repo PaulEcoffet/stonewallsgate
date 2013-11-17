@@ -4,6 +4,7 @@
 import pygame
 
 from decoders.json_structures import *
+from screens.text_render import TextRender
 from data import get_image_path
 
 
@@ -31,14 +32,17 @@ class StoryScreen():
 
         # Sprites placement
         self.text_box.rect = self.text_box.image.get_rect(
-            bottomright=(self.surface.get_width(),
-                         self.surface.get_height()))
+            bottomright=(self.surface.get_width()-50,
+                         self.surface.get_height()-30))
+        
         self.zone_box.rect = self.zone_box.image.get_rect(
             topleft=(0, 0))
         self.charac.rect = self.charac.image.get_rect(midtop=(250, 140))
-        self.graphic_elements = pygame.sprite.RenderPlain(self.text_box,
-                                                 self.zone_box, self.charac)
-        self.set_scene(self.hero["current_scene"])
+        self.graphic_elements = pygame.sprite.RenderPlain(self.text_box)
+
+        self.init_story()
+
+        
 
     def draw(self):
         if self.end_scene:
@@ -59,13 +63,16 @@ class StoryScreen():
             self.scene_background = pygame.image.load(
                 get_image_path('storyscreen/background/demo.jpg')).convert()
             self.scene_background = (pygame.transform.scale(
-                self.scene_background, (1024, 361)))
+                self.scene_background, (1024, 574)))
+            
         if not self.text_box:
             self.text_box = pygame.sprite.DirtySprite()
             self.text_box.image = pygame.image.load(
-                get_image_path('storyscreen/text_box.png')).convert()
-            self.text_box.image = (pygame.transform.scale(self.text_box.image,
-                                                          (1024, 213)))
+                get_image_path('storyscreen/text_box.png'))
+            self.text_box.image = self.text_box.image.convert_alpha()
+            self.text_box.image = pygame.transform.scale(self.text_box.image, (924, 163))
+            self.text_box.image.set_alpha(0)
+            
         if not self.zone_box:
             self.zone_box = pygame.sprite.DirtySprite()
             self.zone_box.image = pygame.image.load(
@@ -80,53 +87,38 @@ class StoryScreen():
             self.charac.image = (pygame.transform.scale(self.charac.image,
                                                         (273, 221)))
 
-    def set_scene(self, entry):
-        self.current_scene = get_scene(entry)
-        self.scene_background = pygame.image.load(
-            get_image_path('storyscreen/background/%s.jpg' %
-                           self.current_scene.background)
-        ).convert()
-        self.scene_background = (pygame.transform.scale(
-            self.scene_background, (1024, 361)))
+    def update_textbox(self):
+        self.text_box.image = pygame.image.load(
+            get_image_path('storyscreen/text_box.png'))
+        self.text_box.image = self.text_box.image.convert_alpha()
+        self.text_box.image = pygame.transform.scale(self.text_box.image, (924, 163))
+        self.text_box.image.set_alpha(0) 
+        self.transparent = pygame.Surface((1000,750), pygame.SRCALPHA)   
+        self.transparent.fill((0,0,0,128))                         
+        self.text_box.image.blit(self.transparent, (0,0))
+        
+    def init_story(self):
+        self.scene = get_scene("scene1")
+        self.update_textbox()
+        self.event = self.scene.events[0]
+        self.dialog_end = True
+        self.dialogs = self.event.next_dialog()
+        self.full_dialog = TextRender((680,70), "lucidaconsole", 20, (255,158,0) , self.dialogs.message)
+        self.show_dialog()
+        self.eventmanager.on_key_down(self.show_dialog)
 
-        self.event = self.findProperEvent(self.current_scene.events)
-        self.showDialog()
-        self.eventmanager.on_key_down(self.showDialog)
+    def show_dialog(self, *args):
+        if self.dialogs:
+            next_dialog = self.full_dialog.next()
+            if not next_dialog:
+                self.dialogs = self.event.next_dialog()
+                if self.dialogs:
+                    self.full_dialog = TextRender((680,70), "lucidaconsole", 20, (255,158,0) , self.dialogs.message)
+                    self.dialog_end = True
+                    next_dialog = self.full_dialog.next()
+                else:
+                    return None
+            self.update_textbox()  
+            for i, line in enumerate(next_dialog):
+                self.text_box.image.blit(line, (20,20+i*35))
 
-    def showDialog(self, *args):
-        try:
-            self.dialog = self.event.dialogs[0]
-            self.text_box.image = pygame.image.load(
-                get_image_path('storyscreen/text_box.png')).convert()
-            self.text_box.image = (pygame.transform.scale(self.text_box.image,
-                                                          (1024, 213)))
-            self.render_text(self.dialog.character,
-                             pygame.font.SysFont("monospace", 30),
-                             (255, 255, 0), (20, 0))
-            self.render_text(self.dialog.message,
-                             pygame.font.SysFont("monospace", 25),
-                             (255, 200, 10), (20, 38))
-            del self.event.dialogs[0]
-        except:
-            self.end_scene = True
-            self.set_scene("scene2")
-
-    def render_text(self, string, font, color, placement):
-        requested_lines = string.splitlines()
-        for requested_line in requested_lines:
-            if requested_line != "":
-                tempsurface = font.render(requested_line, 1, color)
-                placement = list(placement)
-                placement[1] = placement[1] + 30
-                self.text_box.image.blit(tempsurface, tuple(placement))
-
-    def findProperEvent(self, events):
-        return self.current_scene.events[0]
-        all_conditions_valid = True
-        for event in events:
-            for condition in event.conditions:
-                if condition != condition:
-                    all_conditions_valid = False
-                    break
-            if all_conditions_valid:
-                return event
