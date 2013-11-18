@@ -17,7 +17,6 @@ class TextRender():
         #assert isinstance(font, dict)
         #assert isinstance(box_size, tuple), type(box_size)
         self.box_size = box_size
-        print(self.box_size)
         self._font = {"type" : _font, "color" : color, "size" : font_size}
         try:
             font_file = get_fonts_path("%s.ttf"%self._font["type"])
@@ -37,8 +36,9 @@ class TextRender():
                 self.panels.append(panel)
                 break
             if len(panel) >= max_lines - 1:
-                panel.append(" ".join(line[:-1]))
                 line = line[-1:]
+                panel[-1] += ' ...' #on affiche ... si il y a d'autres panels à afficher
+                print(panel)
                 self.panels.append(panel)
                 panel = []
             line.append(mot)
