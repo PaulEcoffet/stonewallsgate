@@ -2,6 +2,7 @@
 
 import pygame
 import pygame.locals as pg
+from data import get_fonts_path
 
 pygame.font.init()
 
@@ -16,14 +17,19 @@ class TextRender():
         #assert isinstance(font, dict)
         #assert isinstance(box_size, tuple), type(box_size)
         self.box_size = box_size
-        self._font = {"type" : _font, "color" : color, "size" : font_size} 
-        self.pg_font = pygame.font.SysFont(self._font["type"], self._font["size"])
+        self._font = {"type" : _font, "color" : color, "size" : font_size}
+        try:
+            font_file = get_fonts_path("%s.ttf"%self._font["type"])
+            print(font_file)
+            self.pg_font = pygame.font.Font(font_file, self._font["size"])
+        except:
+            self.pg_font = pygame.font.SysFont("monospace", self._font["size"])
         letter_size = {"width" : self.pg_font.size(" ")[0], "height": self.pg_font.size(" ")[1]}
         text_size = {"width" : self.pg_font.size(string)[0], "height": letter_size["height"]}
 
         max_carac = int(box_size[0]/(letter_size["width"]*1.15))
         print(int(box_size[0]/(letter_size["width"]*1.2)))
-        max_lines = int(box_size[1]/(letter_size["height"]*1.50)) 
+        max_lines = int(box_size[1]/(letter_size["height"]*1.13)) 
         line, panel, self.panels = [], [], []
         for i, mot in enumerate(string.split(" ")+[""]):
             if len(" ".join(line)) >= max_carac:

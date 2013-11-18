@@ -49,7 +49,12 @@ def get_dialog(current_folder, ref_dialogs):
               "r", encoding="latin-1") as file:
         list_dct = json.load(file)
         dialogs = Dialogs()
+        listener = None
+        main_character = None
         for dct in list_dct:
-            dialogs.characters.append(dct['character'])
-            dialogs.messages.append(dct['message'])
+            if 'listener' in dct:
+                listener = dct['listener']
+            if 'main_character' in dct:
+                main_character = dct['main_character']
+            dialogs.messages.append((main_character, listener, dct['message']))
     return dialogs

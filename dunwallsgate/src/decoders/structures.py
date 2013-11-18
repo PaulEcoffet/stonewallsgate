@@ -30,16 +30,12 @@ class Triggers():
 
 class Dialogs():
     def __init__(self):
-        self.characters = []
         self.messages = []
-        self.old_messages = []
         self.begin = True
         
     def next(self):
         if len(self.messages) != 1:
             if not self.begin:
-                self.messages_done = []
-                self.messages_done.append(self.messages[0])
                 del self.messages[0]
             else:
                 self.begin = False

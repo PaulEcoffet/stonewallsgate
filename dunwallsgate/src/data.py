@@ -27,7 +27,12 @@ def get_config_path(path=""):
     return os.path.abspath(
         os.path.join(get_data_path(), "config/", path))
 
+def get_fonts_path(path=""):
+    return os.path.abspath(
+        os.path.join(get_data_path(), "fonts/", path))
+
 if __name__ == "__main__":
     print(get_image_path())
     print(get_sound_path())
     print(get_config_path())
+    print(get_fonts_path())
