@@ -34,7 +34,7 @@ class StoryScreen():
         self.text_box.rect = self.text_box.image.get_rect(
             bottomright=(self.surface.get_width()-50,
                          self.surface.get_height()-30))
-        
+
         self.zone_box.rect = self.zone_box.image.get_rect(
             topleft=(0, 0))
         self.charac.rect = self.charac.image.get_rect(midtop=(250, 140))
@@ -42,7 +42,7 @@ class StoryScreen():
 
         self.init_story()
 
-        
+
 
     def draw(self):
         if self.end_scene:
@@ -64,7 +64,7 @@ class StoryScreen():
                 get_image_path('storyscreen/background/demo.jpg')).convert()
             self.scene_background = (pygame.transform.scale(
                 self.scene_background, (1024, 574)))
-            
+
         if not self.text_box:
             self.text_box = pygame.sprite.DirtySprite()
             self.text_box.image = pygame.image.load(
@@ -72,7 +72,7 @@ class StoryScreen():
             self.text_box.image = self.text_box.image.convert_alpha()
             self.text_box.image = pygame.transform.scale(self.text_box.image, (924, 163))
             self.text_box.image.set_alpha(0)
-            
+
         if not self.zone_box:
             self.zone_box = pygame.sprite.DirtySprite()
             self.zone_box.image = pygame.image.load(
@@ -92,13 +92,13 @@ class StoryScreen():
             get_image_path('storyscreen/text_box.png'))
         self.text_box.image = self.text_box.image.convert_alpha()
         self.text_box.image = pygame.transform.scale(self.text_box.image, (924, 163))
-        self.text_box.image.set_alpha(0) 
-        self.transparent = pygame.Surface((1000,750), pygame.SRCALPHA)   
-        self.transparent.fill((0,0,0,128))                         
+        self.text_box.image.set_alpha(0)
+        self.transparent = pygame.Surface((1000,750), pygame.SRCALPHA)
+        self.transparent.fill((0,0,0,128))
         self.text_box.image.blit(self.transparent, (0,0))
-        
+
     def init_story(self):
-        self.scene = get_scene("scene1")
+        self.scene = get_scene("intro")
         self.update_textbox()
         self.event = self.scene.events[0]
         self.dialog_end = True
@@ -118,7 +118,7 @@ class StoryScreen():
                     next_dialog = self.full_dialog.next()
                 else:
                     return None
-            self.update_textbox()  
+            self.update_textbox()
             for i, line in enumerate(next_dialog):
                 self.text_box.image.blit(line, (20,20+i*35))
 
