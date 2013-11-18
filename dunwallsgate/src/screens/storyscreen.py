@@ -48,8 +48,8 @@ class StoryScreen():
     def draw(self):
         if self.end_scene:
             self.surface.blit(self.scene_background, (0, 0))
-            self.test = TextRender((500,100), "joystix", 9, (200,100,10), "Scene de demonstration (Dunwall's Gate)")
-            self.surface.blit(self.test.next(), (20,0))
+            self.test = TextRender((300,100), "joystix", 11, (200,100,10), "Scene de demonstration (Dunwall's Gate)")
+            self.surface.blit(self.test.next(), (10,10))
             self.end_scene = False
         self.graphic_elements.clear(self.surface, self.scene_background)
         self.graphic_elements.draw(self.surface)
@@ -129,7 +129,7 @@ class StoryScreen():
             self.text_render = TextRender(self.dialog_box.size_text, "larabiefont", 25, (255,158,0) , self.new_message[2])
             next_text = self.text_render.next()
         self.update_textbox()
-        self.dialog_box.image.blit(next_text, (20,0))
+        self.dialog_box.image.blit(next_text, (10,10))
         if self.new_message[1]:
             self.graphic_elements = pygame.sprite.RenderPlain(self.dialog_box, self.charac1, self.charac2)
         elif self.new_message[0]:
