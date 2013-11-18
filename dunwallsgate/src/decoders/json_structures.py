@@ -1,53 +1,51 @@
 #!/bin/python3
 
 import json
+import os.path
 
 from decoders.structures import *
 from data import get_config_path
 
 
-def get_scene(file):
+def get_scene(scene_name):
     """
-    Get and decode the right json scene file to fill it
-    in a Scene object that is return.
+    Get and decode a scene directory and use it to fill the Scene object which
+    is return.
     """
 
-    current_folder = get_config_path("scenes/{}".format(file))
+    current_folder = get_config_path(os.path.join("scenes/", scene_name))
     scene = Scene()
-
-    with open("%s/%s.json"%(current_folder,file), "r", \
-                encoding="latin-1") as file:
-        scene = Scene()
-        dct = json.load(file)
-        scene.background = dct[0]["background"]
-        scene.events = get_events(current_folder, dct[0]["events"])
+    scene.background = os.path.join(current_folder, "background.png")
+    scene.events = get_events(scene_name)
     return scene
 
-def get_events(current_folder, ref_events):
-    """
-    Get and decode the right json event file to fill
-    each parameters of each events in multiple Events
-    object that are return in one single list.
-    """
 
-    events = [Event() for ref_event in ref_events]
-    for i, ref_event in enumerate(ref_events):
-        with open("%s/events/%s.json"%(current_folder, ref_event), "r", \
-                  encoding="latin-1") as file:
-            dct = json.load(file)
-            events[i].conditions = dct['conditions']
-            events[i].dialogs = get_dialog(current_folder, dct['dialogs'])
-            events[i].triggers = dct['triggers']
+def get_events(scene_name):
+    """
+    Get all the events of a scene
+    """
+    current_folder = get_config_path(os.path.join("scenes/", scene_name))
+    events = []
+    with open(os.path.join(current_folder, "events.json"), "r",
+              encoding="utf8") as events_file:
+        json_events = json.load(events_file)
+        for json_event in json_events:
+            event = Event()
+            event.conditions = json_event['conditions']
+            event.dialogs = get_dialog(current_folder, json_event['dialogs'])
+            event.triggers = json_event['triggers']
     return events
+
 
 def get_dialog(current_folder, ref_dialogs):
     """
     Get and decode the right json dialog file to fill
-    each parameters in a Dialog object that is return.
+    each parameters in a Dialog object that is returned.
     """
-    with open("%s/events/dialogs/%s.json"%(current_folder, ref_dialogs), \
-              "r", encoding="latin-1") as file:
-        list_dct = json.load(file)
+    with open(
+            os.path.join(current_folder, "dialogues", ref_dialogs + ".json"),
+            "r", encoding="latin-1") as json_file:
+        list_dct = json.load(json_file)
         dialogs = [Dialog() for dct in list_dct]
         for i, dct in enumerate(list_dct):
             dialogs[i].character = dct['character']
