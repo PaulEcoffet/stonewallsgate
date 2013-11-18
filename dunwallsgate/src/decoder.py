@@ -2,7 +2,7 @@ import json
 import os.path
 
 import data
-from structures import Event, Scene, Dialogs
+from structures import Event, Scene, Dialogues
 
 _characters_list = None
 
@@ -44,7 +44,7 @@ def get_events(scene_name):
         for json_event in json_events:
             event = Event()
             event.conditions = json_event['conditions']
-            event.dialogs = get_dialogues(current_folder,
+            event.dialogues = get_dialogues(current_folder,
                                           json_event['dialogs'])
             event.triggers = json_event['triggers']
             events.append(event)
@@ -54,13 +54,13 @@ def get_events(scene_name):
 def get_dialogues(current_folder, ref_dialogues):
     """
     Get and decode the right json dialog file to fill
-    each parameters in a Dialog object that is returned.
+    each parameters in a Dialogues object that is returned.
     """
     with open(
             os.path.join(current_folder, "dialogues", ref_dialogues + ".json"),
             "r", encoding="latin-1") as json_file:
         list_dct = json.load(json_file)
-        dialogs = Dialogs()
+        dialogues = Dialogues()
         listener = None
         main_character = None
         for dct in list_dct:
@@ -68,5 +68,5 @@ def get_dialogues(current_folder, ref_dialogues):
                 listener = dct['listener']
             if 'main_character' in dct:
                 main_character = dct['main_character']
-            dialogs.messages.append((main_character, listener, dct['message']))
-    return dialogs
+            dialogues.messages.append((main_character, listener, dct['message']))
+    return dialogues

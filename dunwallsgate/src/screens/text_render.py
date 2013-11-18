@@ -38,7 +38,6 @@ class TextRender():
             if len(panel) >= max_lines - 1:
                 line = line[-1:]
                 panel[-1] += ' ...' #on affiche ... si il y a d'autres panels à afficher
-                print(panel)
                 self.panels.append(panel)
                 panel = []
             line.append(mot)

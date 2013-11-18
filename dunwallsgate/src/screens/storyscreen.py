@@ -15,7 +15,7 @@ class StoryScreen():
     """
 
     scene_background = None
-    dialog_box = None
+    dialogue_box = None
     zone_box = None
     charac1 = None
     charac2 = None
@@ -36,10 +36,10 @@ class StoryScreen():
         # Sprites placement
         self.charac1.rect = self.charac1.image.get_rect(midtop=(250, 160))
         self.charac2.rect = self.charac2.image.get_rect(midtop=(750, 160))
-        self.dialog_box.rect = self.dialog_box.image.get_rect(
+        self.dialogue_box.rect = self.dialogue_box.image.get_rect(
             bottomright=(self.surface.get_width()-50,
                          self.surface.get_height()-30))
-        self.graphic_elements = pygame.sprite.RenderPlain(self.dialog_box)
+        self.graphic_elements = pygame.sprite.RenderPlain(self.dialogue_box)
 
         self.init_story()
 
@@ -55,13 +55,6 @@ class StoryScreen():
         self.graphic_elements.clear(self.surface, self.scene_background)
         self.graphic_elements.draw(self.surface)
 
-    def shutdown(self):
-        """
-        Shutdown screen playing (fill a black screen)
-        Underconstruction : Remove all events and spirits from this screen.
-        """
-        self.surface.fill(0)
-
     def init_sprites(self):
         if not self.scene_background:
             self.scene_background = pygame.image.load(
@@ -69,14 +62,14 @@ class StoryScreen():
             self.scene_background = (pygame.transform.scale(
                 self.scene_background, (1024, 574)))
 
-        if not self.dialog_box:
-            self.dialog_box = pygame.sprite.DirtySprite()
-            self.dialog_box.image = pygame.image.load(
+        if not self.dialogue_box:
+            self.dialogue_box = pygame.sprite.DirtySprite()
+            self.dialogue_box.image = pygame.image.load(
                 data.get_image_path('storyscreen/text_box.png'))
-            self.dialog_box.image = self.dialog_box.image.convert_alpha()
-            self.dialog_box.image = pygame.transform.scale(self.dialog_box.image,
+            self.dialogue_box.image = self.dialogue_box.image.convert_alpha()
+            self.dialogue_box.image = pygame.transform.scale(self.dialogue_box.image,
                                                            (924, 163))
-            self.dialog_box.image.set_alpha(0)
+            self.dialogue_box.image.set_alpha(0)
 
         if not self.charac1:
             self.charac1 = pygame.sprite.DirtySprite()
@@ -95,52 +88,52 @@ class StoryScreen():
 
 
     def update_textbox(self):
-        self.dialog_box.size = (924,163)
-        self.dialog_box.size_text = (904,163)
-        self.dialog_box.image = pygame.image.load(
+        self.dialogue_box.size = (924,163)
+        self.dialogue_box.size_text = (904,163)
+        self.dialogue_box.image = pygame.image.load(
             data.get_image_path('storyscreen/text_box.png'))
-        self.dialog_box.image = self.dialog_box.image.convert_alpha()
-        self.dialog_box.image = pygame.transform.scale(self.dialog_box.image,
-                                                       self.dialog_box.size )
-        self.dialog_box.image.set_alpha(0)
-        self.transparent = pygame.Surface(self.dialog_box.size,
+        self.dialogue_box.image = self.dialogue_box.image.convert_alpha()
+        self.dialogue_box.image = pygame.transform.scale(self.dialogue_box.image,
+                                                       self.dialogue_box.size )
+        self.dialogue_box.image.set_alpha(0)
+        self.transparent = pygame.Surface(self.dialogue_box.size,
                                           pygame.SRCALPHA)
         self.transparent.fill((0,0,0,128))
-        self.dialog_box.image.blit(self.transparent, (0,0))
+        self.dialogue_box.image.blit(self.transparent, (0,0))
 
     def init_story(self):
         self.scene = get_scene("intro")
         self.update_textbox()
         self.event = self.scene.events[0]
-        self.dialog_end = True
-        self.dialogs = self.event.dialogs
-        self.new_message = self.dialogs.next()
-        self.text_render = TextRender(self.dialog_box.size_text, "DroidSansMono",
+        self.dialogue_end = True
+        self.dialogues = self.event.dialogues
+        self.new_message = self.dialogues.next()
+        self.text_render = TextRender(self.dialogue_box.size_text, "DroidSansMono",
                                       20, (255,158,0) , self.new_message[2])
-        self.show_dialog()
+        self.show_dialogue()
 
         # Events registration
-        self.eventmanager.on_key_down(self.show_dialog, pg.K_RIGHT)
-        self.eventmanager.on_click_on(self.dialog_box,
-                                      self.show_dialog)
+        self.eventmanager.on_key_down(self.show_dialogue, pg.K_RIGHT)
+        self.eventmanager.on_click_on(self.dialogue_box,
+                                      self.show_dialogue)
 
-    def show_dialog(self, *args):
+    def show_dialogue(self, *args):
         next_text = self.text_render.next()
         if next_text is None:
-            self.new_message = self.dialogs.next()
+            self.new_message = self.dialogues.next()
             if self.new_message is None:
                 return None
-            self.text_render = TextRender(self.dialog_box.size_text, "larabiefont",
+            self.text_render = TextRender(self.dialogue_box.size_text, "larabiefont",
                                           25, (255,158,0) , self.new_message[2])
             next_text = self.text_render.next()
         self.update_textbox()
-        self.dialog_box.image.blit(next_text, (10,10))
+        self.dialogue_box.image.blit(next_text, (10,10))
         if self.new_message[1]:
             self.graphic_elements = pygame.sprite.RenderPlain(
-                self.dialog_box, self.charac1, self.charac2)
+                self.dialogue_box, self.charac1, self.charac2)
         elif self.new_message[0]:
             self.graphic_elements = pygame.sprite.RenderPlain(
-                self.dialog_box, self.charac1)
+                self.dialogue_box, self.charac1)
 
 
 

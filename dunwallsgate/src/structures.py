@@ -10,7 +10,7 @@ class Scene():
 class Event():
     def __init__(self):
         self.conditions = Conditions()
-        self.dialogs = Dialogs()
+        self.dialogues = Dialogues()
         self.triggers = []
         self.begin = True
         
@@ -28,7 +28,7 @@ class Triggers():
         self.params = []
 ######
 
-class Dialogs():
+class Dialogues():
     def __init__(self):
         self.messages = []
         self.begin = True
