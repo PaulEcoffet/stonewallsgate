@@ -58,15 +58,17 @@ def get_dialogues(current_folder, ref_dialogues):
     """
     with open(
             os.path.join(current_folder, "dialogues", ref_dialogues + ".json"),
-            "r", encoding="latin-1") as json_file:
-        list_dct = json.load(json_file)
+            "r", encoding="latin-1") as dialogues_file:
+        json_dialogues = json.load(dialogues_file)
         dialogues = Dialogues()
-        listener = None
-        main_character = None
-        for dct in list_dct:
-            if 'listener' in dct:
-                listener = dct['listener']
-            if 'main_character' in dct:
-                main_character = dct['main_character']
-            dialogues.messages.append((main_character, listener, dct['message']))
+        transmitter = None
+        receiver = None
+        for json_dialogue in json_dialogues:
+            if "transmitter" in json_dialogue:
+                transmitter = json_dialogue["transmitter"]
+            if "receiver" in json_dialogue:
+                receiver = json_dialogue["receiver"]
+            dialogues.messages.append({"transmitter" : transmitter,
+                                       "receiver" : receiver,
+                                       "message" : json_dialogue["message"]})
     return dialogues

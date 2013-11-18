@@ -107,9 +107,10 @@ class StoryScreen():
         self.event = self.scene.events[0]
         self.dialogue_end = True
         self.dialogues = self.event.dialogues
-        self.new_message = self.dialogues.next()
+        self.message = self.dialogues.next()
+        self.old_message = None
         self.text_render = TextRender(self.dialogue_box.size_text, "DroidSansMono",
-                                      20, (255,158,0) , self.new_message[2])
+                                      20, (255,158,0) , self.message["message"])
         self.show_dialogue()
 
         # Events registration
@@ -120,20 +121,22 @@ class StoryScreen():
     def show_dialogue(self, *args):
         next_text = self.text_render.next()
         if next_text is None:
-            self.new_message = self.dialogues.next()
-            if self.new_message is None:
+            self.message = self.dialogues.next()
+            if self.message is None:
                 return None
             self.text_render = TextRender(self.dialogue_box.size_text, "larabiefont",
-                                          25, (255,158,0) , self.new_message[2])
+                                          25, (255,158,0) , self.message["message"])
             next_text = self.text_render.next()
         self.update_textbox()
         self.dialogue_box.image.blit(next_text, (10,10))
-        if self.new_message[1]:
-            self.graphic_elements = pygame.sprite.RenderPlain(
-                self.dialogue_box, self.charac1, self.charac2)
-        elif self.new_message[0]:
-            self.graphic_elements = pygame.sprite.RenderPlain(
-                self.dialogue_box, self.charac1)
+        if self.message != self.old_message:
+            self.old_message = self.message
+            if self.message["receiver"]:
+                self.graphic_elements = pygame.sprite.RenderPlain(
+                    self.dialogue_box, self.charac1, self.charac2)
+            elif self.message["transmitter"]:
+                self.graphic_elements = pygame.sprite.RenderPlain(
+                    self.dialogue_box, self.charac1)
 
 
 
