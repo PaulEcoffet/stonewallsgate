@@ -2,11 +2,10 @@
 
 
 import pygame
+from decoder import *
 
-from decoders.json_structures import *
 from screens.text_render import TextRender
-from data import get_image_path
-
+import data 
 
 class StoryScreen():
     """
@@ -65,14 +64,14 @@ class StoryScreen():
     def init_sprites(self):
         if not self.scene_background:
             self.scene_background = pygame.image.load(
-                get_image_path('storyscreen/background/demo.jpg')).convert()
+                data.get_image_path('storyscreen/background/demo.jpg')).convert()
             self.scene_background = (pygame.transform.scale(
                 self.scene_background, (1024, 574)))
             
         if not self.dialog_box:
             self.dialog_box = pygame.sprite.DirtySprite()
             self.dialog_box.image = pygame.image.load(
-                get_image_path('storyscreen/text_box.png'))
+                data.get_image_path('storyscreen/text_box.png'))
             self.dialog_box.image = self.dialog_box.image.convert_alpha()
             self.dialog_box.image = pygame.transform.scale(self.dialog_box.image, (924, 163))
             self.dialog_box.image.set_alpha(0)
@@ -80,20 +79,20 @@ class StoryScreen():
         if not self.zone_box:
             self.zone_box = pygame.sprite.DirtySprite()
             self.zone_box.image = pygame.image.load(
-                get_image_path('storyscreen/zone_box.png')).convert()
+                data.get_image_path('storyscreen/zone_box.png')).convert()
             self.zone_box.image = (pygame.transform.scale(self.zone_box.image,
                                                           (249, 36)))
         if not self.charac1:
             self.charac1 = pygame.sprite.DirtySprite()
             self.charac1.image = pygame.image.load(
-                get_image_path('storyscreen/characters/unknown.png'))
+                data.get_image_path('storyscreen/characters/unknown.png'))
             self.charac1.image = self.charac1.image.convert_alpha()
             self.charac1.image = (pygame.transform.scale(self.charac1.image,
                                                         (440, 221)))
         if not self.charac2:
             self.charac2 = pygame.sprite.DirtySprite()
             self.charac2.image = pygame.image.load(
-                get_image_path('storyscreen/characters/charac1.png'))
+                data.get_image_path('storyscreen/characters/charac1.png'))
             self.charac2.image = self.charac2.image.convert_alpha()
             self.charac2.image = (pygame.transform.scale(self.charac2.image,
                                                         (440, 221)))
@@ -102,7 +101,7 @@ class StoryScreen():
         self.dialog_box.size = (924,163)
         self.dialog_box.size_text = (904,163)
         self.dialog_box.image = pygame.image.load(
-            get_image_path('storyscreen/text_box.png'))
+            data.get_image_path('storyscreen/text_box.png'))
         self.dialog_box.image = self.dialog_box.image.convert_alpha()
         self.dialog_box.image = pygame.transform.scale(self.dialog_box.image, self.dialog_box.size )
         self.dialog_box.image.set_alpha(0) 
@@ -132,7 +131,6 @@ class StoryScreen():
         self.update_textbox()
         self.dialog_box.image.blit(next_text, (20,0))
         if self.new_message[1]:
-            print(self.new_message[0], self.new_message[1])
             self.graphic_elements = pygame.sprite.RenderPlain(self.dialog_box, self.charac1, self.charac2)
         elif self.new_message[0]:
             self.graphic_elements = pygame.sprite.RenderPlain(self.dialog_box, self.charac1)
