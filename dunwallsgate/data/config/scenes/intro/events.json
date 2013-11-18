@@ -1,0 +1,32 @@
+[
+    {
+        "conditions":
+            [
+                {
+                    "test": "test_name",
+                    "params": ["params", "list"]
+                },
+                {
+                    "test": "hero_life_sup",
+                    "params": [30]
+                }
+            ],
+        "dialogs": "ref_dialogue1",
+        "triggers":
+            [
+                {
+                    "trigger": "add_hero_health",
+                    "params": [30]
+                },
+                {
+                    "trigger": "add_obj",
+                    "params": ["ammo", 30]
+                },
+                {
+                    "trigger": "add_quest",
+                    "param": "ref_quest"
+                }
+            ]
+    }
+]
+
