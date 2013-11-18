@@ -10,20 +10,11 @@ class Scene():
 class Event():
     def __init__(self):
         self.conditions = Conditions()
-        self.dialogs = [] #list of Dialog()
+        self.dialogs = Dialogs()
         self.triggers = []
         self.begin = True
         
-    def next_dialog(self):
-        if not self.begin:
-            print(self.dialogs[0])
-            self.dialog_done = []
-            self.dialog_done.append(self.dialogs[0])
-            del self.dialogs[0]
-        else:
-            self.begin = False
-        if len(self.dialogs) != 0:
-            return self.dialogs[0]
+
         
 class Conditions():
     def __init__(self):
@@ -37,11 +28,15 @@ class Triggers():
         self.params = []
 ######
 
-class Dialog():
+class Dialogs():
     def __init__(self):
-        self.character = ""
-
-        self.message = []
-        self.old_messages = []
+        self.messages = []
         self.begin = True
-
+        
+    def next(self):
+        if len(self.messages) != 1:
+            if not self.begin:
+                del self.messages[0]
+            else:
+                self.begin = False
+            return self.messages[0]

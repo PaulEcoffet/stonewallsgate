@@ -51,8 +51,7 @@ class EventManager():
         def on_release(e, id_):
             if self._collide_with(e.pos, collidable):
                 callback(e)
-            else:
-                self.callbacks.remove_callback(id_)
+            self.callbacks.remove_callback(id_)
         id_ = self.callbacks.add_callback(
             "mouseup", cat, None, {"buttons": buttons})
         call = self.callbacks.get_callback_object(id_)
@@ -65,7 +64,8 @@ class EventManager():
             "mouseup", cat, callback,
             {"buttons": buttons, "collidable": collidable})
 
-    def on_mouse_down(self, callback, buttons=1, collidable=None, cat="screen"):
+    def on_mouse_down(self, callback, buttons=1, collidable=None,
+                      cat="screen"):
         if not isinstance(buttons, tuple):
             buttons = (buttons,)
         return self.callbacks.add_callback(
