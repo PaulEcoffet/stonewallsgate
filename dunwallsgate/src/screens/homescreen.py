@@ -5,7 +5,8 @@ import pygame
 import pygame.locals as pg
 
 from game import Game
-from data import get_image_path, get_sound_path
+from data import get_image_path
+import soundmanager
 
 
 class HomeScreen():
@@ -19,7 +20,6 @@ class HomeScreen():
     start_btn = None
 
     def __init__(self):
-        self.theme_playing = True
         self.first_draw = False
 
     def start(self, window, eventmanager):
@@ -31,13 +31,11 @@ class HomeScreen():
         self.init_sprites()
         # Soundtrack management
         try:
-            self.soundtrack = pygame.mixer.Sound(
-                get_sound_path('dunwalls_theme.ogg'))
+            soundmanager.play_music("dunwalls_theme", -1)
         except pygame.error as e:
             print("Dismissed exception: ", e)
         else:
             self.eventmanager.on_key_down(self.toggle_theme, pg.K_s)
-            self.toggle_theme(force=True)
 
         # Sprites placement
         self.exit_btn.rect = self.exit_btn.image.get_rect(
@@ -55,15 +53,8 @@ class HomeScreen():
         self.eventmanager.on_click_on(
             self.start_btn, lambda e: self.window.start_game(Game()))
 
-    def toggle_theme(self, *args, **kwargs):
-        try:
-            self.theme_playing = kwargs["force"]
-        except KeyError:
-            self.theme_playing = not self.theme_playing
-        if self.theme_playing:
-            self.soundtrack.play(-1)
-        else:
-            self.soundtrack.stop()
+    def toggle_theme(self, event):
+        soundmanager.toggle_music(500)
 
     def draw(self):
         if self.first_draw:
@@ -74,6 +65,7 @@ class HomeScreen():
 
     def shutdown(self):
         self.surface.fill(0)
+        soundmanager.stop_music(500)
 
     def init_sprites(self):
         if not self.background:
