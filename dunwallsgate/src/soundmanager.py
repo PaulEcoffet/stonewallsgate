@@ -1,7 +1,6 @@
 import os.path
 
 import pygame.mixer
-import pygame.mixer.music
 
 import data
 
@@ -26,9 +25,16 @@ def loop_music(music_ref=None):
 
 def stop_music(fadeout_time=0):
     if fadeout_time > 0:
-        pygame.music.fadeout(fadeout_time)
+        pygame.mixer.music.fadeout(fadeout_time)
     else:
-        pygame.music.stop()
+        pygame.mixer.music.stop()
+
+
+def toggle_music(fadeout_time=0):
+    if pygame.mixer.music.get_busy():
+        stop_music(fadeout_time)
+    else:
+        play_music()
 
 
 def set_music_volume(volume):
