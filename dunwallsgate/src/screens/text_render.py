@@ -52,3 +52,5 @@ class TextRender():
                 self.transparent.blit(render_line, (0,i*self.letter_size["height"]*1.15))
             self.nb_panel += 1
             return self.transparent
+        else:
+            return None
