@@ -47,3 +47,5 @@ class GameEvent():
 					self.game.screen = CombatScreen(self.game.hero, self.event)
 				self.game.change_screen()
 				self.first = False
+			else:
+				self.scene = decoder.get_scene("awakening")

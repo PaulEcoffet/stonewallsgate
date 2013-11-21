@@ -1,22 +1,17 @@
 [
     {
-        "message": "Démonstration"
+        "message": "Astuce: Cliquez sur la zone de texte ou appuyez sur [Fléche Droite] pour avancer."
     },
     {
-        "message": "Vous incarnez un homme oppressé par ce monde sans rime ni raison qui a perdu sa foi envers l'humanité. Violent et imprévisible, sa seule raison de vivre tient en un mémo. Celui de son frère, disparu il y a dix ans, officiellement mort dans un accident... officiellement..."
+        "message": "L'histoire se déroule dans un futur alternatif ou l'humanité a été forcée de vivre abritée sous un immense dome, baptisé : Le Dunwall. Cette immense cité futuriste est construite pour proteger la communauté de survivants d'un virus detruisant toute forme de vie. Alors que le Dunwall se developpait, le cadre de vie y devenait agréable, et l'existence d'un virus à l'extérieur se fit oublier. Une démocratie contrôla la cité pendant deux siècle. Cependant, celle-ci devint lente et décadente, innefficace. La corruption s'installa, les ressources manquent. Las de cette situation et avide de pouvoir, Worthshuttle tente un coup d'état. L'ensemble de Dunwall fut alors géré par un gouvernement totalitaire, chapoté par Worthshuttle qui maintenait l'ordre dans un milieu surpeuplé et à ressources limitées. Ce gouvernement permit une certaine stabilité sous le dôme qui  parvient à redevenir auto-suffisant."
     },
     {
-        "transmitter": "Klim",
-        "message": "Mais où est parti cet incapable de Gordon ?"
+        "transmitter": "Gordon",
+        "message": "Je suis enfin arrivé en ville, je vais pouvoir demander à Klim ce dont il a besoin."
     },
     {
         "transmitter": "Gordon",
         "receiver": "Klim",
-        "message": "Je suis là."
-    },
-    {
-        "transmitter": "Klim",
-        "receiver": "Gordon",
-        "message": "Ok, il etait temps, j'ai besoin de toi. Tu me dois un service non ?"
+        "message": "Nous devons protéger la base du pillage... Nous avons besoin de ton aide. Tu dois partir à la recherche du magnéteur X-2, pour remplacer celui qui retient notre porte."
     }
 ]

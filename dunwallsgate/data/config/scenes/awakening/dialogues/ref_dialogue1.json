@@ -1,0 +1,22 @@
+[
+    {
+        "message": "Démonstration"
+    },
+    {
+        "message": "Vous incarnez un homme oppressé par ce monde sans rime ni raison qui a perdu sa foi envers l'humanité. Violent et imprévisible, sa seule raison de vivre tient en un mémo. Celui de son frère, disparu il y a dix ans, officiellement mort dans un accident... officiellement..."
+    },
+    {
+        "transmitter": "Klim",
+        "message": "Mais où est parti cet incapable de Gordon ?"
+    },
+    {
+        "transmitter": "Gordon",
+        "receiver": "Klim",
+        "message": "Je suis là."
+    },
+    {
+        "transmitter": "Klim",
+        "receiver": "Gordon",
+        "message": "Ok, il etait temps, j'ai besoin de toi. Tu me dois un service non ?"
+    }
+]
