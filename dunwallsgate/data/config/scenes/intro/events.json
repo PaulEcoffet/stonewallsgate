@@ -27,6 +27,35 @@
                     "param": "ref_quest"
                 }
             ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_true",
+                    "params": "true"
+                },
+                {
+                    "test": "hero_name",
+                    "params": "Gordon"
+                }
+            ],
+        "dialogs": "ref_dialogue2",
+        "triggers":
+            [
+                {
+                    "trigger": "add_hero_health",
+                    "params": [30]
+                },
+                {
+                    "trigger": "add_obj",
+                    "params": ["ammo", 30]
+                },
+                {
+                    "trigger": "add_quest",
+                    "param": "ref_quest"
+                }
+            ]
     }
 ]
 

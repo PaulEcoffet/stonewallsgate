@@ -12,7 +12,7 @@ class Event():
 		self.conditions = {}
 		self.dialogues = Dialogues()
 		self.triggers = {}
-		self.begin = True
+		self.done = False
 		
 ######
 

@@ -9,19 +9,24 @@ class GameEvent():
 
 	def __init__(self, game, current_scene=decoder.get_scene("intro")):
 		self.scene = current_scene
-		self.end_scene = False
 		self.game = game
 		self.game_conditions = conditions.get_conditions_dict(game)
+		self.first = True
 
 		#For all events in the scene, check if one event checks all conditions
-		for event in self.scene.events:
-			if self.is_valid(event):
-				self.event = event
-				self.event.background = self.scene.background
-				self.start()
+		self.update()
 
 		#when all events are done, scene is over
 		self.end_scene = True
+		
+	def search_event(self):
+		self.event_found = False
+		for event in self.scene.events:
+			if self.is_valid(event) and not event.done:
+				self.event = event
+				self.event.background = self.scene.background
+				self.event_found = True
+				break
 
 	def is_valid(self, event):
 		"""Check if event valid all conditions (with game data)"""
@@ -31,10 +36,14 @@ class GameEvent():
 				return False
 		return True
 
-	def start(self):
+	def update(self):
 		"""Launch the screen which correspond with the current event"""
-		if self.event.dialogues:
-			self.game.screen = StoryScreen(self.game.hero, self.event)
-		elif self.event.combat:
-			self.game.screen = CombatScreen(self.game.hero, self.event)
-		self.game.change_screen()
+		if self.first or self.event.done:
+			self.search_event()
+			if self.event_found:
+				if self.event.dialogues:
+					self.game.screen = StoryScreen(self.game.hero, self.event)
+				elif self.event.combat:
+					self.game.screen = CombatScreen(self.game.hero, self.event)
+				self.game.change_screen()
+				self.first = False
