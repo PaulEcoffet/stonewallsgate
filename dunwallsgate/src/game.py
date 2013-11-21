@@ -22,10 +22,13 @@ class Game():
 
 	def start(self, window):
 		self.window = window
-		self.game_event = GameEvent(self, decoder.get_scene(self.hero_location))
+		self.game_event = GameEvent(self)
 		
 	def change_screen(self):
 		self.window.set_screen(self.screen)
+	
+	def change_scene(self, scene):
+		self.game_event.scene = decoder.get_scene(scene)
 
 class Base():
 	"""

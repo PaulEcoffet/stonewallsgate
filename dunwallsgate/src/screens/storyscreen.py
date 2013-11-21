@@ -48,8 +48,8 @@ class StoryScreen():
 	def draw(self):
 		if self.end_scene:
 			self.surface.blit(self.scene_background, (0, 0))
-			self.test = TextRender((300,100), "joystix", 11, (200,100,10),
-								   "Scene de demonstration (Dunwall's Gate)")
+			self.test = TextRender((300,100), "larabiefont", 15, (200,100,10),
+								   "ALPHA version")
 			self.surface.blit(self.test.next(), (10,10))
 			self.end_scene = False
 		self.graphic_elements.clear(self.surface, self.scene_background)

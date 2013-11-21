@@ -1,5 +1,5 @@
 from screens.storyscreen import StoryScreen
-import quest, conditions, decoder
+import quest, conditions, decoder, triggers
 from inventory import Inventory
 from character import Character
 
@@ -11,17 +11,13 @@ class GameEvent():
 		self.scene = current_scene
 		self.game = game
 		self.game_conditions = conditions.get_conditions_dict(game)
-		self.first = True
-
-		#For all events in the scene, check if one event checks all conditions
-		self.update()
-
-		#when all events are done, scene is over
-		self.end_scene = True
+		self.game_triggers = triggers.get_triggers_dict(game)
+		self.start = True
 		
 	def search_event(self):
 		self.event_found = False
 		for event in self.scene.events:
+			#Look if event have been done and if it is valid (PS: event.done is set True in the end of StoryScreen)
 			if self.is_valid(event) and not event.done:
 				self.event = event
 				self.event.background = self.scene.background
@@ -30,15 +26,19 @@ class GameEvent():
 
 	def is_valid(self, event):
 		"""Check if event valid all conditions (with game data)"""
-
 		for condition in event.conditions:
 			if not self.game_conditions[condition["test"]](condition["params"]):
 				return False
 		return True
+		
+	def execute_triggers(self, event):
+		for trigger in event.triggers:
+			self.game_triggers[trigger["trigger"]](trigger["params"])
 
 	def update(self):
-		"""Launch the screen which correspond with the current event"""
-		if self.first or self.event.done:
+		"""Update every 30sec the screen to be sure that it correspond with the current event (check window.py)"""
+		#If it's the first update or if previous event are done, search new event and execute it (with triggers)
+		if self.start or self.event.done:
 			self.search_event()
 			if self.event_found:
 				if self.event.dialogues:
@@ -46,6 +46,5 @@ class GameEvent():
 				elif self.event.combat:
 					self.game.screen = CombatScreen(self.game.hero, self.event)
 				self.game.change_screen()
-				self.first = False
-			else:
-				self.scene = decoder.get_scene("awakening")
+				self.execute_triggers(self.event) #may change the screen (Check game.change_scene function)
+				self.start = False
