@@ -1,25 +1,40 @@
 from screens.storyscreen import StoryScreen
-import quest
+import quest, conditions, decoder
 from inventory import Inventory
 from character import Character
 
 
 class GameEvent():
-    """Define what to do and when during the game"""
+	"""Define what to do and when during the game"""
 
-    def __init__(self, current_event=get_events("intro"), game):
-        self.event = current_event
-        self.game = game
-        self.game_conditions = conditions.get_conditions_dict(game)
-        
-    def is_valid(self):
-        for condition in self.event.conditions:
-            if not self.game_conditions[condition["name"]](condition["params"]):
-                return False
-        return True
+	def __init__(self, game, current_scene=decoder.get_scene("intro")):
+		self.scene = current_scene
+		self.end_scene = False
+		self.game = game
+		self.game_conditions = conditions.get_conditions_dict(game)
 
-    def start(self):
-        if self.event.dialogues:
-            for dialogue in self.event.dialogues:
-            
-        
+		#For all events in the scene, check if one event checks all conditions
+		for event in self.scene.events:
+			if self.is_valid(event):
+				self.event = event
+				self.event.background = self.scene.background
+				self.start()
+
+		#when all events are done, scene is over
+		self.end_scene = True
+
+	def is_valid(self, event):
+		"""Check if event valid all conditions (with game data)"""
+
+		for condition in event.conditions:
+			if not self.game_conditions[condition["test"]](condition["params"]):
+				return False
+		return True
+
+	def start(self):
+		"""Launch the screen which correspond with the current event"""
+		if self.event.dialogues:
+			self.game.screen = StoryScreen(self.game.hero, self.event)
+		elif self.event.combat:
+			self.game.screen = CombatScreen(self.game.hero, self.event)
+		self.game.change_screen()

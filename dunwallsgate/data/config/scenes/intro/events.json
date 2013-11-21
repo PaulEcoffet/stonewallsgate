@@ -3,12 +3,12 @@
         "conditions":
             [
                 {
-                    "test": "test_name",
-                    "params": ["params", "list"]
+                    "test": "is_true",
+                    "params": "true"
                 },
                 {
-                    "test": "hero_life_sup",
-                    "params": [30]
+                    "test": "hero_name",
+                    "params": "Gordon"
                 }
             ],
         "dialogs": "ref_dialogue1",

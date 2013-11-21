@@ -13,6 +13,19 @@
         "abilities": ["attack", "heal"]
     },
     {
+        "ref": "chef",
+        "name": "Klim",
+        "front_image": "klim_front.png",
+        "back_image": "klim_front.png",
+        "maxhealth": 100,
+        "range_attack": 10,
+        "attack": 15,
+        "defense": 12,
+        "initiative": 13,
+        "inventory": null,
+        "abilities": ["attack", "heal"]
+    },
+    {
         "ref": "unknown",
         "name": "Who knows?",
         "front_image": "unknown_front.png",
