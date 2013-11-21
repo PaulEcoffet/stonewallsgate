@@ -48,9 +48,13 @@ class StoryScreen():
 	def draw(self):
 		if self.end_scene:
 			self.surface.blit(self.scene_background, (0, 0))
-			self.test = TextRender((300,100), "larabiefont", 15, (200,100,10),
+			transparent = pygame.Surface((230,30),
+										  pygame.SRCALPHA)
+			transparent.fill((0,0,0,140))
+			self.test = TextRender((300,50), "joystix", 20, (255,50,10),
 								   "ALPHA version")
-			self.surface.blit(self.test.next(), (10,10))
+			transparent.blit(self.test.next(), (5,3))
+			self.surface.blit(transparent, (10,10))
 			self.end_scene = False
 		self.graphic_elements.clear(self.surface, self.scene_background)
 		self.graphic_elements.draw(self.surface)
