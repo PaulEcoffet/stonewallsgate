@@ -17,8 +17,6 @@ class StoryScreen():
 	scene_background = None
 	dialogue_box = None
 	zone_box = None
-	charac1 = None
-	charac2 = None
 	next_btn = None
 
 	def __init__(self, hero, event):
@@ -32,6 +30,8 @@ class StoryScreen():
 		self.surface = window.surface
 		self.eventmanager = eventmanager
 		self.end_scene = True
+		self.portraits_cache = {}
+		self.img_cache = {}
 
 		self.init_sprites()
 
@@ -48,11 +48,10 @@ class StoryScreen():
 	def draw(self):
 		if self.end_scene:
 			self.surface.blit(self.scene_background, (0, 0))
-			transparent = pygame.Surface((230,30),
-										  pygame.SRCALPHA)
+			transparent = pygame.Surface((230,30), pygame.SRCALPHA)
 			transparent.fill((0,0,0,140))
-			self.test = TextRender((300,50), "joystix", 20, (255,50,10),
-								   "ALPHA version")
+			self.test = TextRender((300,50), "joystix", 20, (255,50,10), 
+                                               "ALPHA version")
 			transparent.blit(self.test.next(), (5,3))
 			self.surface.blit(transparent, (10,10))
 			self.end_scene = False
@@ -70,15 +69,8 @@ class StoryScreen():
 			self.dialogue_box.image = pygame.image.load(
 				data.get_image_path('storyscreen/text_box.png'))
 			self.dialogue_box.image = self.dialogue_box.image.convert_alpha()
-			self.dialogue_box.image = pygame.transform.scale(self.dialogue_box.image,
-														   (924, 163))
+			self.dialogue_box.image = pygame.transform.scale(self.dialogue_box.image, (924, 163))
 			self.dialogue_box.image.set_alpha(0)
-		
-		if not self.charac1:
-			self.charac1 = pygame.sprite.DirtySprite()
-			
-		if not self.charac2:
-			self.charac2 = pygame.sprite.DirtySprite()
 
 
 	def update_textbox(self):
@@ -87,11 +79,9 @@ class StoryScreen():
 		self.dialogue_box.image = pygame.image.load(
 			data.get_image_path('storyscreen/text_box.png'))
 		self.dialogue_box.image = self.dialogue_box.image.convert_alpha()
-		self.dialogue_box.image = pygame.transform.scale(self.dialogue_box.image,
-													   self.dialogue_box.size )
+		self.dialogue_box.image = pygame.transform.scale(self.dialogue_box.image, self.dialogue_box.size )
 		self.dialogue_box.image.set_alpha(0)
-		self.transparent = pygame.Surface(self.dialogue_box.size,
-										  pygame.SRCALPHA)
+		self.transparent = pygame.Surface(self.dialogue_box.size, pygame.SRCALPHA)
 		self.transparent.fill((0,0,0,128))
 		self.dialogue_box.image.blit(self.transparent, (0,0))
 
@@ -102,32 +92,34 @@ class StoryScreen():
 		self.dialogues = self.event.dialogues
 		self.message = self.dialogues.next()
 		self.old_message = None
-		self.text_render = TextRender(self.dialogue_box.size_text, "unispace_italic",
-									  20, (255,158,0) , self.message["message"])
+		self.text_render = TextRender(self.dialogue_box.size_text, "unispace_italic", 20, (255,158,0) , self.message["message"])
 		self.show_dialogue()
 
 		# Events registration
 		self.eventmanager.on_key_down(self.show_dialogue, pg.K_RIGHT)
-		self.eventmanager.on_click_on(self.dialogue_box,
-									  self.show_dialogue)
+		self.eventmanager.on_click_on(self.dialogue_box, self.show_dialogue)
 
-	def portrait_creation(self, charac, type, position):
-		img = data.get_image_path('characters/%s'%get_character_data(self.message["%s"%type])["front_image"])
-		charac.image = pygame.image.load(img)
-		charac.image = charac.image.convert_alpha()
-		charac.image = (pygame.transform.scale(charac.image,
-													(440, 221)))
-		charac.rect = charac.image.get_rect(midtop=position)
-		name = TextRender((300,100), "joystix", 35, (160,50,10),
-								   self.message["%s"%type])
-		transparent = pygame.Surface((300,100),
-										  pygame.SRCALPHA)
-		transparent.fill((0,0,0,200))
-		if type == "receiver":
-			charac.image.fill((255, 255, 255, 200), None, pygame.BLEND_RGBA_MULT)
-		charac.image.blit(transparent, (20,185))
-		charac.image.blit(name.next(), (25,181))
-		return charac
+	def portrait_creation(self, type, position):
+		#Add image in "cache" list to avoid useless LOADS
+		id_image = self.message[type]
+		if not id_image in self.img_cache:
+			self.img_cache[id_image] = data.get_image_path('characters/%s'%get_character_data(id_image)["front_image"])
+		#Add full portrait (text + image + layouts) in "cache" list to avoid useless PROCESS 
+		id_portrait = (self.message[type], position)
+		if not id_portrait in self.portraits_cache:
+			self.portraits_cache[id_portrait] = pygame.sprite.DirtySprite()
+			self.portraits_cache[id_portrait].image = pygame.image.load(self.img_cache[id_image])
+			self.portraits_cache[id_portrait].image = self.portraits_cache[id_portrait].image.convert_alpha()
+			self.portraits_cache[id_portrait].image = (pygame.transform.scale(self.portraits_cache[id_portrait].image, (440, 221)))
+			self.portraits_cache[id_portrait].rect = self.portraits_cache[id_portrait].image.get_rect(midtop=position)
+			name = TextRender((300,100), "joystix", 35, (160,50,10), self.message["%s"%type])
+			transparent = pygame.Surface((300,100), pygame.SRCALPHA)
+			transparent.fill((0,0,0,200))
+			if type == "receiver":
+				self.portraits_cache[id_portrait].image.fill((255, 255, 255, 200), None, pygame.BLEND_RGBA_MULT)
+			self.portraits_cache[id_portrait].image.blit(transparent, (20,185))
+			self.portraits_cache[id_portrait].image.blit(name.next(), (25,181))
+		return self.portraits_cache[id_portrait]
 		
 	def show_dialogue(self, *args):
 		next_text = self.text_render.next()
@@ -136,19 +128,18 @@ class StoryScreen():
 			if self.message is None:
 				self.event.done = True
 				return None
-			self.text_render = TextRender(self.dialogue_box.size_text, "larabiefont",
-										  25, (255,158,0) , self.message["message"])
+			self.text_render = TextRender(self.dialogue_box.size_text, "larabiefont", 25, (255,158,0) , self.message["message"])
 			next_text = self.text_render.next()
 		self.update_textbox()
 		self.dialogue_box.image.blit(next_text, (10,10))
 		if self.message != self.old_message:
 			self.old_message = self.message
 			if self.message["receiver"]:
-				self.portrait_creation(self.charac1, "transmitter", (250,160))
-				self.portrait_creation(self.charac2, "receiver", (800, 160))
+				charac1 = self.portrait_creation("transmitter", (250,160))
+				charac2 = self.portrait_creation("receiver", (800, 160))
 				self.graphic_elements = pygame.sprite.RenderPlain(
-					self.dialogue_box, self.charac1, self.charac2)
+					self.dialogue_box, charac1, charac2)
 			elif self.message["transmitter"]:
-				self.portrait_creation(self.charac1, "transmitter", (250,160))
+				charac1 = self.portrait_creation("transmitter", (250,160))
 				self.graphic_elements = pygame.sprite.RenderPlain(
-					self.dialogue_box, self.charac1)
+					self.dialogue_box, charac1)

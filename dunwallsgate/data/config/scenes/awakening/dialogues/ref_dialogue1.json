@@ -18,5 +18,20 @@
         "transmitter": "Klim",
         "receiver": "Gordon",
         "message": "Ok, il etait temps, j'ai besoin de toi. Tu me dois un service non ?"
+    },
+    {
+        "transmitter": "Gordon",
+        "receiver": "Klim",
+        "message": "Tu m'as sauvé la vie, je te dois bien plus qu'un service, que veux tu Klim ?"
+    },
+    {
+        "transmitter": "Klim",
+        "receiver": "Gordon",
+        "message": "Les membres des clans des Singes Fous se sont réunis hier, j'ai besoin de savoir pourquoi."
+    },
+    {
+        "transmitter": "Gordon",
+        "receiver": "Klim",
+        "message": "Compte sur moi."
     }
 ]

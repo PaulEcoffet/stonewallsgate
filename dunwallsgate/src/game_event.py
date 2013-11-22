@@ -15,14 +15,13 @@ class GameEvent():
 		self.start = True
 		
 	def search_event(self):
-		self.event_found = False
 		for event in self.scene.events:
 			#Look if event have been done and if it is valid (PS: event.done is set True in the end of StoryScreen)
 			if self.is_valid(event) and not event.done:
 				self.event = event
 				self.event.background = self.scene.background
-				self.event_found = True
-				break
+				return True
+		return False
 
 	def is_valid(self, event):
 		"""Check if event valid all conditions (with game data)"""
@@ -38,13 +37,11 @@ class GameEvent():
 	def update(self):
 		"""Update every 30sec the screen to be sure that it correspond with the current event (check window.py)"""
 		#If it's the first update or if previous event are done, search new event and execute it (with triggers)
-		if self.start or self.event.done:
-			self.search_event()
-			if self.event_found:
-				if self.event.dialogues:
-					self.game.screen = StoryScreen(self.game.hero, self.event)
-				elif self.event.combat:
-					self.game.screen = CombatScreen(self.game.hero, self.event)
-				self.game.change_screen()
-				self.execute_triggers(self.event) #may change the screen (Check game.change_scene function)
-				self.start = False
+		if (self.start or self.event.done) and self.search_event():
+			if self.event.dialogues:
+				self.game.screen = StoryScreen(self.game.hero, self.event)
+			elif self.event.combat:
+				self.game.screen = CombatScreen(self.game.hero, self.event)
+			self.game.change_screen()
+			self.execute_triggers(self.event) #may change the screen (Check game.change_scene function)
+			self.start = False
