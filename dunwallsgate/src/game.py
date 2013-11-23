@@ -19,6 +19,7 @@ class Game():
 		self.hero_state = {"is_true" : "true", "hero_name" : "Gordon"}
 		self.hero_location = "intro"
 		self.hero_companions = []
+		self.characters = [self.hero, Character("klim_sample"), Character("sylvanas_sample")]
 
 	def start(self, window):
 		self.window = window

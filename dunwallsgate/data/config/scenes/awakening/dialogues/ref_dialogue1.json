@@ -33,5 +33,52 @@
         "transmitter": "Gordon",
         "receiver": "Klim",
         "message": "Compte sur moi."
+    },
+    {
+        "transmitter": "Klim",
+        "receiver": "Gordon",
+        "message": "Très bien. Va voir Sylvanas, elle saura te guider dans cette mission."
+    },
+    {
+        "transmitter": "Klim",
+        "message": "J'espère pour lui qu'il a des reins solides, cette mission... Il n'a aucune chance de revenir entier !"
+    },
+    {
+        "transmitter": "Sylvanas",
+        "receiver": "Gordon",
+        "message": "Donc c'est toi le nouveau ? Il parait que tu as réussi à etonner notre chef... J'ai hâte de voir ce dont tu es capable. En route !"
+    },
+    {
+        "transmitter": "Sylvanas",
+        "message": "Je vais encore devoir jouer les mamans... A mois que..."
+    },
+    {
+        "transmitter": "Gordon",
+        "receiver": "Sylvanas",
+        "message": "On va où ?"
+    },
+    {
+        "transmitter": "Sylvanas",
+        "message": "Directement dans leur base."
+    },
+    {
+        "transmitter": "Gordon",
+        "message": "Elle est franche !"
+    },
+    {
+        "message": "Et c'est alors que Gordon et Sylvanas partirent à l'aventure, au risque de mourir, il iront défier les autres clans. Vont-ils survivre ?"
+    },
+    {
+        "transmitter": "Gordon",
+        "message": "Eh ! Mais attend, tout ceci n'est qu'une démo ! Il n'y a donc pas de suite..."
+    },
+    {
+        "transmitter": "Sylvanas",
+        "receiver": "Gordon",
+        "message": "Il est pas bête..."
+    },
+    {
+        "transmitter": "Sylvanas",
+        "message": "Rendez-vous la semaine prochaine pour d'autres démos plus palpitantes encore!"
     }
 ]

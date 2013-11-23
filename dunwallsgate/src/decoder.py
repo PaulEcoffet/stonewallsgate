@@ -61,9 +61,9 @@ def get_dialogues(current_folder, ref_dialogues):
 			"r", encoding="latin-1") as dialogues_file:
 		json_dialogues = json.load(dialogues_file)
 		dialogues = Dialogues()
-		transmitter = None
-		receiver = None
 		for json_dialogue in json_dialogues:
+			transmitter = None
+			receiver = None
 			if "transmitter" in json_dialogue:
 				transmitter = json_dialogue["transmitter"]
 			if "receiver" in json_dialogue:

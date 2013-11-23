@@ -10,8 +10,8 @@
         "message": "Je suis enfin arrivé en ville, je vais pouvoir demander à Klim ce dont il a besoin."
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Klim",
+        "transmitter": "Klim",
+        "receiver": "Gordon",
         "message": "Nous devons protéger la base du pillage... Nous avons besoin de ton aide. Tu dois partir à la recherche du magnéteur X-2, pour remplacer celui qui retient notre porte."
     }
 ]

@@ -39,9 +39,9 @@ class GameEvent():
 		#If it's the first update or if previous event are done, search new event and execute it (with triggers)
 		if (self.start or self.event.done) and self.search_event():
 			if self.event.dialogues:
-				self.game.screen = StoryScreen(self.game.hero, self.event)
+				self.game.screen = StoryScreen(self.game.characters, self.event)
 			elif self.event.combat:
-				self.game.screen = CombatScreen(self.game.hero, self.event)
+				self.game.screen = CombatScreen(self.game.characters, self.event)
 			self.game.change_screen()
 			self.execute_triggers(self.event) #may change the screen (Check game.change_scene function)
 			self.start = False
