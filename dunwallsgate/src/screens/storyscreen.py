@@ -55,10 +55,10 @@ class StoryScreen():
 
 		if not self.dialogue_box:
 			self.dialogue_box = pygame.sprite.DirtySprite()
+			self.dialogue_box.image = pygame.Surface((924,163), pygame.SRCALPHA)
 			self.purge_textbox()
 
 	def purge_textbox(self):
-		self.dialogue_box.image = pygame.Surface((924,163), pygame.SRCALPHA)
 		self.dialogue_box.image.fill((0,0,0,140))
 
 	def init_story(self):
@@ -79,7 +79,7 @@ class StoryScreen():
 		if not id_img in self.cache:
 			for character in self.characters:
 				if character.name == self.message[type]:
-					self.cache[id_img] = data.get_image_path("characters\%s"%character.front_image)
+					self.cache[id_img] = character.front_image
 		#Add full portrait (text + image + layouts) in "cache" list to avoid useless PROCESS 
 		id_portrait = (id_img, type, position)
 		if not id_portrait in self.cache:
@@ -110,27 +110,29 @@ class StoryScreen():
 				#End of Storyscreen (the event is done)
 				self.event.done = True
 				return None
-			characs = []
-			if self.message["transmitter"]:
-				if self.message["transmitter"] == self.master:
-					characs.append(self.portrait_creation("transmitter", (250,160)))
-					if self.message["receiver"]:
-						characs.append(self.portrait_creation("receiver", (800,160)))
-				elif self.message["receiver"] and self.message["receiver"] == self.master: 
-					characs.append(self.portrait_creation("transmitter", (800,160)))
-					characs.append(self.portrait_creation("receiver", (250,160)))
-				elif self.message["receiver"]:
-					self.master = self.message["transmitter"]
-					characs.append(self.portrait_creation("receiver", (800, 160)))
-					characs.append(self.portrait_creation("transmitter", (250, 160)))
-				else:
-					self.master = self.message["transmitter"]
-					characs.append(self.portrait_creation("transmitter", (250, 160)))
-				
 			self.graphic_elements.clear(self.surface, self.scene_background)
 			self.graphic_elements = pygame.sprite.RenderPlain(
-				self.dialogue_box, *characs)
+				self.dialogue_box, *self.get_portraits())
 			self.text_render = TextRender((904,163), "larabiefont", 25, (255,158,0) , self.message["message"])
 			next_text = self.text_render.next()
 		self.purge_textbox()
 		self.dialogue_box.image.blit(next_text, (10,10))
+		
+	def get_portraits(self):
+		characs = []
+		if self.message["transmitter"]:
+			if self.message["transmitter"] == self.master:
+				characs.append(self.portrait_creation("transmitter", (250,160)))
+				if self.message["receiver"]:
+					characs.append(self.portrait_creation("receiver", (800,160)))
+			elif self.message["receiver"] and self.message["receiver"] == self.master: 
+				characs.append(self.portrait_creation("transmitter", (800,160)))
+				characs.append(self.portrait_creation("receiver", (250,160)))
+			elif self.message["receiver"]:
+				self.master = self.message["transmitter"]
+				characs.append(self.portrait_creation("receiver", (800, 160)))
+				characs.append(self.portrait_creation("transmitter", (250, 160)))
+			else:
+				self.master = self.message["transmitter"]
+				characs.append(self.portrait_creation("transmitter", (250, 160)))
+		return characs
