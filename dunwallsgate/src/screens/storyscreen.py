@@ -17,9 +17,9 @@ class StoryScreen():
 	scene_background = None
 	dialogue_box = None
 
-	def __init__(self, characters, event):
+	def __init__(self, game, event):
 		self.start_scene = True
-		self.characters = characters
+		self.game = game
 		self.event = event
 
 	def start(self, window, eventmanager):
@@ -31,7 +31,6 @@ class StoryScreen():
 		# Sprites placement
 		self.dialogue_box.rect = self.dialogue_box.image.get_rect(x=50, y=380)
 		self.graphic_elements = pygame.sprite.RenderPlain(self.dialogue_box)
-		self.portrait_creation()
 		self.init_story()
 
 	def draw(self):
@@ -67,33 +66,12 @@ class StoryScreen():
 		self.message = self.dialogues.next()
 		self.text_render = TextRender((904,163), "unispace_italic", 
 			20, (255,158,0) , self.message["message"])
-		self.master = None
+		self.left_charac = None
 		self.show_dialogue()
 
 		# Events registration
 		self.eventmanager.on_key_down(self.show_dialogue, pg.K_RIGHT)
 		self.eventmanager.on_click_on(self.dialogue_box, self.show_dialogue)
-
-	def portrait_creation(self):
-		#Add image in "cache" list to avoid useless LOADS
-		for character in self.characters:
-			for _type in ["transmitter", "receiver"]:
-				id_portrait = (character.name, _type)
-				self.cache[id_portrait] = pygame.sprite.DirtySprite()
-				self.cache[id_portrait].image = pygame.image.load(character.front_image)
-				self.cache[id_portrait].image = self.cache[id_portrait].image.convert_alpha()
-				self.cache[id_portrait].image = (pygame.transform.scale(self.cache[id_portrait].image, (440, 221)))
-				if _type == "transmitter":
-					name = TextRender((300,100), "joystix", 35, (200,80,15), ">"+character.name)
-					transparent = pygame.Surface((300,100), pygame.SRCALPHA)
-					transparent.fill((0,0,0,200))
-				else:
-					name = TextRender((300,100), "joystix", 30, (160,50,10), character.name)
-					transparent = pygame.Surface((300,100), pygame.SRCALPHA)
-					transparent.fill((0,0,0,200))
-					self.cache[id_portrait].image.fill((255, 255, 255, 140), None, pygame.BLEND_RGBA_MULT)
-				self.cache[id_portrait].image.blit(transparent, (20,185))
-				self.cache[id_portrait].image.blit(name.next(), (25,181))
 		
 	def show_dialogue(self, *args):
 		next_text = self.text_render.next()
@@ -119,25 +97,30 @@ class StoryScreen():
 		self.dialogue_box.image.blit(next_text, (10,10))
 		
 	def get_portraits(self):
+		""" Manage portraits (DirtySprite) to display, if there is. 
+		First charac to speak is always display on the left side."""
+		
 		characs = []
 		if self.message["transmitter"]:
-			if self.message["transmitter"] == self.master:
+			if self.message["transmitter"] == self.left_charac:
 				characs.append(self.search_portrait("transmitter", (250,160)))
 				if self.message["receiver"]:
 					characs.append(self.search_portrait("receiver", (800,160)))
-			elif self.message["receiver"] and self.message["receiver"] == self.master: 
+			elif self.message["receiver"] and self.message["receiver"] == self.left_charac: 
 				characs.append(self.search_portrait("transmitter", (800,160)))
 				characs.append(self.search_portrait("receiver", (250,160)))
 			elif self.message["receiver"]:
-				self.master = self.message["transmitter"]
+				self.left_charac = self.message["transmitter"]
 				characs.append(self.search_portrait("receiver", (800, 160)))
 				characs.append(self.search_portrait("transmitter", (250, 160)))
 			else:
-				self.master = self.message["transmitter"]
+				self.left_charac = self.message["transmitter"]
 				characs.append(self.search_portrait("transmitter", (250, 160)))
 		return characs
 		
 	def search_portrait(self, type, position):
+		""" Get portrait from cache and set it at a position. """
+		
 		id_portrait = (self.message[type], type)
-		self.cache[id_portrait].rect = self.cache[id_portrait].image.get_rect(midtop=position)
-		return self.cache[id_portrait]
+		self.game.cache.portraits[id_portrait].rect = self.game.cache.portraits[id_portrait].image.get_rect(midtop=position)
+		return self.game.cache.portraits[id_portrait]

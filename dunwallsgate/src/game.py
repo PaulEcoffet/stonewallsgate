@@ -3,6 +3,7 @@ import quest
 from inventory import Inventory
 from character import Character
 from game_event import GameEvent
+from cache import CacheSystem
 import decoder
 
 
@@ -20,6 +21,7 @@ class Game():
 		self.hero_location = "intro"
 		self.hero_companions = []
 		self.characters = [self.hero, Character("klim_sample"), Character("sylvanas_sample")]
+		self.cache = CacheSystem(self.characters)
 
 	def start(self, window):
 		self.window = window

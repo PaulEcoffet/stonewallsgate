@@ -1,36 +1,31 @@
-from decoder import get_character_data
-from inventory import Inventory
-from data import get_image_path
-import os.path
+import pygame
+from screens.text_render import TextRender
 
-
-class Character():
-    """
-    Define a character and its abilities
-    """
-
-    def __init__(self, reference=None, **custom):
-        if reference:
-            data = get_character_data(reference)
-        else:
-            data = get_character_data("unknown")
-        self.name = custom.get("name", data["name"])
-        self.front_image = get_image_path(os.path.join("characters", custom.get("front_image", data["front_image"])))
-        self.back_image = get_image_path(os.path.join("characters", custom.get("back_image", data["back_image"])))
-        self.maxhealth = custom.get("maxhealth", data["maxhealth"])
-        self.health = custom.get("health", self.maxhealth)
-        self.range_attack = custom.get("range_attack", data["range_attack"])
-        self.attack = custom.get("attack", data["attack"])
-        self.defense = custom.get("defense", data["defense"])
-        self.initiative = custom.get("initiative", data["initiative"])
-        self.inventory = custom.get("inventory", Inventory())
-        self.abilities = custom.get("abilities", data["abilities"])
-
-    def attack(self, opponent):
-        pass
-
-    def range_attack(self, opponent):
-        pass
-
-    def __str__(self):
-        return str(self.__dict__)
+class CacheSystem():
+	"""
+	Define a character and its abilities
+	"""
+	def __init__(self, characters):
+		self.portraits = {}
+		self.characters = characters
+		self.set_portraits()
+		
+	def set_portraits(self):
+		print("ok")
+		#Add image in "portraits" list to avoid useless LOADS
+		for character in self.characters:
+			for _type in ["transmitter", "receiver"]:
+				id_portrait = (character.name, _type)
+				self.portraits[id_portrait] = pygame.sprite.DirtySprite()
+				self.portraits[id_portrait].image = pygame.image.load(character.front_image)
+				self.portraits[id_portrait].image = self.portraits[id_portrait].image.convert_alpha()
+				self.portraits[id_portrait].image = (pygame.transform.scale(self.portraits[id_portrait].image, (440, 221)))
+				if _type == "transmitter":
+					name = TextRender((300,100), "joystix", 35, (200,80,15), ">"+character.name)
+				else:
+					name = TextRender((300,100), "joystix", 30, (160,50,10), character.name)
+					self.portraits[id_portrait].image.fill((255, 255, 255, 140), None, pygame.BLEND_RGBA_MULT)
+				transparent = pygame.Surface((300,100), pygame.SRCALPHA)
+				transparent.fill((0,0,0,200))
+				self.portraits[id_portrait].image.blit(transparent, (20,185))
+				self.portraits[id_portrait].image.blit(name.next(), (25,181))
