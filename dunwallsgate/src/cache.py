@@ -8,9 +8,10 @@ class CacheSystem():
     def __init__(self, characters):
         self.portraits = {}
         self.characters = characters
-        self.set_portraits()
+        self.rendered_dialogues = list("")
+        self.render_portraits()
 
-    def set_portraits(self):
+    def render_portraits(self):
         for character in self.characters:
             for _type in ["transmitter", "receiver"]:
                 id_portrait = (character.name, _type)
@@ -27,3 +28,34 @@ class CacheSystem():
                 transparent.fill((0,0,0,200))
                 self.portraits[id_portrait].image.blit(transparent, (20,185))
                 self.portraits[id_portrait].image.blit(name.next(), (25,181))
+                
+    def format_dialogues(self, dialogues):
+        message = dialogues.next()
+        while message is not None:
+            txt_object = TextRender((904,163), "larabiefont", 25, 
+                (255,158,0), message["message"])
+            txt_sprite = txt_object.next()
+            while txt_sprite is not None:
+                self.rendered_dialogues.append({
+                                                            "img_txt": txt_sprite, 
+                                                            "transmitter": message["transmitter"], 
+                                                            "receiver": message["receiver"],
+                                                            "choices": message["choices"]
+                                                            })
+                txt_sprite = txt_object.next()
+            message = dialogues.next()
+    
+    def next_panel(self):
+        if len(self.rendered_dialogues) > 1:
+            del self.rendered_dialogues[0]
+            return self.rendered_dialogues[0]
+        return None
+    
+    def clear_portraits(self):
+        self.portraits = {}
+    def clear_dialogues(self):
+        self.rendered_dialogues = []
+    def restart(self):
+        self.clear_portraits()
+        self.clear_dialogues()
+        self.__init__(self.characters)

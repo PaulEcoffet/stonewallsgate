@@ -17,5 +17,10 @@ def get_triggers_dict(game):
     """
     return {
             "change_scene": lambda args: game.change_scene(args),
-            "print" : lambda args: print(args)
+            "print" : lambda args: print(args),
+            "stop_scene": lambda args: test(game),
+            "kitty" : lambda args: print("Hello Kitty")
             }
+
+def test(game):
+    game.force_stop_scene = True

@@ -22,6 +22,7 @@ class Game():
         self.hero_companions = []
         self.characters = [self.hero, Character("klim_sample"), Character("sylvanas_sample")]
         self.cache = CacheSystem(self.characters)
+        self.force_stop_scene = False
 
     def start(self, window):
         self.window = window
@@ -31,7 +32,8 @@ class Game():
         self.window.set_screen(self.screen)
 
     def change_scene(self, scene):
-        self.game_event.scene = decoder.get_scene(scene)
+        if not self.force_stop_scene:
+            self.game_event.scene = decoder.get_scene(scene)
 
 class Base():
     """
