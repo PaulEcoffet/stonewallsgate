@@ -12,5 +12,5 @@ def get_conditions_dict(game):
             "is_food": lambda args: game.hero_state["is_food"],
             "is_water": lambda args: game.hero_state["is_water"],
             "is_energy": lambda args: game.hero_state["is_energy"],
-			"water_under": lambda args: game.water < args[0]
+            "water_under": lambda args: game.water < args[0]
             }
