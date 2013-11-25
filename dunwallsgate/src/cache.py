@@ -11,8 +11,6 @@ class CacheSystem():
 		self.set_portraits()
 		
 	def set_portraits(self):
-		print("ok")
-		#Add image in "portraits" list to avoid useless LOADS
 		for character in self.characters:
 			for _type in ["transmitter", "receiver"]:
 				id_portrait = (character.name, _type)

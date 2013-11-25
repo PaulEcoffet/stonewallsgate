@@ -64,11 +64,15 @@ def get_dialogues(current_folder, ref_dialogues):
 		for json_dialogue in json_dialogues:
 			transmitter = None
 			receiver = None
+			choices = None
 			if "transmitter" in json_dialogue:
 				transmitter = json_dialogue["transmitter"]
 			if "receiver" in json_dialogue:
 				receiver = json_dialogue["receiver"]
+			if "choices" in json_dialogue:
+				choices = json_dialogue["choices"]
 			dialogues.messages.append({"transmitter" : transmitter,
 									   "receiver" : receiver,
+									   "choices" : choices,
 									   "message" : json_dialogue["message"]})
 	return dialogues

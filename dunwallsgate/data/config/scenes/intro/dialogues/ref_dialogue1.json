@@ -1,6 +1,15 @@
 [
     {
-        "message": "Astuce: Cliquez sur la zone de texte ou appuyez sur [Fléche Droite] pour avancer."
+        "message": "Astuce: Appuyez sur [Fléche Droite] pour avancer."
+    },
+    {
+	"transmitter": "Sylvanas",
+	"message": "Faire un choix :",
+        "choices": [
+			{ "text": "Débloquer la scène suivante", "trigger": "print", "params": "Scène débloqué" }, 
+			{ "text": "Ne rien débloquer", "trigger": "print", "params": "Rien n'a été débloqué" }, 
+			{ "text": "Afficher Hello Kitty! dans la console", "trigger": "print", "params": "Hello Kitty!" }
+		   ]
     },
     {
         "message": "L'histoire se déroule dans un futur alternatif ou l'humanité a été forcée de vivre abritée sous un immense dome, baptisé : Le Dunwall. Cette immense cité futuriste est construite pour proteger la communauté de survivants d'un virus detruisant toute forme de vie. Alors que le Dunwall se developpait, le cadre de vie y devenait agréable, et l'existence d'un virus à l'extérieur se fit oublier. Une démocratie contrôla la cité pendant deux siècle. Cependant, celle-ci devint lente et décadente, innefficace. La corruption s'installa, les ressources manquent. Las de cette situation et avide de pouvoir, Worthshuttle tente un coup d'état. L'ensemble de Dunwall fut alors géré par un gouvernement totalitaire, chapoté par Worthshuttle qui maintenait l'ordre dans un milieu surpeuplé et à ressources limitées. Ce gouvernement permit une certaine stabilité sous le dôme qui  parvient à redevenir auto-suffisant."

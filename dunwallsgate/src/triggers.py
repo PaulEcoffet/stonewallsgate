@@ -16,5 +16,6 @@ def get_triggers_dict(game):
 	Return a dict with all the triggers that can be called from a json object
 	"""
 	return {
-			"change_scene": lambda args: game.change_scene(args)
+			"change_scene": lambda args: game.change_scene(args),
+			"print" : lambda args: print(args)
 			}

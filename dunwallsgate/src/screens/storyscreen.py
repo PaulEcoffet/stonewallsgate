@@ -3,9 +3,7 @@
 
 import pygame
 import pygame.locals as pg
-import data
 
-from decoder import *
 from screens.text_render import TextRender
 
 
@@ -26,11 +24,10 @@ class StoryScreen():
 		self.window = window
 		self.surface = window.surface
 		self.eventmanager = eventmanager
-		self.cache = {}
 		self.init_sprites()
 		# Sprites placement
 		self.dialogue_box.rect = self.dialogue_box.image.get_rect(x=50, y=380)
-		self.graphic_elements = pygame.sprite.RenderPlain(self.dialogue_box)
+		self.graphic_elements = pygame.sprite.OrderedUpdates(self.dialogue_box)
 		self.init_story()
 
 	def draw(self):
@@ -71,7 +68,8 @@ class StoryScreen():
 
 		# Events registration
 		self.eventmanager.on_key_down(self.show_dialogue, pg.K_RIGHT)
-		self.eventmanager.on_click_on(self.dialogue_box, self.show_dialogue)
+		#self.eventmanager.on_click_on(self.dialogue_box, self.show_dialogue)
+		
 		
 	def show_dialogue(self, *args):
 		next_text = self.text_render.next()
@@ -83,15 +81,11 @@ class StoryScreen():
 				self.event.done = True
 				return None
 			self.graphic_elements.clear(self.surface, self.scene_background)
-			self.graphic_elements = pygame.sprite.RenderPlain(
-				self.dialogue_box, *self.get_portraits())
-			self.text_render = TextRender((904,163), "larabiefont", 25, (255,158,0) , self.message["message"])
+			self.graphic_elements = pygame.sprite.OrderedUpdates(
+				self.dialogue_box, *(self.ask_choices()+self.get_portraits()))
+			self.text_render = TextRender((904,163), "larabiefont", 25, 
+				(255,158,0), self.message["message"])
 			next_text = self.text_render.next()
-			if False and self.choices:
-				for choice in self.choices:
-					choice = pygame.sprite.DirtySprite()
-					text_choice = TextRender((904,163), "larabiefont", 25, (255,158,0) , self.message["message"])
-					choice.image = text_choice.next()
 			self.purge_textbox()
 		self.purge_textbox()
 		self.dialogue_box.image.blit(next_text, (10,10))
@@ -104,23 +98,37 @@ class StoryScreen():
 		if self.message["transmitter"]:
 			if self.message["transmitter"] == self.left_charac:
 				characs.append(self.search_portrait("transmitter", (250,160)))
-				if self.message["receiver"]:
-					characs.append(self.search_portrait("receiver", (800,160)))
 			elif self.message["receiver"] and self.message["receiver"] == self.left_charac: 
 				characs.append(self.search_portrait("transmitter", (800,160)))
 				characs.append(self.search_portrait("receiver", (250,160)))
-			elif self.message["receiver"]:
-				self.left_charac = self.message["transmitter"]
-				characs.append(self.search_portrait("receiver", (800, 160)))
-				characs.append(self.search_portrait("transmitter", (250, 160)))
 			else:
 				self.left_charac = self.message["transmitter"]
-				characs.append(self.search_portrait("transmitter", (250, 160)))
+				characs.append(self.search_portrait("transmitter", (250, 160)))				
+			if self.message["receiver"] and self.message["receiver"] != self.left_charac:
+				characs.append(self.search_portrait("receiver", (800, 160)))
 		return characs
 		
 	def search_portrait(self, type, position):
 		""" Get portrait from cache and set it at a position. """
 		
 		id_portrait = (self.message[type], type)
-		self.game.cache.portraits[id_portrait].rect = self.game.cache.portraits[id_portrait].image.get_rect(midtop=position)
+		self.game.cache.portraits[id_portrait].rect = \
+			self.game.cache.portraits[id_portrait].image.get_rect(midtop=position)
 		return self.game.cache.portraits[id_portrait]
+		
+	def ask_choices(self):
+		choices_spirit = []
+		if self.message["choices"]:
+			for i, choice in enumerate(self.message["choices"]):
+				choices_spirit.append(pygame.sprite.DirtySprite())
+				choices_spirit[-1].image = pygame.Surface((870,34), pygame.SRCALPHA)
+				choices_spirit[-1].image.fill((180-i*30,255-i*30,0+i*15,50))
+				choices_spirit[-1].rect = choices_spirit[i].image.get_rect(x=75, y=35*i+425)
+				text = TextRender((870,130), "unispace_italic", 26, (255,158,0), choice["text"])
+				choices_spirit[-1].image.blit(text.next(), (0,0))
+				self.eventmanager.on_click_on(choices_spirit[-1], lambda args: print(args)) #self.game.game_event.game_triggers[choice["trigger"]](choice["params"])
+		return choices_spirit
+		
+	def test(self, *args):
+		print("YES!")
+		

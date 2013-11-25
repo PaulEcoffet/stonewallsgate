@@ -46,11 +46,13 @@
     {
         "transmitter": "Sylvanas",
         "receiver": "Gordon",
-        "message": "Donc c'est toi le nouveau ? Il parait que tu as réussi à etonner notre chef... J'ai hâte de voir ce dont tu es capable. En route !"
+        "message": "Donc c'est toi le nouveau ? Il parait que tu as réussi à etonner notre chef... J'ai hâte de voir ce dont tu es capable. C'est quoi ta spécalité ?"
     },
     {
-        "transmitter": "Sylvanas",
-        "message": "Je vais encore devoir jouer les mamans... A mois que..."
+        "transmitter": "Gordon",
+        "receiver": "Sylvanas",
+        "message": "Je suis plutôt :",
+	"choices": ["Un assassin", "Un bourrin", "Un prévoyant"]
     },
     {
         "transmitter": "Gordon",
@@ -60,25 +62,5 @@
     {
         "transmitter": "Sylvanas",
         "message": "Directement dans leur base."
-    },
-    {
-        "transmitter": "Gordon",
-        "message": "Elle est franche !"
-    },
-    {
-        "message": "Et c'est alors que Gordon et Sylvanas partirent à l'aventure, au risque de mourir, il iront défier les autres clans. Vont-ils survivre ?"
-    },
-    {
-        "transmitter": "Gordon",
-        "message": "Eh ! Mais attend, tout ceci n'est qu'une démo ! Il n'y a donc pas de suite..."
-    },
-    {
-        "transmitter": "Sylvanas",
-        "receiver": "Gordon",
-        "message": "Il est pas bête..."
-    },
-    {
-        "transmitter": "Sylvanas",
-        "message": "Rendez-vous la semaine prochaine pour d'autres démos plus palpitantes encore!"
     }
 ]
