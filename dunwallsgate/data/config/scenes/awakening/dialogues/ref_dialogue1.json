@@ -52,7 +52,11 @@
         "transmitter": "Gordon",
         "receiver": "Sylvanas",
         "message": "Je suis plutôt :",
-	"choices": ["Un assassin", "Un bourrin", "Un prévoyant"]
+        "choices": [
+			{ "text": "Débloquer la scène suivante", "trigger": "print", "params": "Scène débloqué" }, 
+			{ "text": "Ne rien débloquer", "trigger": "print", "params": "Rien n'a été débloqué" }, 
+			{ "text": "Afficher Hello Kitty! dans la console", "trigger": "print", "params": "Hello Kitty!" }
+		   ]
     },
     {
         "transmitter": "Gordon",
