@@ -8,7 +8,7 @@ class CacheSystem():
     def __init__(self, characters):
         self.portraits = {}
         self.characters = characters
-        self.rendered_dialogues = list("")
+        self.rendered_dialogues = []
         self.render_portraits()
 
     def render_portraits(self):
@@ -30,6 +30,7 @@ class CacheSystem():
                 self.portraits[id_portrait].image.blit(name.next(), (25,181))
                 
     def format_dialogues(self, dialogues):
+        self.rendered_dialogues.append("")
         message = dialogues.next()
         while message is not None:
             txt_object = TextRender((904,163), "larabiefont", 25, 

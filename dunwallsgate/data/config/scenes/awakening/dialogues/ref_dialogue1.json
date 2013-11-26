@@ -53,9 +53,9 @@
         "receiver": "Sylvanas",
         "message": "Je suis plutôt :",
         "choices": [
-			{ "txt": "Débloquer la scène suivante", "trigger_cat" : "print"}, 
-			{ "txt": "Ne rien débloquer", "trigger_cat" : "print"}, 
-			{ "txt": "Afficher Hello Kitty! dans la console", "trigger_cat" : "kitty" }
+			{ "txt": "Un assassin", "trigger_cat" : "print"}, 
+			{ "txt": "Un sang-chaud", "trigger_cat" : "print"}, 
+			{ "txt": "Un troll", "trigger_cat" : "kitty" }
 		   ]
     },
     {

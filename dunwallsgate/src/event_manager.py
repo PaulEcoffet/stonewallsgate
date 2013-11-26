@@ -137,6 +137,9 @@ class EventManager():
     def on_custom_event(self, event_name, callback, cat="screen"):
         return self.callbacks.add_callback(event_name, cat, callback)
 
+    def remove_callback(self, *args):
+        for id_call in args:
+            self.callbacks.remove_callback(id_call)
 
 class CallbacksContainer():
     """Contain the callbacks and can operate on them"""
