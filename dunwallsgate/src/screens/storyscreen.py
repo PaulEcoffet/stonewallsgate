@@ -141,10 +141,13 @@ class StoryScreen():
                 self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger, params: lambda x: self.game.game_event.game_triggers[trigger](params))(choice["trigger_cat"], choice["txt"])))
                 self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], self.show_dialogue))
                 self.eventmanager.remove_callback(*self.pass_dial_id)
-                self.pass_dial_id.clear()
+                self.pass_dial_id = []
                 self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.pass_dial_id.append(self.eventmanager.on_click_on(self.suite_box, self.show_dialogue))))
                 self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.pass_dial_id.append(self.eventmanager.on_key_down(self.show_dialogue, pg.K_SPACE))))
                 self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.eventmanager.remove_callback(*self.choices_actions))
-                self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.choices_actions.clear())
-                
+                self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.clear_list(self.choices_actions))
         return choices_sprite
+        
+    def clear_list(self, _list):
+        _list = []
+        
