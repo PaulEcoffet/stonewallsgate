@@ -13,13 +13,13 @@ class CacheSystem():
 
     def render_portraits(self):
         for character in self.characters:
-            for _type in ["transmitter", "receiver"]:
-                id_portrait = (character.name, _type)
+            for _id in ["talker", "hearer"]:
+                id_portrait = (character.name, _id)
                 self.portraits[id_portrait] = pygame.sprite.DirtySprite()
                 self.portraits[id_portrait].image = pygame.image.load(character.front_image)
                 self.portraits[id_portrait].image = self.portraits[id_portrait].image.convert_alpha()
                 self.portraits[id_portrait].image = (pygame.transform.scale(self.portraits[id_portrait].image, (440, 221)))
-                if _type == "transmitter":
+                if _id == "talker":
                     name = TextRender((300,100), "joystix", 35, (200,80,15), ">"+character.name)
                 else:
                     name = TextRender((300,100), "joystix", 30, (160,50,10), character.name)
@@ -33,13 +33,13 @@ class CacheSystem():
         message = dialogues.next()
         while message is not None:
             txt_object = TextRender((904,163), "larabiefont", 25, 
-                (255,158,0), message["message"])
+                (255,158,0), message["msg"])
             txt_sprite = txt_object.next()
             while txt_sprite is not None:
                 self.rendered_dialogues.append({
                                                             "img_txt": txt_sprite, 
-                                                            "transmitter": message["transmitter"], 
-                                                            "receiver": message["receiver"],
+                                                            "talker": message["talker"], 
+                                                            "hearer": message["hearer"],
                                                             "choices": message["choices"]
                                                             })
                 txt_sprite = txt_object.next()

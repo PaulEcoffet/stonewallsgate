@@ -53,9 +53,9 @@
         "receiver": "Sylvanas",
         "message": "Je suis plutôt :",
         "choices": [
-			{ "text": "Débloquer la scène suivante", "trigger_cat" : "print"}, 
-			{ "text": "Ne rien débloquer", "trigger_cat" : "print"}, 
-			{ "text": "Afficher Hello Kitty! dans la console", "trigger_cat" : "kitty" }
+			{ "txt": "Débloquer la scène suivante", "trigger_cat" : "print"}, 
+			{ "txt": "Ne rien débloquer", "trigger_cat" : "print"}, 
+			{ "txt": "Afficher Hello Kitty! dans la console", "trigger_cat" : "kitty" }
 		   ]
     },
     {
