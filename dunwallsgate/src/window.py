@@ -30,14 +30,14 @@ class Window():
         Define the screen to be displayed in the window
         """
         if self._screen is not None:
-            self._screen.shutdown()
+            self._screen.surface.fill(0)
             self.eventmanager.purge_callbacks("screen")
         self._screen = screen
         self._screen.start(self, self.eventmanager)
 
     def set_do_run(self, value=True):
         self.do_run = value
-    
+
     def start_game(self, game):
         self.game = game
         game.start(self)
@@ -49,6 +49,8 @@ class Window():
         self.eventmanager.on_quit(lambda x: self.set_do_run(False), "global")
         while self.do_run:
             self._screen.draw()
+            if self.game:
+                self.game.game_event.update()
             self.eventmanager.run(pygame.event.get())
             pygame.display.flip()
             self.fpsClock.tick(FPS)

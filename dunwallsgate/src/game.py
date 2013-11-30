@@ -2,6 +2,9 @@ from screens.storyscreen import StoryScreen
 import quest
 from inventory import Inventory
 from character import Character
+from game_event import GameEvent
+from cache import CacheSystem
+import decoder
 
 
 class Game():
@@ -9,17 +12,28 @@ class Game():
 
     def __init__(self):
         self.window = None
+        self.screen = None
+        self.game_event = None
         self.quests = quest.get_quests_dict()
         self.base = Base()
         self.hero = Character("hero")
-        self.hero_location = "scene1"
+        self.hero_state = {"is_true" : "true", "hero_name" : "Gordon"}
+        self.hero_location = "intro"
         self.hero_companions = []
-        self.screen = StoryScreen({"current_scene": self.hero_location})
+        self.characters = [self.hero, Character("klim_sample"), Character("sylvanas_sample")]
+        self.cache = CacheSystem(self.characters)
+        self.force_stop_scene = False
 
     def start(self, window):
         self.window = window
+        self.game_event = GameEvent(self)
+
+    def change_screen(self):
         self.window.set_screen(self.screen)
 
+    def change_scene(self, scene):
+        if not self.force_stop_scene:
+            self.game_event.scene = decoder.get_scene(scene)
 
 class Base():
     """

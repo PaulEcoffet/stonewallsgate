@@ -15,7 +15,7 @@ def get_character_data(ref):
                 as f:
             _characters_list = json.load(f)
     for character in _characters_list:
-        if character["ref"] == ref:
+        if character["ref"] == ref or character["name"] == ref :
             return character
 
 
@@ -61,14 +61,18 @@ def get_dialogues(current_folder, ref_dialogues):
             "r", encoding="latin-1") as dialogues_file:
         json_dialogues = json.load(dialogues_file)
         dialogues = Dialogues()
-        transmitter = None
-        receiver = None
         for json_dialogue in json_dialogues:
+            transmitter = None
+            receiver = None
+            choices = None
             if "transmitter" in json_dialogue:
                 transmitter = json_dialogue["transmitter"]
             if "receiver" in json_dialogue:
                 receiver = json_dialogue["receiver"]
-            dialogues.messages.append({"transmitter" : transmitter,
-                                       "receiver" : receiver,
-                                       "message" : json_dialogue["message"]})
+            if "choices" in json_dialogue:
+                choices = json_dialogue["choices"]
+            dialogues.messages.append({"talker" : transmitter,
+                                       "hearer" : receiver,
+                                       "choices" : choices,
+                                       "msg" : json_dialogue["message"]})
     return dialogues

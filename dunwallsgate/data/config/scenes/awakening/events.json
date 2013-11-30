@@ -14,10 +14,6 @@
         "dialogs": "ref_dialogue1",
         "triggers":
             [
-                {
-                    "trigger": "change_scene",
-                    "params": "awakening"
-                }
             ]
     }
 ]

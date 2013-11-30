@@ -12,7 +12,7 @@ class TextRender():
     font_size : dictionnary which stocks font_size for each
     type of message.
     """
-    
+
     def __init__(self, box_size, _font, font_size, color, string, custom=None):
         #assert isinstance(font, dict)
         #assert isinstance(box_size, tuple), type(box_size)
@@ -37,15 +37,16 @@ class TextRender():
                 break
             if len(panel) >= max_lines - 1:
                 line = line[-1:]
-                panel[-1] += ' ...' #on affiche ... si il y a d'autres panels à afficher
+                if len(panel) > 0:
+                    panel[-1] += ' ...' #on affiche ... si il y a d'autres panels à afficher
                 self.panels.append(panel)
                 panel = []
             line.append(mot)
         self.nb_panel = 0
-                
+
     def next(self):
         if self.nb_panel < len(self.panels):
-            self.transparent = pygame.Surface(self.box_size, pygame.SRCALPHA)   
+            self.transparent = pygame.Surface(self.box_size, pygame.SRCALPHA)
             self.transparent.fill((0,0,0,0))
             for i, line in enumerate(self.panels[self.nb_panel]):
                 render_line = self.pg_font.render(line, 1, self._font["color"])

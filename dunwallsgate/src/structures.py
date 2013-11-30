@@ -2,37 +2,25 @@
 
 class Scene():
     def __init__(self):
-        self.background = ""  # txt (image?)
-        self.events = {}  # dct
+        self.events = []  # dct
+        self.background = ""
 
 ######
-        
+
 class Event():
     def __init__(self):
-        self.conditions = Conditions()
+        self.conditions = {}
         self.dialogues = Dialogues()
-        self.triggers = []
-        self.begin = True
-        
+        self.triggers = {}
+        self.done = False
 
-        
-class Conditions():
-    def __init__(self):
-        self.test = ""
-        self.params = []
-        self.param = ""
-        
-class Triggers():
-    def __init__(self):
-        self.trigger = ""
-        self.params = []
 ######
 
 class Dialogues():
     def __init__(self):
         self.messages = []
         self.begin = True
-        
+
     def next(self):
         if len(self.messages) != 1:
             if not self.begin:
