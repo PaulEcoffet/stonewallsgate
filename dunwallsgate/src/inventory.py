@@ -8,9 +8,21 @@ import json
 import data
 
 
+def use_potion(self, target):
+    print("using potion on {}, recovering {}hp".format(
+        target, self.caracts["heal"]))
+
+
+action_dict = {"use_potion": use_potion}
+
+
 class Inventory(object):
 
-    def __init__(self, inventory=None):
+    def __init__(self, inventory=None, maxsize=None):
+        if maxsize:
+            self.maxsize = maxsize
+        else:
+            self.maxsize = float("+inf")
         if isinstance(inventory, Inventory):
             self.inventory = inventory
         elif isinstance(inventory, list):
@@ -22,7 +34,7 @@ class Inventory(object):
 
     def load_inventory_from_list(self, items):
         for item in items:
-            item_object = create_item(item, self)
+            item_object = Item(item)
             self._items.append(item_object)
 
     def load_inventory_from_ref(self, ref):
@@ -31,15 +43,34 @@ class Inventory(object):
             items_list = json.load(f)
         self.load_inventory_from_list(items_list)
 
-    def is_inside(self, other_item):
+    def __contains__(self, other_item):
         for item in self._items:
             if item == other_item:
                 return True
         return False
 
+    def add(self, item):
+        if self.size + item.weight > self.maxsize:
+            raise InventoryFullException()
+        self._items.append(item)
+        item.inventory = self
 
-def create_item(item, inventory):
-    return None
+    def remove(self, item):
+        try:
+            self._items.remove(item)
+        except ValueError:
+            raise ValueError("inventory.remove(item): item not in inventory")
+
+    @property
+    def items(self):
+        return self._items
+
+    @property
+    def size(self):
+        if self._items:
+            return sum((item.weight for item in self._items))
+        else:
+            return 0
 
 
 class Item(object):
@@ -49,13 +80,13 @@ class Item(object):
     _items_dict = None
 
     def __init__(self, ref=None, inventory=None):
+        self.inventory = inventory
         self.caracts = {}
         if not Item._items_dict:
             Item._load_items_dict()
         if isinstance(ref, str):
             self.ref = ref
             self._compute_caracts(Item._items_dict[ref])
-        self.inventory = inventory
 
     def _compute_caracts(self, base_item):
         item_caracts = copy.copy(base_item)
@@ -69,118 +100,117 @@ class Item(object):
                         caract["min"], caract["max"])
         self.caracts = item_caracts
 
+    @property
+    def weight(self):
+        return self.caracts["weight"]
+
     @classmethod
     def _load_items_dict(cls):
-        pass
+        with open(data.get_config_path("items.json")) as f:
+            cls._items_dict = json.load(f)
 
 
-class ItemDecorator(Item):
+class Weapon(Item):
+    """Represents a weapon"""
 
-    def __init__(self, item):
-        super().__init__()
-        self.item = item
-        self.caracts = item.caracts
+    def __init__(self, ref):
+        super().__init__(ref)
+        self._ammo = None
+        self.compatible_ammo = self.caracts["compatible_ammo"]
+
+    @property
+    def ammo(self):
+        return self._ammo
+
+    @ammo.setter
+    def ammo(self, ammo):
+        if ammo.ref in self.compatible_ammo:
+            self._ammo = ammo
+        else:
+            raise IncompatibleAmmoException()
+
+    def use_weapon(self):
+        if self.can_use_weapon():
+            if self.ammo:
+                self.ammo.amount -= 1
+            return self.weapon_power
+        else:
+            raise IncompatibleAmmoException()
+
+    def can_use_weapon(self):
+        if self.ammo.ref in self.compatible_ammo:
+            if self.ammo:
+                return self.ammo.amount > 0
+            else:
+                return True
+        else:
+            return False
+
+    @property
+    def weapon_power(self):
+        if self.ammo:
+            return self.caracts["power"] * self.ammo.caracts["coef"]
+        else:
+            return self.caracts["power"]
 
 
-class Consumable(ItemDecorator):
-
-    def __init__(self, item, amount=1):
-        super().__init__(item)
+class Stackable(Item):
+    """Represents Stackable item"""
+    def __init__(self, ref=None, amount=1, inventory=None):
+        super().__init__(ref)
         self._amount = 0
+        self.unit_weight = self.caracts["weight"]
         self.amount = amount
 
     @property
     def amount(self):
-        return self._amount
+        return max(0, self._amount)
 
     @amount.setter
     def amount(self, value):
-        self._amount = max(0, value)
-        if self._amount == 0 and self.inventory:
+        if value < 0:
+            raise BelowZeroAmountException()
+        if (self.inventory and self.inventory.size +
+                (value - self.amount) * self.unit_weight
+                > self.inventory.maxsize):
+            raise InventoryFullException()
+        self._amount = value
+        if self.amount == 0 and self.inventory:
             self.inventory.remove(self)
 
-    @amount.deleter
-    def amount(self):
-        del self._amount
+    @property
+    def weight(self):
+        return self.unit_weight * self.amount
 
 
-class Ammo(Consumable):
-
-    def __init__(self, item, weapon_compatibility=None, amount=1):
-        super().__init__(item, amount)
-        if weapon_compatibility:
-            self.caracts["weapon_compatibility"] = weapon_compatibility
-
-
-class Usable(ItemDecorator):
-
-    def __init__(self, item, action, consumable=None, infight=True,
-                 outoffight=False):
-        super().__init__(item)
-        self.can_be_used_in_fight = infight
-        self.can_be_used_out_of_fight = outoffight
-        self._use = action
-        self.consumable = consumable
-
-    def is_usable(self, infight):
-        if self.consumable and self.consumable.amount <= 0:
-            return False
-        if infight and self.can_be_used_in_fight:
-            return True
-        elif not infight and self.can_be_used_out_of_fight:
-            return False
-
-    def use(self, *args, **kwargs):
-        if self.consumable and self.consumable.amount <= 0:
-            raise CantBeUsedException("There is no consumable")
-        else:
-            self.consumable.amount -= 1
-            self._use(*args, **kwargs)
-
-
-class CantBeUsedException(Exception):
+class BelowZeroAmountException(Exception):
     pass
 
 
-class Weapon(Usable):
+class InventoryFullException(Exception):
+    pass
 
-    def __init__(self, item, type_, consumable=None):
-        super().__init__(item, self.attack, None, True, False)
-        self.consumable = consumable
 
-    def attack(self, other):
-        print("using weapon on {}".format(other))
+class IncompatibleAmmoException(Exception):
+    pass
 
 
 def test():
-    inventory = Inventory()
-    ammo = Ammo(Item(), None, 30)
-    print(ammo.amount)
-    ammo.amount -= 1
-    print(ammo.amount)
-    print("isinstance(ammo, Ammo): {}".format(
-        isinstance(ammo, Ammo)))
-    print("isinstance(ammo, Consumable): {}".format(
-        isinstance(ammo, Consumable)))
-    print("isinstance(item, Item): {}".format(
-        isinstance(ammo, Item)))
-
-    potion = Usable(Consumable(Item(), 3), lambda e: print("using potion"))
-    print("isinstance(potion.item, Consumable): {}".format(
-        isinstance(potion.item, Consumable)))
-    potion.consumable = potion.item
-    for dummy in range(4):
+    inventory = Inventory(50)
+    gun = Weapon("gun")
+    inventory.add(gun)
+    print("inventory.size = {}".format(inventory.size))
+    gun_ammo = Stackable("gun_ammo", 30)
+    inventory.add(gun_ammo)
+    print("inventory.size = {}".format(inventory.size))
+    print(inventory.items)
+    gun.ammo = gun_ammo
+    for i in range(32):
         try:
-            potion.use(True)
-        except CantBeUsedException as e:
-            print("Expected exception: {}".format(e))
-
-    gun = Weapon(Item(), "all", ammo)
-    for dummy in range(31):
-        try:
-            gun.use("bad guy")
-        except CantBeUsedException as e:
-            print("Expected exception: {}".format(e))
+            print(gun.use_weapon())
+        except IncompatibleAmmoException as e:
+            print(repr(e))
+    print(inventory.items)
 
 if __name__ == "__main__":
     test()
