@@ -1,11 +1,13 @@
 {
     "gun": {
+        "type": "weapon",
         "name": "Regular Gun",
         "weight": 3,
         "power": 20,
         "compatible_ammo": ["gun_ammo"]
         },
     "gun_ammo": {
+        "type": "stackable",
         "name": "Ammo for Regular Gun",
         "weight": 0.1,
         "coef": 1.14

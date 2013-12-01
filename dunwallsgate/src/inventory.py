@@ -8,14 +8,6 @@ import json
 import data
 
 
-def use_potion(self, target):
-    print("using potion on {}, recovering {}hp".format(
-        target, self.caracts["heal"]))
-
-
-action_dict = {"use_potion": use_potion}
-
-
 class Inventory(object):
 
     def __init__(self, inventory=None, maxsize=None):
@@ -73,6 +65,14 @@ class Inventory(object):
             return 0
 
 
+def create_item(ref):
+    a = Item.get_item_base(ref)
+    if a["type"] == "weapon":
+        return Weapon(ref)
+    elif a["type"] == "stackable":
+        return Stackable(ref)
+
+
 class Item(object):
 
     """Represent an item."""
@@ -82,11 +82,9 @@ class Item(object):
     def __init__(self, ref=None, inventory=None):
         self.inventory = inventory
         self.caracts = {}
-        if not Item._items_dict:
-            Item._load_items_dict()
         if isinstance(ref, str):
             self.ref = ref
-            self._compute_caracts(Item._items_dict[ref])
+            self._compute_caracts(Item.get_item_base(ref))
 
     def _compute_caracts(self, base_item):
         item_caracts = copy.copy(base_item)
@@ -108,6 +106,12 @@ class Item(object):
     def _load_items_dict(cls):
         with open(data.get_config_path("items.json")) as f:
             cls._items_dict = json.load(f)
+
+    @classmethod
+    def get_item_base(cls, ref):
+        if not Item._items_dict:
+            Item._load_items_dict()
+        return Item._items_dict[ref]
 
 
 class Weapon(Item):
@@ -196,12 +200,16 @@ class IncompatibleAmmoException(Exception):
 
 
 def test():
-    inventory = Inventory(50)
-    gun = Weapon("gun")
+    inventory = Inventory(None, 50)
+    gun = create_item("gun")
     inventory.add(gun)
     print("inventory.size = {}".format(inventory.size))
-    gun_ammo = Stackable("gun_ammo", 30)
-    inventory.add(gun_ammo)
+    gun_ammo = create_item("gun_ammo")
+    gun_ammo.amount = 30
+    try:
+        inventory.add(gun_ammo)
+    except InventoryFullException:
+        print("Inventory is full")
     print("inventory.size = {}".format(inventory.size))
     print(inventory.items)
     gun.ammo = gun_ammo
