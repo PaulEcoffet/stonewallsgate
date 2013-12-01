@@ -3,18 +3,33 @@
         "conditions":
             [
                 {
-                    "test": "is_true",
-                    "params": "true"
-                },
-                {
-                    "test": "hero_name",
-                    "params": "Gordon"
+                    "test": "robot_X2_key",
+                    "params": "false"
                 }
             ],
         "dialogs": "ref_dialogue1",
         "triggers":
             [
+                {
+                    "trigger": "switch_scene",
+					"params": "awakening_0"
+                }
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "robot_X2_key",
+                    "params": "true"
+                }
+            ],
+        "dialogs": "ref_dialogue2",
+        "triggers":
+            [
+                {
+                    "trigger": "switch_scene"
+                }
             ]
     }
 ]
-

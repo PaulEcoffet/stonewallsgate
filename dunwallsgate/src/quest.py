@@ -8,4 +8,5 @@ VALIDATED = 2
 
 
 def get_quests_dict():
-    return {"quest1": INACTIVE}
+    return {"jammer_quest": INACTIVE,
+                "megatron_eye": INACTIVE}

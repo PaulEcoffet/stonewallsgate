@@ -30,6 +30,7 @@ class CacheSystem():
                 self.portraits[id_portrait].image.blit(name.next(), (25,181))
                 
     def format_dialogues(self, dialogues):
+        dialogues.restore_messages()
         self.rendered_dialogues.append("")
         message = dialogues.next()
         while message is not None:

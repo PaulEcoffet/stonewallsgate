@@ -20,6 +20,7 @@ class StoryScreen():
         self.start_scene = True
         self.game = game
         self.event = event
+        self.end = False
 
     def start(self, window, eventmanager):
         self.window = window
@@ -39,9 +40,9 @@ class StoryScreen():
     def draw(self):
         if self.start_scene:
             self.surface.blit(self.scene_background, (0, 0))
-            transparent = pygame.Surface((265,30), pygame.SRCALPHA)
+            transparent = pygame.Surface((205,25), pygame.SRCALPHA)
             transparent.fill((0,0,0,140))
-            note = TextRender((320,50), "joystix", 20, (255,50,10), 
+            note = TextRender((320,50), "joystix", 16, (255,50,10), 
                                                "ALPHA version 2")
             transparent.blit(note.next(), (5,3))
             self.surface.blit(transparent, (10,10))
@@ -111,7 +112,7 @@ class StoryScreen():
             self.dialogue_box.image.blit(self.msg["img_txt"], (10,10))
             self.msg = None
         else:
-            self.event.done = True
+            self.end = True
 
     def set_portraits(self):
         """ Manage portraits (DirtySprite) to display, if there is. 
@@ -131,6 +132,8 @@ class StoryScreen():
     def ask_choices(self):
         choices_sprite = []
         if self.msg["choices"]:
+            self.eventmanager.remove_callback(*self.pass_dial_id)
+            self.pass_dial_id = []
             for i, choice in enumerate(self.msg["choices"]):
                 choices_sprite.append(pygame.sprite.DirtySprite())
                 choices_sprite[-1].image = pygame.Surface((870,34), pygame.SRCALPHA)
@@ -138,16 +141,19 @@ class StoryScreen():
                 choices_sprite[-1].rect = choices_sprite[i].image.get_rect(x=75, y=35*i+425)
                 text = TextRender((870,130), "unispace_italic", 26, (255,158,0), choice["txt"])
                 choices_sprite[-1].image.blit(text.next(), (0,0))
-                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger, params: lambda x: self.game.game_event.game_triggers[trigger](params))(choice["trigger_cat"], choice["txt"])))
-                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], self.show_dialogue))
-                self.eventmanager.remove_callback(*self.pass_dial_id)
-                self.pass_dial_id = []
+                if "triggers" in choice:
+                    for trigger in choice["triggers"]:
+                        self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(trigger.get("trigger_cat", "None"), trigger.get("params", None))))
+                elif "trigger_cat" in choice:
+                        self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(choice.get("trigger_cat", "None"), choice.get("params", None))))
                 self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.pass_dial_id.append(self.eventmanager.on_click_on(self.suite_box, self.show_dialogue))))
                 self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.pass_dial_id.append(self.eventmanager.on_key_down(self.show_dialogue, pg.K_SPACE))))
-                self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.eventmanager.remove_callback(*self.choices_actions))
-                self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.clear_list(self.choices_actions))
+                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.eventmanager.remove_callback(*self.choices_actions)))
+                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], self.clear_list))
+                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], self.show_dialogue))
         return choices_sprite
         
-    def clear_list(self, _list):
-        _list = []
+    def clear_list(self, *args):
+        self.choices_actions = []
+        
         

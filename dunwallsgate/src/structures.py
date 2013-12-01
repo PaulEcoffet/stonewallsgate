@@ -26,5 +26,12 @@ class Dialogues():
             if not self.begin:
                 del self.messages[0]
             else:
+                self.cache = self.messages[:]
                 self.begin = False
             return self.messages[0]
+            
+    def restore_messages(self):
+        try:
+            self.messages =  [""] + self.cache[:]
+        except AttributeError:
+            pass

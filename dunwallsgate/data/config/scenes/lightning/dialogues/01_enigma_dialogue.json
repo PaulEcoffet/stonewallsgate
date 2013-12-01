@@ -1,0 +1,39 @@
+[
+    {
+        "transmitter": "Klim",
+        "receiver": "Gordon",
+        "message": "Bienvenue dans la boutique de Klim, que cherches-tu?"
+    },
+    {
+        "transmitter": "Gordon",
+        "receiver": "Klim",
+        "message": "<Il me faut :>",
+        "choices": [
+							{
+								"txt": "Un brouilleur d'ondes", 
+								"triggers": [
+													{
+														"trigger_cat" : "add_item", 
+														"params" : "jammer"
+													},
+													{
+														"trigger_cat" : "valid_quest", 
+														"params" : "jammer_quest"
+													},
+													{
+														"trigger_cat" : "force_stop_event"
+													}
+											]
+							}, 
+							{ 
+								"txt": "Un kebab sauce blanche",
+								"trigger_cat": "restart_event"
+							} 
+					  ]
+    },
+    {
+        "transmitter": "Sylvanas",
+        "receiver": "Gordon",
+        "message": "Je n'ai pas demandé de KEBAB !!! Retourne chercher ce qu'il me faut imbécile."
+    }
+]

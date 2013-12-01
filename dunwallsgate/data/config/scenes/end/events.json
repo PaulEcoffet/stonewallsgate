@@ -6,9 +6,6 @@
         "dialogs": "ref_dialogue1",
         "triggers":
             [
-                {
-                    "trigger": "switch_scene"
-                }
             ]
     }
 ]

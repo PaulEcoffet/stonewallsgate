@@ -4,23 +4,21 @@
     },
     {
 	"transmitter": "Sylvanas",
-	"message": "Faire un choix :",
+	"receiver": "Gordon",
+	"message": "Salut le nouveau ! Quel branchement veux tu prendre ?"
+    },
+    {
+	"transmitter": "Gordon",
+	"receiver": "Sylvanas",
+	"message": "<Je souhaite explorer :>",
         "choices": [
-			{ "txt": "Débloquer la scène suivante", "trigger_cat" : "print"}, 
-			{ "txt": "Ne rien débloquer", "trigger_cat" : "print"}, 
-			{ "txt": "Afficher Hello Kitty! dans la console", "trigger_cat" : "kitty" }
+			{ "txt": "L'arc 'LIGHTNING'", "trigger_cat" : "def_next_scene", "params" : "lightning"}, 
+			{ "txt": "L'arc 'DYING'", "trigger_cat" : "def_next_scene", "params" : "dying"}
 		   ]
     },
     {
-        "message": "L'histoire se déroule dans un futur alternatif ou l'humanité a été forcée de vivre abritée sous un immense dome, baptisé : Le Dunwall. Cette immense cité futuriste est construite pour proteger la communauté de survivants d'un virus detruisant toute forme de vie. Alors que le Dunwall se developpait, le cadre de vie y devenait agréable, et l'existence d'un virus à l'extérieur se fit oublier. Une démocratie contrôla la cité pendant deux siècle. Cependant, celle-ci devint lente et décadente, innefficace. La corruption s'installa, les ressources manquent. Las de cette situation et avide de pouvoir, Worthshuttle tente un coup d'état. L'ensemble de Dunwall fut alors géré par un gouvernement totalitaire, chapoté par Worthshuttle qui maintenait l'ordre dans un milieu surpeuplé et à ressources limitées. Ce gouvernement permit une certaine stabilité sous le dôme qui  parvient à redevenir auto-suffisant."
-    },
-    {
-        "transmitter": "Gordon",
-        "message": "Je suis enfin arrivé en ville, je vais pouvoir demander à Klim ce dont il a besoin."
-    },
-    {
-        "transmitter": "Klim",
-        "receiver": "Gordon",
-        "message": "Nous devons protéger la base du pillage... Nous avons besoin de ton aide. Tu dois partir à la recherche du magnéteur X-2, pour remplacer celui qui retient notre porte."
+	"transmitter": "Sylvanas",
+	"receiver": "Gordon",
+	"message": "Très bien, suis-moi dans ce cas."
     }
 ]

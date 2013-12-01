@@ -1,0 +1,54 @@
+[
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_item",
+                    "params": "jammer"
+                },
+                {
+                    "test": "is_quest_valid",
+                    "params": "jammer_quest"
+                }
+				
+            ],
+        "dialogs": "02_quest_succeed",
+        "triggers":
+            [
+                {
+                    "trigger": "switch_scene",
+		    "params": "dying"
+                }
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_quest_active",
+                    "params": "jammer_quest"
+                }
+            ],
+        "dialogs": "01_enigma_dialogue",
+        "triggers":
+            [
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_quest_inactive",
+                    "params": "jammer_quest"
+                }
+            ],
+        "dialogs": "00_send_to_quest",
+        "triggers":
+            [
+                {
+                    "trigger": "active_quest",
+		    "params": "jammer_quest"
+                }
+            ]
+    }
+]

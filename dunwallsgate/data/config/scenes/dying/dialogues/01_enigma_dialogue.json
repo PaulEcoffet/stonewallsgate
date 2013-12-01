@@ -1,0 +1,39 @@
+[
+    {
+        "transmitter": "Sylvanas",
+        "receiver": "Gordon",
+        "message": "Si tu tiens vraiment à partir avec l'oeil, répond à mon enigme. Si tu la réussi, tu partiras avec. Sinon, tu devras retenter ta chance."
+    },
+    {
+        "transmitter": "Gordon",
+        "receiver": "Sylvanas",
+        "message": "<Quel est le nom de code du jeu dans lequel tu évolues ?>",
+        "choices": [
+							{
+								"txt": "Dunwall's Gate", 
+								"triggers": [
+													{
+														"trigger_cat" : "add_item", 
+														"params" : "megatron_eye"
+													},
+													{
+														"trigger_cat" : "valid_quest", 
+														"params" : "megatron_eye"
+													},
+													{
+														"trigger_cat" : "force_stop_event"
+													}
+											]
+							}, 
+							{ 
+								"txt": "South Park",
+								"trigger_cat": "restart_event"
+							} 
+					  ]
+    },
+    {
+        "transmitter": "Sylvanas",
+        "receiver": "Gordon",
+        "message": "Tu as choisi la mauvaise réponse. Retente ta chance"
+    }
+]

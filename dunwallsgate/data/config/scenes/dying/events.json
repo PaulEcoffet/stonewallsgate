@@ -1,0 +1,54 @@
+[
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_item",
+                    "params": "megatron_eye"
+                },
+                {
+                    "test": "is_quest_valid",
+                    "params": "megatron_eye"
+                }
+				
+            ],
+        "dialogs": "02_quest_succeed",
+        "triggers":
+            [
+                {
+                    "trigger": "switch_scene",
+					"params": "end"
+                }
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_quest_active",
+                    "params": "megatron_eye"
+                }
+            ],
+        "dialogs": "01_enigma_dialogue",
+        "triggers":
+            [
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_quest_inactive",
+                    "params": "megatron_eye"
+                }
+            ],
+        "dialogs": "00_send_to_quest",
+        "triggers":
+            [
+                {
+                    "trigger": "active_quest",
+					"params": "megatron_eye"
+                }
+            ]
+    }
+]

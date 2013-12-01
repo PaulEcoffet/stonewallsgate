@@ -13,14 +13,17 @@ class GameEvent():
         self.game_conditions = conditions.get_conditions_dict(game)
         self.game_triggers = triggers.get_triggers_dict(game)
         self.start = True
+        self.event_done = False
 
     def search_event(self):
-        for event in self.scene.events:
-            #Look if event have been done and if it is valid (PS: event.done is set True in the end of StoryScreen)
-            if self.is_valid(event) and not event.done:
-                self.event = event
-                self.event.background = self.scene.background
-                return True
+        if self.event_done or self.start:
+            for event in self.scene.events:
+                #Look if event have been done and if it is valid (PS: event.done is set True in the end of StoryScreen)
+                if self.is_valid(event):
+                    self.event = event
+                    self.event.background = self.scene.background
+                    self.event_done = False
+                    return True
         return False
 
     def is_valid(self, event):
@@ -32,16 +35,18 @@ class GameEvent():
 
     def execute_triggers(self, event):
         for trigger in event.triggers:
-            self.game_triggers[trigger["trigger"]](trigger["params"])
+            self.game_triggers[trigger["trigger"]](trigger.get("params", None))
 
     def update(self):
         """Update every 30sec the screen to be sure that it correspond with the current event (check window.py)"""
+        if self.game.screen and self.game.screen.end:
+            self.event_done = True
+            self.execute_triggers(self.event)
         #If it's the first update or if previous event are done, search new event and execute it (with triggers)
-        if (self.start or self.event.done) and self.search_event():
+        if (self.start or self.event_done) and self.search_event():
             if self.event.dialogues:
                 self.game.screen = StoryScreen(self.game, self.event)
             elif self.event.combat:
                 self.game.screen = CombatScreen(self.game, self.event)
             self.game.change_screen()
-            self.execute_triggers(self.event) #may change the screen (Check game.change_scene function)
             self.start = False
