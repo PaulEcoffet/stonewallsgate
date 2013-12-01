@@ -1,15 +1,46 @@
 {
-    "gun": {
-        "type": "weapon",
-        "name": "Regular Gun",
-        "weight": 3,
-        "power": 20,
-        "compatible_ammo": ["gun_ammo"]
-        },
-    "gun_ammo": {
-        "type": "stackable",
-        "name": "Ammo for Regular Gun",
-        "weight": 0.1,
-        "coef": 1.14
-        }
+  "gun": {
+    "type": "weapon",
+    "name": "Regular Gun",
+    "weight": 3,
+    "power": 20,
+    "compatible_ammo": [
+      "gun_ammo",
+      "junk"
+    ]
+  },
+  "gun_ammo": {
+    "type": "ammo",
+    "name": "Ammo for Regular Gun",
+    "weight": 0.75,
+    "coef": 1
+  },
+  "junk": {
+    "type": "ammo",
+    "name": "Metal junk",
+    "weight": 0.5,
+    "coef": 0.65
+  },
+  "m16": {
+    "type": "weapon",
+    "name": "M-16",
+    "weight": 10,
+    "power": 43,
+    "compatible_ammo": [
+      "piercing_bullet",
+      "m16_ammo"
+    ]
+  },
+  "m16_ammo": {
+    "type": "ammo",
+    "name": "M-16 ammo",
+    "weight": 1,
+    "coef": 1
+  },
+  "piercing_bullet": {
+    "type": "ammo",
+    "name": "Piercing bullets",
+    "weight": 1.2,
+    "coef": 1.25
+  }
 }

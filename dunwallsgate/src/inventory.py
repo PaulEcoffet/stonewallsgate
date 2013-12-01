@@ -11,22 +11,26 @@ import data
 class Inventory(object):
 
     def __init__(self, inventory=None, maxsize=None):
+        self._items = []
         if maxsize:
             self.maxsize = maxsize
         else:
             self.maxsize = float("+inf")
         if isinstance(inventory, Inventory):
-            self.inventory = inventory
+            self = inventory
         elif isinstance(inventory, list):
             self.load_inventory_from_list(inventory)
         elif isinstance(inventory, str):
             self.load_inventory_from_ref(inventory)
-        else:
-            self._items = []
 
     def load_inventory_from_list(self, items):
         for item in items:
-            item_object = Item(item)
+            if isinstance(item, list):
+                args = item[1:]
+                item = item[0]
+            else:
+                args = []
+            item_object = create_item(item, *args)
             self._items.append(item_object)
 
     def load_inventory_from_ref(self, ref):
@@ -44,8 +48,16 @@ class Inventory(object):
     def add(self, item):
         if self.size + item.weight > self.maxsize:
             raise InventoryFullException()
-        self._items.append(item)
+        if isinstance(item, Stackable):
+            for current in self.items:
+                if item["ref"] == current["ref"]:
+                    current.amount += item.amount
+                    item = current
+                    break
+        else:
+            self._items.append(item)
         item.inventory = self
+        return item
 
     def remove(self, item):
         try:
@@ -65,12 +77,14 @@ class Inventory(object):
             return 0
 
 
-def create_item(ref):
+def create_item(ref, *args):
     a = Item.get_item_base(ref)
     if a["type"] == "weapon":
         return Weapon(ref)
     elif a["type"] == "stackable":
-        return Stackable(ref)
+        return Stackable(ref, *args)
+    elif a["type"] == "ammo":
+        return Ammo(ref, *args)
 
 
 class Item(object):
@@ -187,6 +201,10 @@ class Stackable(Item):
         return self.unit_weight * self.amount
 
 
+class Ammo(Stackable):
+    pass
+
+
 class BelowZeroAmountException(Exception):
     pass
 
@@ -200,18 +218,15 @@ class IncompatibleAmmoException(Exception):
 
 
 def test():
-    inventory = Inventory(None, 50)
-    gun = create_item("gun")
-    inventory.add(gun)
-    print("inventory.size = {}".format(inventory.size))
-    gun_ammo = create_item("gun_ammo")
-    gun_ammo.amount = 30
-    try:
-        inventory.add(gun_ammo)
-    except InventoryFullException:
-        print("Inventory is full")
+    inventory = Inventory("begining_inventory", 50)
     print("inventory.size = {}".format(inventory.size))
     print(inventory.items)
+    for item in inventory.items:
+        if isinstance(item, Weapon):
+            gun = item
+        if isinstance(item, Ammo):
+            print(item.caracts["name"])
+            gun_ammo = item
     gun.ammo = gun_ammo
     for i in range(32):
         try:
