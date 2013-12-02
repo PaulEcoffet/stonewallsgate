@@ -47,7 +47,8 @@ def get_events(scene_name):
             if 'dialogs' in json_event:
                 event.dialogues = get_dialogues(current_folder,
                                               json_event['dialogs'])
-            event.triggers = json_event['triggers']
+            if 'triggers' in json_event:
+                event.triggers = json_event['triggers']
             events.append(event)
     return events
 

@@ -62,10 +62,7 @@
                     "params": "megatron_eye"
                 }
             ],
-        "dialogs": "01_enigma_dialogue",
-        "triggers":
-            [
-            ]
+        "dialogs": "01_enigma_dialogue"
     },
     {
         "conditions":

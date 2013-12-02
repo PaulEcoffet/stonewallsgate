@@ -36,5 +36,6 @@ class Dialogues():
     def restore_messages(self):
         try:
             self.messages = self.cache[:]
+            self.begin = True
         except AttributeError:
             pass
