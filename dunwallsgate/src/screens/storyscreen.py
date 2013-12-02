@@ -105,7 +105,7 @@ class StoryScreen():
         
     def show_dialogue(self, *args):
         self.msg = self.game.cache.next_panel()
-        if self.msg:
+        if self.msg and isinstance(self.msg, dict):
             self.choices = self.ask_choices()
             self.new_portraits = self.set_portraits()
             self.purge_textbox()
@@ -113,6 +113,7 @@ class StoryScreen():
             self.msg = None
         else:
             self.end = True
+            self.game.cache.clear_dialogues()
 
     def set_portraits(self):
         """ Manage portraits (DirtySprite) to display, if there is. 

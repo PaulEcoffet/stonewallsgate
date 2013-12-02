@@ -57,4 +57,3 @@ def restart_event(game):
 
 def force_stop_event(game):
     game.game_event.event_done = True
-    game.screen.end = True

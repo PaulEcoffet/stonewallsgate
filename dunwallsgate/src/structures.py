@@ -22,16 +22,19 @@ class Dialogues():
         self.begin = True
 
     def next(self):
-        if len(self.messages) != 1:
+        if len(self.messages) > 1 or self.begin:
             if not self.begin:
                 del self.messages[0]
             else:
                 self.cache = self.messages[:]
                 self.begin = False
             return self.messages[0]
+        elif len(self.messages) == 1:
+            self.messages = []
+         
             
     def restore_messages(self):
         try:
-            self.messages =  [""] + self.cache[:]
+            self.messages = self.cache[:]
         except AttributeError:
             pass

@@ -16,14 +16,13 @@ class GameEvent():
         self.event_done = False
 
     def search_event(self):
-        if self.event_done or self.start:
-            for event in self.scene.events:
-                #Look if event have been done and if it is valid (PS: event.done is set True in the end of StoryScreen)
-                if self.is_valid(event):
-                    self.event = event
-                    self.event.background = self.scene.background
-                    self.event_done = False
-                    return True
+        for event in self.scene.events:
+            #Look if event have been done and if it is valid (PS: event.done is set True in the end of StoryScreen)
+            if self.is_valid(event):
+                self.event = event
+                self.event.background = self.scene.background
+                self.event_done = False
+                return True
         return False
 
     def is_valid(self, event):
