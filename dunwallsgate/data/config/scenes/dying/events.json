@@ -3,11 +3,44 @@
         "conditions":
             [
                 {
-                    "test": "is_item",
-                    "params": "megatron_eye"
+                    "test": "is_quest_valid",
+                    "params": "jammer_quest"
                 },
                 {
                     "test": "is_quest_valid",
+                    "params": "megatron_eye"
+                }
+            ],
+        "triggers":
+            [
+                {
+                    "trigger": "switch_scene",
+					"params": "end"
+                }
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_quest_valid",
+                    "params": "megatron_eye"
+                }
+				
+            ],
+        "triggers":
+            [
+                {
+                    "trigger": "switch_scene",
+					"params": "lightning"
+                }
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_item",
                     "params": "megatron_eye"
                 }
 				
@@ -15,10 +48,10 @@
         "dialogs": "02_quest_succeed",
         "triggers":
             [
-                {
-                    "trigger": "switch_scene",
-					"params": "end"
-                }
+				{
+					"trigger" : "valid_quest", 
+					"params" : "megatron_eye"
+				}
             ]
     },
     {

@@ -17,10 +17,6 @@
 														"params" : "jammer"
 													},
 													{
-														"trigger_cat" : "valid_quest", 
-														"params" : "jammer_quest"
-													},
-													{
 														"trigger_cat" : "force_stop_event"
 													}
 											]

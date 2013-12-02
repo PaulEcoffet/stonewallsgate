@@ -17,10 +17,6 @@
 														"params" : "megatron_eye"
 													},
 													{
-														"trigger_cat" : "valid_quest", 
-														"params" : "megatron_eye"
-													},
-													{
 														"trigger_cat" : "force_stop_event"
 													}
 											]
