@@ -70,11 +70,30 @@ class Inventory(object):
         return self._items
 
     @property
+    def weapons(self):
+        return [weapon for weapon in self.items if isinstance(weapon, Weapon)]
+
+    @property
     def size(self):
         if self._items:
             return sum((item.weight for item in self._items))
         else:
             return 0
+
+    def get_first(self, ref):
+        """Returns the first occurence of the item with the ref"""
+        for item in self.items:
+            if item.ref == ref:
+                return item
+        raise ValueError("There is no item with the ref " + ref + " in this "
+                         "inventory")
+
+    def get_compatible_ammo(self, weapon):
+        ammo_list = []
+        for item in self.items:
+            if isinstance(item, Ammo) and item.ref in weapon.compatible_ammo:
+                ammo_list.append(item)
+        return ammo_list
 
 
 def create_item(ref, *args):
@@ -85,6 +104,8 @@ def create_item(ref, *args):
         return Stackable(ref, *args)
     elif a["type"] == "ammo":
         return Ammo(ref, *args)
+    else:
+        return Item(ref)
 
 
 class Item(object):
@@ -111,6 +132,12 @@ class Item(object):
                     item_caracts[caract] = random.randint(
                         caract["min"], caract["max"])
         self.caracts = item_caracts
+    
+    def __eq__(self, other):
+        if isinstance(other, Item):
+            return self.ref == other.ref
+        else:
+            return False
 
     @property
     def weight(self):
@@ -156,7 +183,10 @@ class Weapon(Item):
             raise IncompatibleAmmoException()
 
     def can_use_weapon(self):
-        if self.ammo.ref in self.compatible_ammo:
+        if not self.ammo and self.ammo in self.compatible_ammo:
+        # No ammo needed
+            return True
+        elif self.ammo.ref in self.compatible_ammo:
             if self.ammo:
                 return self.ammo.amount > 0
             else:
