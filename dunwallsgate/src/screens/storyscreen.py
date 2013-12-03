@@ -1,6 +1,5 @@
 #!/bin/python3
 
-
 import pygame
 import pygame.locals as pg
 
@@ -26,6 +25,8 @@ class StoryScreen():
         self.window = window
         self.surface = window.surface
         self.eventmanager = eventmanager
+        self.options_active = False
+        self.e_registrations = []
         self.init_sprites()
 
         # Sprites placement
@@ -34,7 +35,7 @@ class StoryScreen():
         self.exit_btn.rect = self.exit_btn.image.get_rect(x=897, y=20)
         self.graphic_elements = pygame.sprite.OrderedUpdates(self.dialogue_box, self.exit_btn)
         self.portraits_elements = pygame.sprite.RenderUpdates()
-        self.eventmanager.on_click_on(self.exit_btn, lambda e: self.window.set_do_run(False))
+        self.e_registrations.append(self.eventmanager.on_click_on(self.exit_btn, lambda e: self.options_manager()))
         self.init_story()
 
     def draw(self):
@@ -47,7 +48,7 @@ class StoryScreen():
             transparent.blit(note.next(), (5,3))
             self.surface.blit(transparent, (10,10))
             self.start_scene = False
-            
+
         self.graphic_elements.clear(self.surface, self.scene_background)
         if self.choices:
             self.graphic_elements = pygame.sprite.OrderedUpdates(
@@ -56,12 +57,59 @@ class StoryScreen():
             self.graphic_elements = pygame.sprite.OrderedUpdates(
                 self.dialogue_box, self.exit_btn, self.suite_box)         
         self.graphic_elements.draw(self.surface)
-        if self.new_portraits is not None or self.start_scene:
+        if self.portrait_update or self.start_scene:
             self.portraits_elements.clear(self.surface, self.scene_background)
             self.portraits_elements = pygame.sprite.RenderUpdates(self.new_portraits)
             self.portraits_elements.draw(self.surface)
-            self.new_portraits = None
-
+            self.portrait_update = False
+            
+        if self.options_active:
+            self.loads_elements.clear(self.surface, self.scene_background)
+        if self.options_active:
+            self.loads_elements.draw(self.surface)
+            
+    def desactiv_game_load(self):
+        self.options_active = False
+        self.portrait_update = True
+        self.loads_elements.clear(self.surface, self.scene_background)
+        self.draw()
+        self.eventmanager.remove_callback(*self.e_registrations)
+        self.e_registrations.append(self.eventmanager.on_click_on(self.exit_btn,
+                                      lambda e:  self.options_manager()))
+            
+    def options_manager(self):
+        self.options_active = True
+        self.eventmanager.remove_callback(*self.e_registrations)
+        
+        self.transparent = pygame.sprite.DirtySprite()
+        self.transparent.image = pygame.Surface((self.surface.get_width(),self.surface.get_height()), pygame.SRCALPHA)
+        self.transparent.image.fill((0,0,0,200))
+        self.transparent.rect = self.transparent.image.get_rect(
+            bottomright=(self.surface.get_width(),
+                         self.surface.get_height()))
+                         
+        self.load_block = pygame.sprite.DirtySprite()
+        self.load_block.image = pygame.Surface((self.surface.get_width(),self.surface.get_height()/2), pygame.SRCALPHA)
+        self.load_block.image.fill((0,0,0,200))
+        self.load_block.rect = self.load_block.image.get_rect(
+            topleft=(0,
+                         self.surface.get_height()/4))
+                         
+        transparent = pygame.Surface((700,200), pygame.SRCALPHA)
+        transparent.fill((0,0,0,140))
+        note = TextRender((700,700), "joystix", 35, (255,255,255), 
+                                           "SAVE")
+        note2 = TextRender((700,700), "joystix", 35, (255,255,255), 
+                                           "EXIT")
+        transparent.blit(note.next(), (140,0))
+        transparent.blit(note2.next(), (140,50))
+        self.load_block.image.blit(transparent, (300,70))
+                         
+        self.loads_elements = pygame.sprite.OrderedUpdates(self.transparent, self.load_block)
+        
+        self.e_registrations.append(self.eventmanager.on_click_on(
+            self.surface, lambda e: self.desactiv_game_load()))
+            
     def init_sprites(self):
         if not self.scene_background:
             self.scene_background = pygame.image.load(
@@ -85,7 +133,7 @@ class StoryScreen():
             self.exit_btn = pygame.sprite.DirtySprite()
             self.exit_btn.image = pygame.Surface((170, 20), pygame.SRCALPHA)
             self.exit_btn.image.fill((0,0,0,120))
-            text = TextRender((500,500), "joystix", 14, (255,158,0), "EXIT")
+            text = TextRender((500,500), "joystix", 14, (255,158,0), "OPTIONS")
             self.exit_btn.image.blit(text.next(), (6,1))
             
     def purge_textbox(self):
@@ -108,6 +156,7 @@ class StoryScreen():
         if self.msg and isinstance(self.msg, dict):
             self.choices = self.ask_choices()
             self.new_portraits = self.set_portraits()
+            self.portrait_update = True
             self.purge_textbox()
             self.dialogue_box.image.blit(self.msg["img_txt"], (10,10))
             self.msg = None
@@ -156,5 +205,3 @@ class StoryScreen():
         
     def clear_list(self, *args):
         self.choices_actions = []
-        
-        
