@@ -3,22 +3,55 @@
         "conditions":
             [
                 {
-                    "test": "is_item",
-                    "params": "jammer"
+                    "test": "is_quest_valid",
+                    "params": "jammer_quest"
                 },
+                {
+                    "test": "is_quest_valid",
+                    "params": "megatron_eye"
+                }
+            ],
+        "triggers":
+            [
+                {
+                    "trigger": "switch_scene",
+					"params": "end"
+                }
+            ]
+    },
+    {
+        "conditions":
+            [
                 {
                     "test": "is_quest_valid",
                     "params": "jammer_quest"
                 }
 				
             ],
-        "dialogs": "02_quest_succeed",
         "triggers":
             [
                 {
                     "trigger": "switch_scene",
-		    "params": "dying"
+					"params": "dying"
                 }
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "is_item",
+                    "params": "jammer"
+                }
+				
+            ],
+        "dialogs": "02_quest_succeed",
+        "triggers":
+            [
+				{
+					"trigger" : "valid_quest", 
+					"params" : "jammer_quest"
+				}
             ]
     },
     {
@@ -29,10 +62,7 @@
                     "params": "jammer_quest"
                 }
             ],
-        "dialogs": "01_enigma_dialogue",
-        "triggers":
-            [
-            ]
+        "dialogs": "01_enigma_dialogue"
     },
     {
         "conditions":
@@ -47,7 +77,7 @@
             [
                 {
                     "trigger": "active_quest",
-		    "params": "jammer_quest"
+					"params": "jammer_quest"
                 }
             ]
     }
