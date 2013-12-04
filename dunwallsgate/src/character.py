@@ -5,6 +5,7 @@ from inventory import Inventory
 from data import get_image_path
 from random import gauss, randint
 from customsprites import HighlightedPortrait, AttenuatedPortrait, LifeBar
+import inventory
 
 
 LIST_CARAC = ["name", "front_image", "back_image", "maxhealth", "range_attack", "attack", "defense", "initiative", "abilities"]
@@ -63,7 +64,7 @@ class Character():
             self.weapon = self.inventory.weapons[0]  # Take the first
                                                      # weapon found
         except IndexError:
-            self.weapon = self.inventory.create_item("bare_hands")
+            self.weapon = inventory.create_item("bare_hands")
 
     @property
     def is_alive(self):
