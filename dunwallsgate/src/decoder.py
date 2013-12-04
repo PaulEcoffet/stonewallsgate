@@ -2,7 +2,7 @@ import json
 import os.path
 
 import data
-from structures import Event, Scene, Dialogues
+from structures import *
 
 _characters_list = None
 
@@ -43,8 +43,11 @@ def get_events(scene_name):
         json_events = json.load(events_file)
         for json_event in json_events:
             event = Event()
-            event.conditions = json_event['conditions']
-            if 'dialogs' in json_event:
+            event.conditions = json_event.get('conditions', [])
+            if 'battle' in json_event:
+                event.battle = Battle()
+                event.battle.ennemies = json_event['battle']['ennemies']
+            elif 'dialogs' in json_event:
                 event.dialogues = get_dialogues(current_folder,
                                               json_event['dialogs'])
             if 'triggers' in json_event:

@@ -11,8 +11,16 @@ class Event():
     def __init__(self):
         self.conditions = {}
         self.dialogues = Dialogues()
+        self.battle = None
         self.triggers = {}
         self.done = False
+
+######
+
+class Battle():
+    def __init__(self):
+        self.allies = []
+        self.ennemies = []
 
 ######
 

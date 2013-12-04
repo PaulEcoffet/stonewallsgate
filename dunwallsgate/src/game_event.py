@@ -1,4 +1,5 @@
 from screens.storyscreen import StoryScreen
+from screens.battlescreen import BattleScreen
 import quest, conditions, decoder, triggers
 from inventory import Inventory
 from character import Character
@@ -52,8 +53,8 @@ class GameEvent():
             if self.event.dialogues and self.event.dialogues.messages:
                 self.game.screen = StoryScreen(self.game, self.event)
                 self.game.change_screen()
-            elif False and self.event.combat:
-                self.game.screen = CombatScreen(self.game, self.event)
+            elif self.event.battle:
+                self.game.screen = BattleScreen(self.game, self.event)
                 self.game.change_screen()
             elif self.event.triggers:
                 self.execute_triggers(self.event) #si l'evenement contient uniquement des triggers

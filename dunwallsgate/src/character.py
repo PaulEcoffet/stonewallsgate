@@ -4,6 +4,7 @@ from decoder import get_character_data
 from inventory import Inventory
 from data import get_image_path
 from random import gauss, randint
+from customsprites import HighlightedPortrait, AttenuatedPortrait, LifeBar
 import os.path
 
 class Character():
@@ -22,6 +23,10 @@ class Character():
         self.name = self.operations(custom.get("name", data["name"]))
         self.front_image = get_image_path(os.path.join("characters", self.operations(custom.get("front_image", data["front_image"]))))
         self.back_image = get_image_path(os.path.join("characters", self.operations(custom.get("back_image", data["back_image"]))))
+        self.front_portrait = {"Highlighted": HighlightedPortrait(self.name, self.front_image),"Attenuated": AttenuatedPortrait(self.name, self.front_image)}
+        try:
+            self.back_portrait = {"Highlighted": HighlightedPortrait(self.name, self.back_image),"Attenuated": AttenuatedPortrait(self.name, self.back_image)}
+        except: pass
         self.maxhealth = self.operations(custom.get("maxhealth", data["maxhealth"]))
         self.health = custom.get("health", self.maxhealth)
         self.range_attack = self.operations(custom.get("range_attack", data["range_attack"]))
@@ -30,7 +35,8 @@ class Character():
         self.initiative = self.operations(custom.get("initiative", data["initiative"]))
         self.inventory = custom.get("inventory", Inventory())
         self.abilities = self.operations(custom.get("abilities", data["abilities"]))
-
+        self.lifebar = LifeBar(self)
+        
     def attack(self, opponent):
         pass
 
