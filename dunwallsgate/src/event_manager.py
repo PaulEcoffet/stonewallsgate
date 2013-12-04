@@ -141,6 +141,31 @@ class EventManager():
         for id_call in args:
             self.callbacks.remove_callback(id_call)
 
+    def lock_callback(self, *ids):
+        for id_call in ids:
+            self.callbacks.lock_callback(id_call)
+        return ids
+
+    def lock_categories(self, *categories):
+        for category in categories:
+            self.callbacks.lock_category(category)
+        return categories
+
+    def unlock_callback(self, *ids):
+        for id_call in ids:
+            self.callbacks.unlock_callback(id_call)
+
+    def unlock_categories(self, *categories):
+        for category in categories:
+            self.callbacks.unlock_category(category)
+
+    def lock_all_but(self, *categories):
+        locked_categories = [category for category in
+                             self.callbacks.categories
+                             if category not in categories]
+        return self.lock_categories(*locked_categories)
+
+
 class CallbacksContainer():
     """Contain the callbacks and can operate on them"""
 
@@ -169,12 +194,9 @@ class CallbacksContainer():
 
     def purge_category(self, cat):
         for callbackslist in self._callbacks.values():
-            i = 0
-            while i < len(callbackslist):
-                if callbackslist[i].category == cat:
+            for i, callback in enumerate(callbackslist):
+                if callback.category == cat:
                     del callbackslist[i]
-                else:
-                    i += 1
 
     def get_callback_object(self, id_):
         """
@@ -182,15 +204,47 @@ class CallbacksContainer():
 
         Even though the callback object is self contained in the id, this
         method is provided for abstraction. The way id are implemented may
-        vary.
+        vary in the future.
         """
         return id_[1]
 
-    def get_type(self, type_):
+    def lock_callback(self, id_):
+        self.get_callback_object(id_).lock()
+
+    def unlock_callback(self, id_):
+        self.get_callback_object(id_).unlock()
+
+    def get_type(self, type_, with_locked=False):
         try:
-            return self._callbacks[type_]
+            return [callback for callback in self._callbacks[type_]
+                    if not callback.is_locked or with_locked]
         except KeyError:
             return []
+
+    def get_category(self, category, with_locked=False):
+        callbacks = []
+        for callbackslist in self.callbacks.values():
+            for callback in callbackslist:
+                if callback.category == category:
+                    callbacks.append(callback)
+        return callbacks
+
+    def lock_category(self, category):
+        for callback in self.get_category(category, True):
+            callback.lock()
+
+    def unlock_category(self, category):
+        for callback in self.get_category(category, True):
+            callback.unlock()
+
+    @property
+    def categories(self):
+        categories = []
+        for callbackslist in self._callbacks.values:
+            for callback in callbackslist:
+                if callback.category not in categories:
+                    categories.append(callback.category)
+        return categories
 
 
 class Callback():
@@ -200,8 +254,29 @@ class Callback():
         self.callback = callback
         self.params = params
         self.category = category
+        self._num_locked = 0
+        self.num_locked = 0
+
+    @property
+    def num_locked(self):
+        return max(0, self._num_locked)
+
+    @num_locked.setter
+    def num_locked(self, value):
+        self._num_locked = max(0, self._num_locked)
+
+    @property
+    def is_locked(self):
+        return self.num_locked > 0
+
+    def lock(self):
+        self.num_locked += 1
+
+    def unlock(self):
+        self.num_locked -= 1
 
     def __repr__(self):
         return ("callback: " + repr(self.callback) + " ; params: "
                 + repr(self.params)
-                + " ; category: " + repr(self.category))
+                + " ; category: " + repr(self.category)
+                + " ; num_locked: " + self.num_locked)
