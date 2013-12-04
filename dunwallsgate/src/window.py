@@ -18,7 +18,7 @@ class Window():
         """
         self.surface = pygame.display.set_mode((1024, 574), pg.DOUBLEBUF)
         pygame.display.set_caption("Dunwall's Gate")
-        self.eventmanager = EventManager()
+        self.eventmanager = EventManager(self)
         self._screen = None
         self.game = None
         self.set_screen(HomeScreen())
@@ -31,7 +31,7 @@ class Window():
         """
         if self._screen is not None:
             self._screen.surface.fill(0)
-            self.eventmanager.purge_callbacks("screen")
+            self.eventmanager.purge_callbacks(self._screen)
         self._screen = screen
         self._screen.start(self, self.eventmanager)
 
