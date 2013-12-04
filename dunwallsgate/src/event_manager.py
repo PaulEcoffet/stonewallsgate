@@ -14,7 +14,7 @@ class EventManager():
     def purge_callbacks(self, category):
         self.callbacks.purge_category(category)
 
-    def on_key_down(self, callback, which=None, cat="screen"):
+    def on_key_down(self, callback, cat, which=None):
         """
         Register an event when a key is pressed
         callback - The function to call when the event occurs
@@ -27,7 +27,7 @@ class EventManager():
         return self.callbacks.add_callback("keydown", cat, callback,
                                            {"key": which})
 
-    def on_click_on(self, collidable, callback, buttons=1, cat="screen"):
+    def on_click_on(self, collidable, callback, cat, buttons=1):
         """
         Register a callback called when the collidable object is clicked.
         This means that the mouse click is down on the collidable, and it is
@@ -64,15 +64,14 @@ class EventManager():
             "mouseup", cat, callback,
             {"buttons": buttons, "collidable": collidable})
 
-    def on_mouse_down(self, callback, buttons=1, collidable=None,
-                      cat="screen"):
+    def on_mouse_down(self, callback, cat, buttons=1, collidable=None):
         if not isinstance(buttons, tuple):
             buttons = (buttons,)
         return self.callbacks.add_callback(
             "mousedown", cat, callback,
             {"buttons": buttons, "collidable": collidable})
 
-    def on_mouse_in(self, collidable, callback, cat="screen"):
+    def on_mouse_in(self, collidable, callback, cat):
         """
         Triggered when the mouse is in a collidable.
         """
@@ -80,11 +79,11 @@ class EventManager():
             "mousemove", cat, callback,
             {"collidable": collidable})
 
-    def on_mouse_move(self, callback, cat="screen"):
+    def on_mouse_move(self, callback, cat):
         return self.callbacks.add_callback(
             "mousemove", cat, callback, None)
 
-    def on_quit(self, callback, cat="screen"):
+    def on_quit(self, callback, cat):
         self.callbacks.add_callback("quit", cat, callback, None)
 
     def run(self, events):
@@ -134,9 +133,6 @@ class EventManager():
                     pass
         return False
 
-    def on_custom_event(self, event_name, callback, cat="screen"):
-        return self.callbacks.add_callback(event_name, cat, callback)
-
     def remove_callback(self, *args):
         for id_call in args:
             self.callbacks.remove_callback(id_call)
@@ -159,7 +155,7 @@ class EventManager():
         for category in categories:
             self.callbacks.unlock_category(category)
 
-    def lock_all_but(self, *categories):
+    def lock_all_categories_but(self, *categories):
         locked_categories = [category for category in
                              self.callbacks.categories
                              if category not in categories]
@@ -223,9 +219,9 @@ class CallbacksContainer():
 
     def get_category(self, category, with_locked=False):
         callbacks = []
-        for callbackslist in self.callbacks.values():
+        for callbackslist in self._callbacks.values():
             for callback in callbackslist:
-                if callback.category == category:
+                if callback.category is category:
                     callbacks.append(callback)
         return callbacks
 
@@ -240,7 +236,7 @@ class CallbacksContainer():
     @property
     def categories(self):
         categories = []
-        for callbackslist in self._callbacks.values:
+        for callbackslist in self._callbacks.values():
             for callback in callbackslist:
                 if callback.category not in categories:
                     categories.append(callback.category)
@@ -263,7 +259,7 @@ class Callback():
 
     @num_locked.setter
     def num_locked(self, value):
-        self._num_locked = max(0, self._num_locked)
+        self._num_locked = max(0, value)
 
     @property
     def is_locked(self):
@@ -279,4 +275,30 @@ class Callback():
         return ("callback: " + repr(self.callback) + " ; params: "
                 + repr(self.params)
                 + " ; category: " + repr(self.category)
-                + " ; num_locked: " + self.num_locked)
+                + " ; num_locked: {}".format(self.num_locked))
+
+
+def test():
+    em = EventManager()
+    cat = object()
+    cat2 = object()
+    id1 = em.on_key_down(lambda: None, cat)
+    id2 = em.on_key_down(lambda: None, cat)
+    id3 = em.on_key_down(lambda: None, cat2)
+    id4 = em.on_key_down(lambda: None, cat2)
+    locked_cat = em.lock_all_categories_but(cat2)
+    print("id1.is_locked: {}, id3.is_locked: {}".format(id1[1].is_locked,
+                                                        id3[1].is_locked))
+    em.unlock_categories(*locked_cat)
+    print("id1.is_locked: {}, id3.is_locked: {}".format(id1[1].is_locked,
+                                                        id3[1].is_locked))
+    em.lock_callback(id1)
+    print("id1.is_locked: {}, id3.is_locked: {}".format(id1[1].is_locked,
+                                                        id3[1].is_locked))
+    em.unlock_callback(id1)
+    print("id1.is_locked: {}, id3.is_locked: {}".format(id1[1].is_locked,
+                                                        id3[1].is_locked))
+
+
+if __name__ == "__main__":
+    test()
