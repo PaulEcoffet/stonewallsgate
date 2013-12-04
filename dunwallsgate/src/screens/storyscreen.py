@@ -181,6 +181,7 @@ class StoryScreen():
                     characs[-1].rect = characs[-1].image.get_rect(midtop=(250, 160))
                 else:
                     characs[-1].rect = characs[-1].image.get_rect(midtop=(800, 160))
+                characs[-1].resize()
         return characs
         
     def ask_choices(self):

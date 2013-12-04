@@ -21,6 +21,7 @@ class Game():
         self.hero_location = "intro"
         self.characters = [self.hero, Character("klim_sample"), Character("sylvanas_sample")]
         self.hero_companions = [x for x in self.characters if x.name != "Gordon"]
+        self.combat_state = ""
         self.cache = CacheSystem(self.characters)
         self.next_scene = "intro"
         self.restart_event = False

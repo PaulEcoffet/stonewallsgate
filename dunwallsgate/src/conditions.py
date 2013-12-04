@@ -14,6 +14,7 @@ def get_conditions_dict(game):
             "is_quest_valid": lambda quest: game.hero_state["quests"][quest] == VALIDATED,
             "is_quest_active": lambda quest: game.hero_state["quests"][quest] == ACTIVE,
             "is_quest_inactive": lambda quest: game.hero_state["quests"][quest] == INACTIVE,
+            "combat_state": lambda state: game.combat_state == state,
             "has_fellow": lambda args: args[0] in game.hero_fellows,
             "is_food": lambda args: game.hero_state["is_food"],
             "is_water": lambda args: game.hero_state["is_water"],

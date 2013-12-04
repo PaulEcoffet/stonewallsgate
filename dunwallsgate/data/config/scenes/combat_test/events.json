@@ -1,5 +1,46 @@
 [
     {
+        "conditions":
+            [
+                {
+                    "test": "combat_state",
+					"params" : "win"
+                }
+            ],
+		"dialogs": "00_combat_win",
+        "triggers":
+            [
+                {
+                    "trigger": "switch_scene",
+					"params": "end"
+                }
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "combat_state",
+					"params" : "loose"
+                }
+            ],
+		"dialogs": "01_combat_loose",
+        "triggers":
+            [
+                {
+                    "trigger": "switch_scene",
+					"params": "end"
+                }
+            ]
+    },
+    {
+        "conditions":
+            [
+                {
+                    "test": "combat_state",
+					"params" : ""
+                }
+			],
         "battle" : {"allies": ["Gordon", "Sylvanas"], "ennemies": ["Bandit"]}
     }
 ]

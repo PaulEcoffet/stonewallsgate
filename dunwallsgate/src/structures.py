@@ -14,7 +14,9 @@ class Event():
         self.battle = None
         self.triggers = {}
         self.done = False
-
+    def __str__(self):
+        return "C:%s\nT:%s\nDone:%s\nBattle:%s"%(self.conditions, self.triggers, self.done, self.battle)
+        
 ######
 
 class Battle():
