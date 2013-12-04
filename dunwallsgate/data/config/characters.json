@@ -9,7 +9,7 @@
         "attack": 15,
         "defense": 12,
         "initiative": 13,
-        "inventory": null,
+        "inventory": "begining_inventory",
         "abilities": ["attack", "heal"]
     },
     {
@@ -22,7 +22,7 @@
         "attack": 15,
         "defense": 12,
         "initiative": 13,
-        "inventory": null,
+        "inventory": "",
         "abilities": ["attack", "heal"]
     },
     {

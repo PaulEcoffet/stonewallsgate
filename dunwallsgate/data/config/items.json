@@ -1,4 +1,11 @@
 {
+  "bare_hands": {
+      "type": "weapon",
+      "name": "Bare Hands",
+      "weight": 0,
+      "power": 4,
+      "compatible_ammo": [null]
+  },
   "gun": {
     "type": "weapon",
     "name": "Regular Gun",
