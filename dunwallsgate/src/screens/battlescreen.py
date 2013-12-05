@@ -48,9 +48,9 @@ class BattleScreen(Overlay):
         self.lifebars_elements = pygame.sprite.OrderedUpdates()
         self.portraits_elements = pygame.sprite.RenderUpdates()
         super().__init__(self.window, self.eventmanager, self.run_btn)
-        self.init_battle()
         self.e_registrations.append(self.eventmanager.on_click_on(self.run_btn,
                                       lambda e:  self.active()))
+        self.init_battle()
 
     def draw(self):
         if self.start_battle:

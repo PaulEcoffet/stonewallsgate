@@ -21,8 +21,10 @@ class Button(pygame.sprite.DirtySprite):
         self.image = pygame.surface.Surface(size)
         pygame.draw.rect(self.image, color, (0,0,250,70), 3)
         self.rect = self.image.get_rect()
-        attack = TextRender((500,500), "joystix", 40, (255,158,0), self.text)
-        self.image.blit(attack.next(), (5,6))
+        text_img = TextRender((500,500), "joystix", 40, (255,158,0), self.text)
+        self.image.blit(text_img.next(), (5,6))
+        
+        
             
 class LifeBar(pygame.sprite.Sprite):
     """shows a bar with the health of a charac"""
@@ -59,34 +61,26 @@ class LifeBar(pygame.sprite.Sprite):
             a = self.pg_font.render("DEAD", 1, RED_RGB)    
             self.image.blit(a, (75,1))
         
-    def get_color(self, health):
-        if health == 0:
-            color = (0,0,0)
-        elif health < 20:
-            self.i = self.i + 1
-            if self.i % 10 == 0:
-                color = ORANGE_RGB
-            else:
-                color = RED_RGB
-            self.i = 0
-        elif health < 50:
-            color = YELLOW_RGB
+    def get_color(self, hppercent):
+        if hppercent == 0:
+            return (0,0,0)
+        elif hppercent > 0.5:
+            return (255*(1-hppercent)*2,255,0)
         else:
-            color = GREEN_RGB
-        return color
+            return (255, 255*(hppercent)*2,0)
         
     def update(self):
         if self.smooth_revision == self.health:
             self.charac.health = self.health
             if self.health != 0:
-                self.health = random.choice([x for x in range(0,self.maxhealth,10)])
+                self.health = random.choice([x for x in range(20,self.maxhealth,20)])
             
         if self.smooth_revision != self.health:
             health_left = self.smooth_revision - self.health
             self.smooth_revision -= abs(health_left)/health_left
             #self.percent = self.charac.health / self.maxhealth
             self.percent = self.smooth_revision / self.maxhealth
-            color = self.get_color(self.smooth_revision)
+            color = self.get_color(self.percent)
             if self.percent != self.oldpercent or color != self.old_color:
                 pygame.draw.rect(self.image, BLACK_RGB, (0,0,200-2,15)) # fill black
                 self.draw_greenbar(self.smooth_revision, color)
