@@ -11,7 +11,7 @@ class EventManager():
     def __init__(self, protected_categories=None):
         self.callbacks = CallbacksContainer()
         if protected_categories:
-            self.protected_categories = protected_categories
+            self.protected_categories = list(protected_categories)
         else:
             self.protected_categories = []
 
@@ -162,7 +162,7 @@ class EventManager():
     def lock_all_categories_but(self, *categories, **options):
         lock_protected = options.get("lock_protected", False)
         if not lock_protected:
-            categories += self.protected_categories
+            categories = list(categories) + self.protected_categories
         locked_categories = [category for category in
                              self.callbacks.categories
                              if category not in categories]
