@@ -31,6 +31,7 @@ class Window():
         """
         if self._screen is not None:
             self._screen.surface.fill(0)
+            self._screen.shutdown()
             self.eventmanager.purge_callbacks(self._screen)
         self._screen = screen
         self._screen.start(self, self.eventmanager)
