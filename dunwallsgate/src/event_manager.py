@@ -11,7 +11,6 @@ class EventManager():
     def __init__(self, *protected_categories):
         self.callbacks = CallbacksContainer()
         if protected_categories:
-
             self.protected_categories = list(protected_categories)
         else:
             self.protected_categories = []
@@ -92,35 +91,48 @@ class EventManager():
         self.callbacks.add_callback("quit", cat, callback, None)
 
     def run(self, events):
+        callbacks_to_run = []
         for event in events:
             if event.type == pg.KEYDOWN:
-                self.manage_key_event(event, "keydown")
+                callbacks_to_run.extend(
+                    self.manage_key_event(event, "keydown"))
             elif event.type == pg.QUIT:
                 for callback in self.callbacks.get_type("quit"):
-                    callback.callback(event)
+                    callbacks_to_run.append((callback.callback, event))
             elif event.type == pg.MOUSEBUTTONUP:
-                self.manage_mouse_button_event(event, "mouseup")
+                callbacks_to_run.extend(
+                    self.manage_mouse_button_event(event, "mouseup"))
             elif event.type == pg.MOUSEBUTTONDOWN:
-                self.manage_mouse_button_event(event, "mousedown")
+                callbacks_to_run.extend(
+                    self.manage_mouse_button_event(event, "mousedown"))
+        self._do_run(callbacks_to_run)
+
+    def _do_run(self, callbacks_to_run):
+        for callback in callbacks_to_run:
+            callback[0](callback[1])
 
     def manage_key_event(self, event, type_):
+        callbacks_to_run = []
         for callback in self.callbacks.get_type(type_):
             if callback.params["key"] is None or\
                     callback.params["key"] == event.key or\
                     callback.params["key"] == event.unicode:
-                callback.callback(event)
+                callbacks_to_run.append((callback.callback, event))
+        return callbacks_to_run
 
     def manage_mouse_button_event(self, event, type_):
+        callbacks_to_run = []
         for callback in self.callbacks.get_type(type_):
             if event.button in callback.params["buttons"]:
                 try:
                     collide = self._collide_with(
                         event.pos, callback.params["collidable"])
                 except KeyError:
-                    callback.callback(event)
+                    callbacks_to_run.append((callback.callback, event))
                 else:
                     if collide:
-                        callback.callback(event)
+                        callbacks_to_run.append((callback.callback, event))
+        return callbacks_to_run
 
     def _collide_with(self, coord, collidable):
         try:
