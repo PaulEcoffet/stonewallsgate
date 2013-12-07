@@ -19,10 +19,10 @@ class Game():
         self.hero = Character("hero")
         self.hero_state = {"quests" : self.quests, "hero_name" : "Gordon"}
         self.hero_location = "intro"
-        self.characters = [self.hero, Character("klim_sample"), Character("sylvanas_sample")]
+        self.characters = [self.hero, Character("klim"), Character("sylvanas")]
         self.hero_companions = [x for x in self.characters if x.name != "Gordon"]
         self.combat_state = ""
-        self.cache = CacheSystem(self.characters)
+        self.cache = CacheSystem()
         self.next_scene = "intro"
         self.restart_event = False
 

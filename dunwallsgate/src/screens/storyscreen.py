@@ -6,6 +6,7 @@ import pygame.locals as pg
 from screens.text_render import TextRender
 from customsprites import Portrait, Button
 from screens.overlay import Overlay
+from character import Character
 
 class StoryScreen(Overlay):
     """
@@ -135,11 +136,11 @@ class StoryScreen(Overlay):
         for _id in self.msg:
             if self.msg[_id] and _id in ["talker", "hearer"]:
                 if _id == "talker":
-                    characs.append(self.game.cache.get_charac(self.msg[_id]).front_portrait["Highlighted"])
+                    characs.append(Portrait(self.game.cache, Character(self.msg[_id]), "front", True))
                     if self.left_one != self.msg["hearer"]:
                         self.left_one = self.msg[_id]
                 else:
-                    characs.append(self.game.cache.get_charac(self.msg[_id]).front_portrait["Attenuated"])
+                    characs.append(Portrait(self.game.cache, Character(self.msg[_id]), "front", False))
                 if self.msg[_id] == self.left_one:
                     characs[-1].rect = characs[-1].image.get_rect(midtop=(250, 160))
                 else:

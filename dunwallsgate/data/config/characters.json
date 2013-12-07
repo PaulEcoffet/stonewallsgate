@@ -13,7 +13,7 @@
         "abilities": ["attack", "heal"]
     },
     {
-        "ref": "klim_sample",
+        "ref": "klim",
         "name": "Klim",
         "front_image": "klim_front.png",
         "back_image": "klim_front.png",
@@ -26,7 +26,7 @@
         "abilities": ["attack", "heal"]
     },
     {
-        "ref": "sylvanas_sample",
+        "ref": "sylvanas",
         "name": "Sylvanas",
         "front_image": "sylvanas_front.png",
         "back_image": "sylvanas_front.png",

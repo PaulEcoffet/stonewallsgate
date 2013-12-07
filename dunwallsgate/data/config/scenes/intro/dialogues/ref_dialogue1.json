@@ -3,13 +3,13 @@
         "message": "Astuce: Appuyez sur [Espace] pour avancer ou sur le boutton <SUITE>."
     },
     {
-	"transmitter": "Sylvanas",
-	"receiver": "Gordon",
+	"transmitter": "sylvanas",
+	"receiver": "hero",
 	"message": "Salut le nouveau ! Quel branchement veux tu prendre ?"
     },
     {
-	"transmitter": "Gordon",
-	"receiver": "Sylvanas",
+	"transmitter": "hero",
+	"receiver": "sylvanas",
 	"message": "<Je souhaite explorer :>",
         "choices": [
 			{ "txt": "L'arc 'LIGHTNING'", "trigger_cat" : "def_next_scene", "params" : "lightning"}, 
@@ -18,8 +18,8 @@
 		   ]
     },
     {
-	"transmitter": "Sylvanas",
-	"receiver": "Gordon",
+	"transmitter": "sylvanas",
+	"receiver": "hero",
 	"message": "Très bien, suis-moi dans ce cas."
     }
 ]
