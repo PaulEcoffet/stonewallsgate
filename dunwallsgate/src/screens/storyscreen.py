@@ -23,6 +23,8 @@ class StoryScreen(Overlay):
         self.game = game
         self.event = event
         self.end = False
+        self.choice_actions_cat = object()  # Event manager category
+        self.next_dialogue_cat = object()  # Event manager category
 
     def start(self, window, eventmanager):
         self.window = window
@@ -39,6 +41,8 @@ class StoryScreen(Overlay):
         super().__init__(self.window, self.eventmanager, self.options_btn)
         self.e_registrations.append(self.eventmanager.on_click_on(self.options_btn,
                                       lambda e:  self.active(), self))
+        self.eventmanager.on_key_down(self.show_dialogue, self.next_dialogue_cat, pg.K_SPACE)
+        self.eventmanager.on_click_on(self.suite_box, self.show_dialogue, self.next_dialogue_cat)
         self.init_story()
 
     def draw(self):
@@ -73,6 +77,7 @@ class StoryScreen(Overlay):
                 self.portrait_update = False
             if self.clear_options:
                 self.clear_options = False
+
     def init_sprites(self):
         if not self.scene_background:
             self.scene_background = pygame.image.load(
@@ -106,13 +111,9 @@ class StoryScreen(Overlay):
         self.game.cache.clear_dialogues()
         self.game.cache.format_dialogues(self.event.dialogues)
         self.left_one = ""
-        self.pass_dial_id = []
         self.choices = []
         self.new_portraits = []
-        self.choices_actions = []
         self.show_dialogue()
-        self.pass_dial_id.append(self.eventmanager.on_key_down(self.show_dialogue, self, pg.K_SPACE))
-        self.pass_dial_id.append(self.eventmanager.on_click_on(self.suite_box, self.show_dialogue, self))
 
     def show_dialogue(self, *args):
         self.msg = self.game.cache.next_panel()
@@ -149,7 +150,7 @@ class StoryScreen(Overlay):
     def ask_choices(self):
         choices_sprite = []
         if self.msg["choices"]:
-            self.eventmanager.remove_callback(*self.pass_dial_id)
+            self.eventmanager.lock_categories(self.next_dialogue_cat)
             self.pass_dial_id = []
             for i, choice in enumerate(self.msg["choices"]):
                 choices_sprite.append(pygame.sprite.DirtySprite())
@@ -160,15 +161,20 @@ class StoryScreen(Overlay):
                 choices_sprite[-1].image.blit(text.next(), (0,0))
                 if "triggers" in choice:
                     for trigger in choice["triggers"]:
-                        self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(trigger.get("trigger_cat", "None"), trigger.get("params", None)), self))
+                        self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(trigger.get("trigger_cat", "None"), trigger.get("params", None)), self.choice_actions_cat)
                 elif "trigger_cat" in choice:
-                        self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(choice.get("trigger_cat", "None"), choice.get("params", None)), self))
-                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.pass_dial_id.append(self.eventmanager.on_click_on(self.suite_box, self.show_dialogue, self)), self))
-                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.pass_dial_id.append(self.eventmanager.on_key_down(self.show_dialogue, self, pg.K_SPACE)), self))
-                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], lambda x: self.eventmanager.remove_callback(*self.choices_actions), self))
-                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], self.clear_choices_actions, self))
-                self.choices_actions.append(self.eventmanager.on_click_on(choices_sprite[-1], self.show_dialogue, self))
+                        self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(choice.get("trigger_cat", "None"), choice.get("params", None)), self.choice_actions_cat)
+                self.eventmanager.on_click_on(choices_sprite[-1], lambda e: self.activate_dialogue_events(), self.choice_actions_cat)
+                self.eventmanager.on_click_on(choices_sprite[-1], lambda e: self.purge_choice_actions(), self.choice_actions_cat)
+                self.eventmanager.on_click_on(choices_sprite[-1], self.show_dialogue, self.choice_actions_cat)
         return choices_sprite
 
-    def clear_choices_actions(self, *args):
-        self.choices_actions = []
+    def activate_dialogue_events(self):
+        self.eventmanager.unlock_categories(self.next_dialogue_cat)
+
+    def purge_choice_actions(self):
+        self.eventmanager.purge_callbacks(self.choice_actions_cat)
+
+    def shutdown(self):
+        self.eventmanager.purge_callbacks(self.choice_actions_cat)
+        self.eventmanager.purge_callbacks(self.next_dialogue_cat)
