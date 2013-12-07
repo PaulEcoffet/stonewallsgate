@@ -49,5 +49,15 @@
     "name": "Piercing bullets",
     "weight": 1.2,
     "coef": 1.25
+  },
+  "jammer": {
+      "name": "Jammer",
+      "type": "quest_item",
+      "weight": 1
+  },
+  "megatron_eye": {
+      "name": "Jammer",
+      "type": "quest_item",
+      "weight": 1
   }
 }
