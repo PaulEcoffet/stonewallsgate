@@ -4,7 +4,7 @@ import pygame
 import pygame.locals as pg
 
 from screens.text_render import TextRender
-from customsprites import HighlightedPortrait, AttenuatedPortrait, Button
+from customsprites import Portrait, Button
 from screens.overlay import Overlay
 
 class StoryScreen(Overlay):

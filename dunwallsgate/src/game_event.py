@@ -3,6 +3,7 @@ from screens.battlescreen import BattleScreen
 import quest, conditions, decoder, triggers
 from inventory import Inventory
 from character import Character
+from battle import Battle
 
 
 class GameEvent():
@@ -54,7 +55,9 @@ class GameEvent():
                 self.game.screen = StoryScreen(self.game, self.event)
                 self.game.change_screen()
             elif self.event.battle:
-                self.game.screen = BattleScreen(self.game, self.event)
+                battle = Battle([self.game.hero] + self.game.hero_companions, [Character("klim_sample")])
+                self.game.screen = BattleScreen(battle, self.event, self.game)
+                self.game.screen.init_battle()
                 self.game.change_screen()
             elif self.event.triggers:
                 self.execute_triggers(self.event) #si l'evenement contient uniquement des triggers
