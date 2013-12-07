@@ -8,9 +8,10 @@ class EventManager():
     Manage all the event of the game
     """
 
-    def __init__(self, protected_categories=None):
+    def __init__(self, *protected_categories):
         self.callbacks = CallbacksContainer()
         if protected_categories:
+
             self.protected_categories = list(protected_categories)
         else:
             self.protected_categories = []
