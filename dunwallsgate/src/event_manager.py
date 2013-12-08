@@ -85,7 +85,6 @@ class EventManager():
 
         def inside(event, id_):
             callback(event)
-            print(len(self.callbacks._callbacks["mousemotion"]))
             self.lock_callback(id_)
             id2 = self.on_mouse_out(collidable, None, cat)
             call = self.callbacks.get_callback_object(id2)
@@ -99,7 +98,6 @@ class EventManager():
         return id_
 
     def on_mouse_out(self, collidable, callback, cat):
-        print("creation")
         return self.callbacks.add_callback(
             "mousemotion", cat,
             lambda e: self._watch_move_out(callback, cat, collidable),
