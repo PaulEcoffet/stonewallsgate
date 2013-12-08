@@ -79,11 +79,27 @@ class EventManager():
         """
         Triggered when the mouse is in a collidable.
         """
-        return self.callbacks.add_callback(
-            "mousemotion", cat, callback,
+        def unlock_remove(id1, id2):
+            self.unlock_callback(id1)
+            self.remove_callback(id2)
+
+        def inside(event, id_):
+            callback(event)
+            print(len(self.callbacks._callbacks["mousemotion"]))
+            self.lock_callback(id_)
+            id2 = self.on_mouse_out(collidable, None, cat)
+            call = self.callbacks.get_callback_object(id2)
+            call.callback = lambda e: self._watch_move_out(
+                lambda e: unlock_remove(id_, id2), cat, collidable)
+        id_ = self.callbacks.add_callback(
+            "mousemotion", cat, None,
             {"collidable": collidable})
+        call = self.callbacks.get_callback_object(id_)
+        call.callback = lambda e: inside(e, id_)
+        return id_
 
     def on_mouse_out(self, collidable, callback, cat):
+        print("creation")
         return self.callbacks.add_callback(
             "mousemotion", cat,
             lambda e: self._watch_move_out(callback, cat, collidable),
