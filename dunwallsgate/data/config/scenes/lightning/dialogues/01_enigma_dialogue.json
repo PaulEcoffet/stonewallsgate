@@ -1,12 +1,12 @@
 [
     {
-        "transmitter": "Klim",
-        "receiver": "Gordon",
-        "message": "Bienvenue dans la boutique de Klim, que cherches-tu?"
+        "transmitter": "klim",
+        "receiver": "hero",
+        "message": "Bienvenue dans la boutique de klim, que cherches-tu?"
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Klim",
+        "transmitter": "hero",
+        "receiver": "klim",
         "message": "<Il me faut :>",
         "choices": [
 							{
@@ -28,8 +28,8 @@
 					  ]
     },
     {
-        "transmitter": "Sylvanas",
-        "receiver": "Gordon",
+        "transmitter": "sylvanas",
+        "receiver": "hero",
         "message": "Je n'ai pas demandé de KEBAB !!! Retourne chercher ce qu'il me faut imbécile."
     }
 ]

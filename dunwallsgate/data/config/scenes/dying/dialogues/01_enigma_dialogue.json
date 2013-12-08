@@ -1,12 +1,12 @@
 [
     {
-        "transmitter": "Sylvanas",
-        "receiver": "Gordon",
+        "transmitter": "sylvanas",
+        "receiver": "hero",
         "message": "Si tu tiens vraiment à partir avec l'oeil, répond à mon enigme. Si tu la réussi, tu partiras avec. Sinon, tu devras retenter ta chance."
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Sylvanas",
+        "transmitter": "hero",
+        "receiver": "sylvanas",
         "message": "<Quel est le nom de code du jeu dans lequel tu évolues ?>",
         "choices": [
 							{
@@ -28,8 +28,8 @@
 					  ]
     },
     {
-        "transmitter": "Sylvanas",
-        "receiver": "Gordon",
+        "transmitter": "sylvanas",
+        "receiver": "hero",
         "message": "Tu as choisi la mauvaise réponse. Retente ta chance"
     }
 ]

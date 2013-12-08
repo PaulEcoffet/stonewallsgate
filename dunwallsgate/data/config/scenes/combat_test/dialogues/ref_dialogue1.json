@@ -1,12 +1,12 @@
 [
     {
-        "transmitter": "Klim",
-        "receiver": "Gordon",
+        "transmitter": "klim",
+        "receiver": "hero",
         "message": "Te voilà prêt pour la bataille finale ! Tu vas devoir m'affrontrer, si tu gagnes tu prendras le contrôle du clan. C'est un combat à mort, précisons-le."
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Klim",
+        "transmitter": "hero",
+        "receiver": "klim",
         "message": "Que le meilleur gagne."
     }
 ]

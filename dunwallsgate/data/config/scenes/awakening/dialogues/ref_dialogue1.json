@@ -3,12 +3,12 @@
         "message": "Arc awakening - Episode 1"
     },
     {
-        "transmitter": "Sylvanas",
+        "transmitter": "sylvanas",
         "message": "Il te faut une clé pour débloquer la suite de l'arc. Est-ce que tu l'as ?"
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Sylvanas",
+        "transmitter": "hero",
+        "receiver": "sylvanas",
         "message": "Est-ce que j'ai la clé ?",
         "choices": [
 			{ "txt": "Oui, je veux aller à la scène dying", "trigger_cat" : "def_next_scene", "params" : "dying" }, 
@@ -16,8 +16,8 @@
 		   ]
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Sylvanas",
+        "transmitter": "hero",
+        "receiver": "sylvanas",
         "message": "Le choix a été pris en compte."
     }
 ]

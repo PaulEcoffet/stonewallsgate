@@ -3,22 +3,22 @@
         "message": "Vous avez donc choisi la scène <dying>. Le changement s'est correctement déroulé."
     },
     {
-        "transmitter": "Klim",
-        "message": "Mais où est passé cet incapable de Gordon ?"
+        "transmitter": "klim",
+        "message": "Mais où est passé cet incapable de hero ?"
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Klim",
-        "message": "Je suis là, Klim."
+        "transmitter": "hero",
+        "receiver": "klim",
+        "message": "Je suis là, klim."
     },
     {
-        "transmitter": "Klim",
-        "receiver": "Gordon",
+        "transmitter": "klim",
+        "receiver": "hero",
         "message": "J'ai besoin de toi, tu vas devoir me rammener un oeil de megatron. C'est l'élement indispensable à mon plan. Je t'expliquerai plus tard."
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Klim",
+        "transmitter": "hero",
+        "receiver": "klim",
         "message": "Compte sur moi."
     }
 ]

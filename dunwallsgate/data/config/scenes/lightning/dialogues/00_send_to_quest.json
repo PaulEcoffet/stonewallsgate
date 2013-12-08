@@ -3,22 +3,22 @@
         "message": "Vous avez donc choisi la scène <lightning>. Le changement s'est correctement déroulé."
     },
     {
-        "transmitter": "Sylvanas",
-        "message": "J'ai besoin de Gordon ! Allez me le chercher !"
+        "transmitter": "sylvanas",
+        "message": "J'ai besoin de hero ! Allez me le chercher !"
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Sylvanas",
-        "message": "Je suis là, Sylvanas."
+        "transmitter": "hero",
+        "receiver": "sylvanas",
+        "message": "Je suis là, sylvanas."
     },
     {
-        "transmitter": "Sylvanas",
-        "receiver": "Gordon",
-        "message": "J'ai besoin de toi, tu vas devoir me rammener un brouilleur d'ondes radio. C'est l'un des élements indispensable à mon plan. Va voir la boutique à Klim, il doit en avoir."
+        "transmitter": "sylvanas",
+        "receiver": "hero",
+        "message": "J'ai besoin de toi, tu vas devoir me rammener un brouilleur d'ondes radio. C'est l'un des élements indispensable à mon plan. Va voir la boutique à klim, il doit en avoir."
     },
     {
-        "transmitter": "Gordon",
-        "receiver": "Sylvanas",
+        "transmitter": "hero",
+        "receiver": "sylvanas",
         "message": "Compte sur moi."
     }
 ]
