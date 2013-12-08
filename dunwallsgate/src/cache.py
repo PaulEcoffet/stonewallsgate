@@ -12,15 +12,33 @@ class CacheSystem():
     """
     def __init__(self):
         self.image_portraits = {}
+        self.image_backgrounds = {}
         self.rendered_dialogues = []
         self.load_image_portraits()
-
+        self.load_backgrounds()
+        
     def get_portrait_image(self, ref, position):
         try:
             return self.image_portraits[ref][position]
         except KeyError:
             return self.image_portraits[ref]["front"]
 
+    def load_backgrounds(self):
+        self.image_backgrounds["default"] = pygame.Surface((1024, 574)) #Default BG
+        for image_path in glob.glob(os.path.join(
+                data.get_image_path("scenes"), "*.png")):
+            scene_ref = os.path.splitext(os.path.basename(image_path))[0]
+            image = pygame.image.load(image_path).convert()
+            image = pygame.transform.scale(
+                image, (1024, 574))
+            transparent = pygame.Surface((205, 25), pygame.SRCALPHA)
+            transparent.fill((0, 0, 0, 140))
+            note = TextRender((320, 50), "joystix", 16, (255, 50, 10),
+                              "ALPHA version 2")
+            transparent.blit(note.next(), (5, 3))
+            image.blit(transparent, (10, 10))
+            self.image_backgrounds[scene_ref] = image
+            
     def load_image_portraits(self):
         for image_path in glob.glob(os.path.join(
                 data.get_image_path("characters"), "*.png")):
@@ -30,7 +48,7 @@ class CacheSystem():
             if not charact_ref in self.image_portraits:
                 self.image_portraits[charact_ref] = {}
             self.image_portraits[charact_ref][position] = image
-
+    
     def format_dialogues(self, dialogues):
         self.begin = True
         dialogues.restore_messages()
@@ -57,7 +75,7 @@ class CacheSystem():
                 self.begin = False
             return self.rendered_dialogues[0]
         elif len(self.rendered_dialogues) == 1:
-            self.rendered_dialogues = []
+            self.clear_dialogues()
         return None
 
 
