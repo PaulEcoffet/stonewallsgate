@@ -3,7 +3,7 @@
 class Scene():
     def __init__(self):
         self.events = []  # dct
-        self.background = ""
+        self.background = None
 
 ######
 
@@ -14,9 +14,9 @@ class Event():
         self.battle = None
         self.triggers = {}
         self.done = False
+        self.background = None
     def __str__(self):
-        return "C:%s\nT:%s\nDone:%s\nBattle:%s"%(self.conditions, self.triggers, self.done, self.battle)
-        
+        return "C:%s\nT:%s\nDone:%s\nBattle:%s\nBG:%s\nMessages:%s"%(self.conditions, self.triggers, self.done, self.battle, self.background, self.dialogues.messages)
 ######
 
 class Battle():

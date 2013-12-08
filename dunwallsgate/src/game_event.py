@@ -28,8 +28,9 @@ class GameEvent():
             #Look if event have been done and if it is valid (PS: event.done is set True in the end of StoryScreen)
             if self.is_valid(event):
                 self.event = event
-                self.event.background = self.scene.background
                 self.event_done = False
+                if not self.event.background:
+                    self.event.background = self.scene.background
                 return True
         return False
 
@@ -52,8 +53,11 @@ class GameEvent():
         #If it's the first update or if previous event are done, search new event and execute it (with triggers)
         if (self.start or self.event_done) and self.search_event():
             if self.event.dialogues and self.event.dialogues.messages:
-                self.game.screen = StoryScreen(self.game, self.event)
-                self.game.change_screen()
+                if isinstance(self.game.screen, StoryScreen):
+                    self.game.screen.updateTEST(self.event)
+                else:
+                    self.game.screen = StoryScreen(self.game, self.event)
+                    self.game.change_screen()
             elif self.event.battle:
                 battle = Battle([self.game.hero] + self.game.hero_companions, [Character("klim")])
                 self.game.screen = BattleScreen(battle, self.event, self.game)

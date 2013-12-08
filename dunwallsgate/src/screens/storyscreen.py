@@ -13,7 +13,7 @@ class StoryScreen():
     The story screen of the game.
     """
 
-    scene_background = None
+    background = None
     dialogue_box = None
     suite_box = None
     gameversion = None
@@ -43,42 +43,41 @@ class StoryScreen():
                                       self.next_dialogue_cat)
         self.init_story()
 
+    def updateTEST(self, event):
+        self.event = event
+        self.end = False
+        if self.bg_ref != self.event.background:
+            self.set_background(self.event.background)
+            self.new_background = True
+        self.init_story()
+        
     def update(self):
         pass
 
     def draw(self):
-        if self.start_scene:
-            self.surface.blit(self.scene_background, (0, 0))
-            transparent = pygame.Surface((205, 25), pygame.SRCALPHA)
-            transparent.fill((0, 0, 0, 140))
-            note = TextRender((320, 50), "joystix", 16, (255, 50, 10),
-                              "ALPHA version 2")
-            transparent.blit(note.next(), (5, 3))
-            self.surface.blit(transparent, (10, 10))
+        if self.start_scene or self.new_background:
+            self.surface.blit(self.background, (0, 0))
             self.start_scene = False
+            self.new_background = False
+        self.graphic_elements.clear(self.surface, self.background)
+        if self.choices:
+            self.graphic_elements = pygame.sprite.OrderedUpdates(
+                self.dialogue_box, self.choices)
         else:
-            self.graphic_elements.clear(self.surface, self.scene_background)
-            if self.choices:
-                self.graphic_elements = pygame.sprite.OrderedUpdates(
-                    self.dialogue_box, self.choices)
-            else:
-                self.graphic_elements = pygame.sprite.OrderedUpdates(
-                    self.dialogue_box, self.suite_box)
-            self.graphic_elements.draw(self.surface)
-            if self.portrait_update or self.start_scene:
-                self.portraits_elements.clear(self.surface,
-                                              self.scene_background)
-                self.portraits_elements = (pygame.sprite
-                                           .RenderUpdates(self.new_portraits))
-                self.portraits_elements.draw(self.surface)
-                self.portrait_update = False
+            self.graphic_elements = pygame.sprite.OrderedUpdates(
+                self.dialogue_box, self.suite_box)
+        self.graphic_elements.draw(self.surface)
+        if self.portrait_update or self.start_scene:
+            self.portraits_elements.clear(self.surface,
+                                          self.background)
+            self.portraits_elements = (pygame.sprite
+                                       .RenderUpdates(self.new_portraits))
+            self.portraits_elements.draw(self.surface)
+            self.portrait_update = False
 
     def init_sprites(self):
-        if not self.scene_background:
-            self.scene_background = pygame.image.load(
-                self.event.background).convert()
-            self.scene_background = (pygame.transform.scale(
-                self.scene_background, (1024, 574)))
+        if not self.background:
+            self.set_background(self.event.background)
 
         if not self.dialogue_box:
             self.dialogue_box = pygame.sprite.DirtySprite()
@@ -96,7 +95,11 @@ class StoryScreen():
 
     def purge_textbox(self):
         self.dialogue_box.image.fill((0, 0, 0, 140))
-
+        
+    def set_background(self, background):
+        self.bg_ref = background
+        self.background = self.game.cache.image_backgrounds[self.bg_ref]
+                
     def init_story(self):
         self.game.cache.clear_dialogues()
         self.game.cache.format_dialogues(self.event.dialogues)

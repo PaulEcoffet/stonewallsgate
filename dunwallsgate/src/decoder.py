@@ -28,8 +28,7 @@ def get_scene(scene_name):
 
     current_folder = data.get_config_path(os.path.join("scenes/", scene_name))
     scene = Scene()
-    scene.background = os.path.join(current_folder, "background.png")
-    scene.events = get_events(scene_name)
+    scene.events, scene.background = get_events(scene_name)
     return scene
 
 
@@ -42,7 +41,11 @@ def get_events(scene_name):
     with open(os.path.join(current_folder, "events.json"), "r",
               encoding="utf8") as events_file:
         json_events = json.load(events_file)
-        for json_event in json_events:
+        if len(json_events[0]) == 1 and "background_ref" in json_events[0]:
+            background = json_events[0].get('background_ref', None)
+        else:
+            raise Exception("No default background specified ! Must be on top (More info in event_sample.json).")
+        for json_event in json_events[1:]:
             event = Event()
             event.conditions = json_event.get('conditions', [])
             if 'battle' in json_event:
@@ -53,8 +56,10 @@ def get_events(scene_name):
                                                 json_event['dialogs'])
             if 'triggers' in json_event:
                 event.triggers = json_event['triggers']
+            if 'background_ref' in json_event:
+                event.background = json_event['background_ref']
             events.append(event)
-    return events
+    return events, background
 
 
 def get_dialogues(current_folder, ref_dialogues):
