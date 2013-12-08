@@ -2,7 +2,8 @@
 
 import pygame
 
-from customsprites import Button, Portrait, LifeBar
+from customsprites import Portrait, LifeBar
+from button import Button
 
 class BattleScreen():
     """
@@ -80,7 +81,7 @@ class BattleScreen():
             except KeyError:
                 self.background = self.game.cache.image_backgrounds["default"]
                 print("Warning: images/scenes/%s.png does not exist ! Default BG has been set"%self.bg_ref)
-                
+
         if not self.combat_box:
             self.combat_box = pygame.sprite.DirtySprite()
             self.combat_box.image = pygame.Surface((924, 163), pygame.SRCALPHA)
@@ -90,15 +91,15 @@ class BattleScreen():
             self.info_box.image = pygame.Surface((350, 163), pygame.SRCALPHA)
             self.purge_box(self.info_box, 195)
         if not self.attack_btn:
-            self.attack_btn = Button("ATTACK", buttons=self.buttons)
+            self.attack_btn = Button(self.eventmanager, self, "ATTACK")
         if not self.switchwep_btn:
-            self.switchwep_btn = Button("WEAPONS", buttons=self.buttons)
+            self.switchwep_btn = Button(self.eventmanager, self, "WEAPONS")
         if not self.run_btn:
-            self.run_btn = Button("RUN", buttons=self.buttons,
-                                  color=(255, 69, 0))
+            self.run_btn = Button(self.eventmanager, self, "RUN")
         if not self.bag_btn:
-            self.bag_btn = Button("MY BAG", buttons=self.buttons,
-                                  color=(255, 69, 0))
+            self.bag_btn = Button(self.eventmanager, self, "MY BAG")
+        self.buttons = pygame.sprite.RenderUpdates(self.attack_btn, self.switchwep_btn,
+                                                   self.run_btn, self.bag_btn)
 
     def purge_box(self, sprite, alphakey=140):
         sprite.image.fill((0, 0, 0, alphakey))
