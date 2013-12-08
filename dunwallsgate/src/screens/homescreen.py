@@ -66,6 +66,9 @@ class HomeScreen():
     def toggle_theme(self, event):
         soundmanager.toggle_music(500)
 
+    def update(self):
+        pass
+
     def draw(self):
         if self.first_draw:
             self.surface.blit(self.background, (0, 0))
