@@ -54,7 +54,7 @@ class GameEvent():
         if (self.start or self.event_done) and self.search_event():
             if self.event.dialogues and self.event.dialogues.messages:
                 if isinstance(self.game.screen, StoryScreen):
-                    self.game.screen.updateTEST(self.event)
+                    self.game.screen.smooth_update(self.event)
                 else:
                     self.game.screen = StoryScreen(self.game, self.event)
                     self.game.change_screen()

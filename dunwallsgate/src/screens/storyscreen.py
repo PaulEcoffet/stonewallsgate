@@ -43,7 +43,7 @@ class StoryScreen():
                                       self.next_dialogue_cat)
         self.init_story()
 
-    def updateTEST(self, event):
+    def smooth_update(self, event):
         self.event = event
         self.end = False
         if self.bg_ref != self.event.background:
