@@ -16,7 +16,6 @@ class CacheSystem():
         self.load_image_portraits()
 
     def get_portrait_image(self, ref, position):
-        print(ref)
         try:
             return self.image_portraits[ref][position]
         except KeyError:

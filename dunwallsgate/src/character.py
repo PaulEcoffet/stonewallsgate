@@ -1,13 +1,13 @@
-import os.path
-
 from decoder import get_character_data
 from inventory import Inventory
-from data import get_image_path
 from random import gauss, randint
 import inventory
 
 
-LIST_CARAC = ["name", "front_image", "back_image", "maxhealth", "range_attack", "attack", "defense", "initiative", "abilities"]
+LIST_CARAC = ["name", "front_image", "back_image", "maxhealth",
+              "range_attack", "attack", "defense", "initiative",
+              "abilities"]
+
 
 class Character():
     """
@@ -22,7 +22,6 @@ class Character():
                     data[key] = get_character_data("unknown")[key]
         else:
             data = get_character_data("unknown")
-        print("*"*90)
         self._health = 0
         self.name = self.operations(custom.get("name", data["name"]))
         self.maxhealth = self.operations(custom.get(
@@ -66,20 +65,23 @@ class Character():
         if isinstance(caract, dict) and "_random_" in caract:
             if caract["_random_"] == "gauss":
                 result = -1
-                while not caract.get("min", 0) <= result <= caract.get("max", 10**5):
-                    result = int(gauss(caract["mean"], caract["deviation"])/10)*10
+                while not(caract.get("min", 0) <= result
+                          and result <= caract.get("max", 10 ** 5)):
+                    result = int(gauss(caract["mean"],
+                                       caract["deviation"]) / 10) * 10
             elif caract["random"] == "choice":
                 if caract["max_items"] < 1:
-                    result = caract["items"][randint(0, len(carac["items"]))]
+                    result = caract["items"][randint(0, len(caract["items"]))]
                 else:
                     item = None
                     result = None
                     for i in caract["max_items"]:
                         while not item or item in result:
-                            item = caract["items"][randint(0, len(carac["items"]))]
+                            item = caract["items"][randint(
+                                0, len(caract["items"]))]
                         result.append(item)
             elif caract["random"] == "equiproba":
-                caract = int(randint(caract["min"], caract["max"])/10)*10
+                caract = int(randint(caract["min"], caract["max"]) / 10) * 10
             return result
         else:
             return caract
