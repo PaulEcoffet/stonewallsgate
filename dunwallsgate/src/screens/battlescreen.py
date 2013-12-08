@@ -17,7 +17,6 @@ class BattleScreen():
     switchwep_btn = None
     run_btn = None
     bag_btn = None
-    buttons = pygame.sprite.RenderUpdates()
 
     def __init__(self, battle, event, game):
         self.start_battle = True
@@ -27,6 +26,7 @@ class BattleScreen():
         self.window = None
         self.eventmanager = None
         self.game = game
+        self.buttons = None
 
     def start(self, window, eventmanager):
         self.window = window
@@ -51,6 +51,7 @@ class BattleScreen():
 
     def update(self):
             self.lifebars_elements.update()
+            self.buttons.update()
 
     def draw(self):
         if self.start_battle:

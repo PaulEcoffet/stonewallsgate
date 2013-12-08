@@ -1,5 +1,5 @@
 import pygame
-from screen.text_render import TextRender
+from screens.text_render import TextRender
 
 GREEN_RGB = (0, 255, 0)
 YELLOW_RGB = (255, 215, 0)
