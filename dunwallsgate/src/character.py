@@ -9,6 +9,10 @@ LIST_CARAC = ["name", "front_image", "back_image", "maxhealth",
               "abilities"]
 
 
+class UnexistingCharacterException(Exception):
+    pass
+
+
 class Character():
     """
     Define a character and its abilities
@@ -16,10 +20,15 @@ class Character():
 
     def __init__(self, reference=None, **custom):
         if reference:
-            data = get_character_data(reference)
-            for key in LIST_CARAC:
-                if not key in data:
-                    data[key] = get_character_data("unknown")[key]
+            try:
+                data = get_character_data(reference)
+            except ValueError:
+                raise UnexistingCharacterException(
+                    "The reference \"{}\" doesn't exist".format(reference))
+            else:
+                for key in LIST_CARAC:
+                    if not key in data:
+                        data[key] = get_character_data("unknown")[key]
         else:
             data = get_character_data("unknown")
         self._health = 0

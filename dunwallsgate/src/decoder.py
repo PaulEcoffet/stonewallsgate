@@ -15,8 +15,9 @@ def get_character_data(ref):
                 as f:
             _characters_list = json.load(f)
     for character in _characters_list:
-        if character["ref"] == ref or character["name"] == ref :
+        if character["ref"] == ref or character["name"] == ref:
             return character
+    raise ValueError("The ref \"{}\" does not exist".format(ref))
 
 
 def get_scene(scene_name):
@@ -49,7 +50,7 @@ def get_events(scene_name):
                 event.battle.ennemies = json_event['battle']['ennemies']
             elif 'dialogs' in json_event:
                 event.dialogues = get_dialogues(current_folder,
-                                              json_event['dialogs'])
+                                                json_event['dialogs'])
             if 'triggers' in json_event:
                 event.triggers = json_event['triggers']
             events.append(event)
@@ -76,8 +77,8 @@ def get_dialogues(current_folder, ref_dialogues):
                 receiver = json_dialogue["receiver"]
             if "choices" in json_dialogue:
                 choices = json_dialogue["choices"]
-            dialogues.messages.append({"talker" : transmitter,
-                                       "hearer" : receiver,
-                                       "choices" : choices,
-                                       "msg" : json_dialogue["message"]})
+            dialogues.messages.append({"talker": transmitter,
+                                       "hearer": receiver,
+                                       "choices": choices,
+                                       "msg": json_dialogue["message"]})
     return dialogues

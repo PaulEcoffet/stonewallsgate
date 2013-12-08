@@ -17,7 +17,7 @@ class Game():
         self.quests = quest.get_quests_dict()
         self.base = Base()
         self.hero = Character("hero")
-        self.hero_state = {"quests" : self.quests, "hero_name" : "Gordon"}
+        self.hero_state = {"quests": self.quests, "hero_name": "Gordon"}
         self.hero_location = "intro"
         self.characters = [self.hero, Character("klim"), Character("sylvanas")]
         self.hero_companions = [x for x in self.characters if x.name != "Gordon"]
