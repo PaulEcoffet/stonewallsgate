@@ -124,16 +124,14 @@ class StoryScreen():
         characs = []
         for _id in self.msg:
             if self.msg[_id] and _id in ["talker", "hearer"]:
+                charac = self.game.get_character(self.msg[_id])
+                highlighted = False
                 if _id == "talker":
-                    characs.append(Portrait(
-                        self.game.cache, Character(self.msg[_id]), "front",
-                        True))
+                    highlighted = True
                     if self.left_one != self.msg["hearer"]:
                         self.left_one = self.msg[_id]
-                else:
-                    characs.append(Portrait(
-                        self.game.cache, Character(self.msg[_id]), "front",
-                        False))
+                characs.append(Portrait(
+                        self.game.cache, charac, "front", highlighted))
                 if self.msg[_id] == self.left_one:
                     characs[-1].rect = (characs[-1].image
                                         .get_rect(midtop=(250, 160)))

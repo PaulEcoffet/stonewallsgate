@@ -25,7 +25,13 @@ class Game():
         self.cache = CacheSystem()
         self.next_scene = "intro"
         self.restart_event = False
-
+    
+    def get_character(self, ref):
+        for charac in self.characters:
+            if ref == charac.ref:
+                return charac
+        raise Exception("Character (%s) not found !"%ref)
+        
     def start(self, window):
         self.window = window
         self.game_event = GameEvent(self)

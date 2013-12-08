@@ -57,7 +57,7 @@ class CacheSystem():
                 self.begin = False
             return self.rendered_dialogues[0]
         elif len(self.rendered_dialogues) == 1:
-            self.rendered_dialogues = []
+            self.clear_dialogues()
         return None
 
 
