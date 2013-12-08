@@ -98,8 +98,12 @@ class StoryScreen():
         
     def set_background(self, background):
         self.bg_ref = background
-        self.background = self.game.cache.image_backgrounds[self.bg_ref]
-                
+        try:
+            self.background = self.game.cache.image_backgrounds[self.bg_ref]
+        except KeyError:
+            self.background = self.game.cache.image_backgrounds["default"]
+            print("Warning: images/scenes/%s.png does not exist ! Default BG has been set"%self.bg_ref)
+            
     def init_story(self):
         self.game.cache.clear_dialogues()
         self.game.cache.format_dialogues(self.event.dialogues)

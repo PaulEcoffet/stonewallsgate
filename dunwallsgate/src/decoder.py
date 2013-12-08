@@ -44,8 +44,12 @@ def get_events(scene_name):
         if len(json_events[0]) == 1 and "background_ref" in json_events[0]:
             background = json_events[0].get('background_ref', None)
         else:
-            raise Exception("No default background specified ! Must be on top (More info in event_sample.json).")
-        for json_event in json_events[1:]:
+            print("Warning: No default background specified ! More info in event_sample.json \
+               A default black BG has been used")
+            background = "default"
+        for json_event in json_events:
+            if len(json_event) == 1 and "background_ref" in json_event:
+                continue
             event = Event()
             event.conditions = json_event.get('conditions', [])
             if 'battle' in json_event:

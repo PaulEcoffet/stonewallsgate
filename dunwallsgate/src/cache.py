@@ -23,7 +23,8 @@ class CacheSystem():
         except KeyError:
             return self.image_portraits[ref]["front"]
 
-    def load_image_portraits(self):
+    def load_backgrounds(self):
+        self.image_backgrounds["default"] = pygame.Surface((1024, 574)) #Default BG
         for image_path in glob.glob(os.path.join(
                 data.get_image_path("scenes"), "*.png")):
             scene_ref = os.path.splitext(os.path.basename(image_path))[0]
@@ -38,7 +39,7 @@ class CacheSystem():
             image.blit(transparent, (10, 10))
             self.image_backgrounds[scene_ref] = image
             
-    def load_backgrounds(self):
+    def load_image_portraits(self):
         for image_path in glob.glob(os.path.join(
                 data.get_image_path("characters"), "*.png")):
             filename = os.path.splitext(os.path.basename(image_path))[0]
