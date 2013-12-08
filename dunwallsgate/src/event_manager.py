@@ -61,7 +61,7 @@ class EventManager():
         call = self.callbacks.get_callback_object(id_)
         call.callback = lambda e: on_release(e, id_)
 
-    def on_mouse_up(self, callback, buttons=1, collidable=None, cat="screen"):
+    def on_mouse_up(self, callback, cat, buttons=1, collidable=None):
         if not isinstance(buttons, tuple):
             buttons = (buttons,)
         return self.callbacks.add_callback(
@@ -80,12 +80,27 @@ class EventManager():
         Triggered when the mouse is in a collidable.
         """
         return self.callbacks.add_callback(
-            "mousemove", cat, callback,
+            "mousemotion", cat, callback,
             {"collidable": collidable})
+
+    def on_mouse_out(self, collidable, callback, cat):
+        return self.callbacks.add_callback(
+            "mousemotion", cat,
+            lambda e: self._watch_move_out(callback, cat, collidable),
+            {"collidable": collidable})
+
+    def _watch_move_out(self, callback, cat, collidable):
+        def when_is_out(event, id_):
+            if not self._collide_with(event.pos, collidable):
+                callback(event)
+                self.remove_callback(id_)
+        id_ = self.on_mouse_move(None, cat)
+        call = self.callbacks.get_callback_object(id_)
+        call.callback = lambda e: when_is_out(e, id_)
 
     def on_mouse_move(self, callback, cat):
         return self.callbacks.add_callback(
-            "mousemove", cat, callback, None)
+            "mousemotion", cat, callback, None)
 
     def on_quit(self, callback, cat):
         self.callbacks.add_callback("quit", cat, callback, None)
@@ -97,14 +112,18 @@ class EventManager():
                 callbacks_to_run.extend(
                     self.manage_key_event(event, "keydown"))
             elif event.type == pg.QUIT:
-                for callback in self.callbacks.get_type("quit"):
-                    callbacks_to_run.append((callback.callback, event))
+                callbacks_to_run.extend((
+                    (callback.callback, event) for callback
+                    in self.callbacks.get_type("quit")))
             elif event.type == pg.MOUSEBUTTONUP:
                 callbacks_to_run.extend(
                     self.manage_mouse_button_event(event, "mouseup"))
             elif event.type == pg.MOUSEBUTTONDOWN:
                 callbacks_to_run.extend(
                     self.manage_mouse_button_event(event, "mousedown"))
+            elif event.type == pg.MOUSEMOTION:
+                callbacks_to_run.extend(
+                    self.manage_mouse_motion_event(event))
         self._do_run(callbacks_to_run)
 
     def _do_run(self, callbacks_to_run):
@@ -117,6 +136,17 @@ class EventManager():
             if callback.params["key"] is None or\
                     callback.params["key"] == event.key or\
                     callback.params["key"] == event.unicode:
+                callbacks_to_run.append((callback.callback, event))
+        return callbacks_to_run
+
+    def manage_mouse_motion_event(self, event):
+        callbacks_to_run = []
+        for callback in self.callbacks.get_type("mousemotion"):
+            try:
+                if self._collide_with(event.pos,
+                                      callback.params["collidable"]):
+                    callbacks_to_run.append((callback.callback, event))
+            except KeyError:
                 callbacks_to_run.append((callback.callback, event))
         return callbacks_to_run
 
@@ -135,19 +165,15 @@ class EventManager():
         return callbacks_to_run
 
     def _collide_with(self, coord, collidable):
-        try:
-            if (collidable.collidepoint(coord)):
-                return True
-        except AttributeError:
-            try:
-                if (collidable.get_rect().collidepoint(coord)):
-                    return True
-            except AttributeError:
-                try:
-                    if (collidable.rect.collidepoint(coord)):
-                        return True
-                except AttributeError:
-                    pass
+        if (hasattr(collidable, "collidepoint")
+                and collidable.collidepoint(coord)):
+            return True
+        elif (hasattr(collidable, "get_rect")
+                and collidable.get_rect().collidepoint(coord)):
+            return True
+        elif (hasattr(collidable, "rect")
+                and collidable.rect.collidepoint(coord)):
+            return True
         return False
 
     def remove_callback(self, *args):
@@ -268,7 +294,10 @@ class Callback():
 
     def __init__(self, callback, params, category):
         self.callback = callback
-        self.params = params
+        if params:
+            self.params = params
+        else:
+            self.params = {}
         self.category = category
         self._num_locked = 0
         self.num_locked = 0
@@ -318,6 +347,7 @@ def test():
     em.unlock_callback(id1)
     print("id1.is_locked: {}, id3.is_locked: {}".format(id1[1].is_locked,
                                                         id3[1].is_locked))
+    print(id1, id2, id3, id4)
 
 
 if __name__ == "__main__":

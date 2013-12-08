@@ -8,23 +8,6 @@ BLACK_RGB = (0, 0, 0)
 ORANGE_RGB = (255, 69, 0)
 
 
-class Button(pygame.sprite.DirtySprite):
-    """generic button which can be improved"""
-
-    def __init__(self, text, buttons=None, size=(250, 70), color=ORANGE_RGB):
-        self.text = text
-        if buttons:
-            pygame.sprite.DirtySprite.__init__(self, buttons)
-        else:
-            pygame.sprite.DirtySprite.__init__(self)
-        self.image = pygame.surface.Surface(size)
-        pygame.draw.rect(self.image, color, (0, 0, 250, 70), 3)
-        self.rect = self.image.get_rect()
-        text_img = TextRender((500, 500), "joystix", 40, (255, 158, 0),
-                              self.text)
-        self.image.blit(text_img.next(), (5, 6))
-
-
 class LifeBar(pygame.sprite.Sprite):
     """shows a bar with the health of a charac"""
 
