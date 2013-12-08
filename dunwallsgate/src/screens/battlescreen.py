@@ -5,6 +5,7 @@ import pygame
 from customsprites import Portrait, LifeBar
 from button import Button
 from screens.text_render import TextRender
+import battle
 
 
 class BattleScreen():
@@ -33,6 +34,7 @@ class BattleScreen():
         self.buttons = None
         self.portraits_elements = None
         self.atk_cat = object()
+        self.action_mode = None
 
     def start(self, window, eventmanager):
         self.window = window
@@ -104,22 +106,33 @@ class BattleScreen():
                                                    self.run_btn, self.bag_btn)
 
     def show_attack_action(self):
-        text = TextRender((self.info_box.image.get_width() - 20,
-                           self.info_box.image.get_height() - 20),
-                          "larabiefont", 25,
-                          (255, 158, 0), "Choisissez votre cible")
+        self.action_mode = "attack"
+        self.set_info_box_text("Choisissez votre cible")
         portrait_targets = [(char, self.portraits[char])
                             for char in
                             self.battle.possible_targets_attack()]
         for char, portrait in portrait_targets:
-            self.eventmanager.on_click_on(portrait, lambda e: self.do_attack(char), self.atk_cat)
+            self.eventmanager.on_click_on(portrait, (lambda chara :lambda e: self.do_attack(chara))(char), self.atk_cat)
         self.highlighted = [portrait for char, portrait in portrait_targets]
-        self.info_box.image.blit(text.next(), (10, 10))
 
     def do_attack(self, char):
-        self.battle.do_attack(char)
         self.eventmanager.purge_callbacks(self.atk_cat)
-        self.end_turn()
+        if self.action_mode == "attack":
+            try:
+                self.battle.do_attack(char)
+            except battle.CantAttackException:
+                self.set_info_box_text("Impossible d'attaquer")
+            else:
+                self.end_turn()
+            self.action_mode = None
+
+    def set_info_box_text(self, text):
+        panel = TextRender((self.info_box.image.get_width() - 20,
+                           self.info_box.image.get_height() - 20),
+                          "larabiefont", 25,
+                          (255, 158, 0), text)
+        self.purge_box(self.info_box)
+        self.info_box.image.blit(panel.next(), (10, 10))
 
     def end_turn(self):
         self.battle.end_turn()

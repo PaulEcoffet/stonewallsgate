@@ -93,7 +93,7 @@ def test():
     gordon.weapon = gordon.inventory.get_first("gun")
     gordon.weapon.ammo = gordon.inventory.get_compatible_ammo(
         gordon.weapon)[0]
-    klim = Character("klim_sample")
+    klim = Character("klim")
     battle = Battle([gordon], [klim])
     while not battle.winner:
         battle.do_attack(battle.possible_targets_attack()[0])

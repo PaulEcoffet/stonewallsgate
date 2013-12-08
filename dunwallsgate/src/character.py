@@ -4,7 +4,7 @@ from random import gauss, randint
 import inventory
 
 
-LIST_CARAC = ["name", "front_image", "back_image", "maxhealth",
+LIST_CARAC = ["name", "maxhealth",
               "range_attack", "attack", "defense", "initiative",
               "abilities"]
 
