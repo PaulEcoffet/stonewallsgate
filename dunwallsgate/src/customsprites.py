@@ -13,7 +13,7 @@ class Button(pygame.sprite.DirtySprite):
 
     def __init__(self, text, buttons=None, size=(250, 70), color=ORANGE_RGB):
         self.text = text
-        if not buttons is None:
+        if buttons:
             pygame.sprite.DirtySprite.__init__(self, buttons)
         else:
             pygame.sprite.DirtySprite.__init__(self)
