@@ -118,6 +118,7 @@ class BattleScreen():
 
     def do_attack(self, char):
         self.battle.do_attack(char)
+        self.eventmanager.purge_callbacks(self.atk_cat)
         self.end_turn()
 
     def end_turn(self):
