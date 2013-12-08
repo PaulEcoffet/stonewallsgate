@@ -122,17 +122,16 @@ class BattleScreen():
             position_bars = lambda i: (100 * (i * 1.4 + 1) + 740, 160)
         for i, companion in enumerate(characters):
             print(companion)
-            portrait = self.get_character_portrait(companion, "front", True)
+            portrait = self.get_character_portrait(companion, "front")
             portrait.resize(300, 150)
             portrait.move(*position_portraits(i))
             self.characs.append(portrait)
             self.lifebars[companion].move(*position_bars(i))
             
-    def get_character_portrait(self, charac, cat, highlighted):
+    def get_character_portrait(self, charac, cat):
         for portrait in self.portraits:
             if (charac, cat) == portrait.id:
-                portrait.highlighted = highlighted
                 return portrait
-        self.portraits.append(Portrait(
-        self.game.cache, charac, cat, highlighted))
+        self.portraits.append(
+            Portrait(self.game.cache, charac, cat))
         return self.portraits[-1]

@@ -24,6 +24,7 @@ class StoryScreen():
         self.event = event
         self.end = False
         self.portraits = []
+        self.highlighted_pending = []
         self.choice_actions_cat = object()  # Event manager category
         self.next_dialogue_cat = object()  # Event manager category
 
@@ -53,7 +54,13 @@ class StoryScreen():
         self.init_story()
         
     def update(self):
-        pass
+        if self.portrait_update or self.start_scene:
+            self.portraits_elements.clear(self.surface,
+                                          self.background)
+            self.portraits_elements = pygame.sprite.RenderUpdates(
+                self.new_portraits)
+            self.portraits_elements.update(self.highlighted_pending)
+            self.highlighted_pending = []
 
     def draw(self):
         if self.start_scene or self.new_background:
@@ -69,10 +76,6 @@ class StoryScreen():
                 self.dialogue_box, self.suite_box)
         self.graphic_elements.draw(self.surface)
         if self.portrait_update or self.start_scene:
-            self.portraits_elements.clear(self.surface,
-                                          self.background)
-            self.portraits_elements = (pygame.sprite
-                                       .RenderUpdates(self.new_portraits))
             self.portraits_elements.draw(self.surface)
             self.portrait_update = False
 
@@ -133,13 +136,12 @@ class StoryScreen():
         for _id in self.msg:
             if self.msg[_id] and _id in ["talker", "hearer"]:
                 charac = self.game.get_character(self.msg[_id])
-                highlighted = False
+                portrait = self.get_character_portrait(charac, 
+                    "front")
                 if _id == "talker":
-                    highlighted = True
+                    self.highlighted_pending.append(portrait)
                     if self.left_one != self.msg["hearer"]:
                         self.left_one = self.msg[_id]
-                portrait = self.get_character_portrait(charac, 
-                    "front", highlighted)
                 if self.msg[_id] == self.left_one:
                     portrait.rect = (portrait.image
                                         .get_rect(midtop=(250, 160)))
@@ -150,13 +152,12 @@ class StoryScreen():
                 portraits.append(portrait)
         return portraits
     
-    def get_character_portrait(self, charac, cat, highlighted):
+    def get_character_portrait(self, charac, cat):
         for portrait in self.portraits:
             if (charac, cat) == portrait.id:
-                portrait.highlighted = highlighted
                 return portrait
-        self.portraits.append(Portrait(
-        self.game.cache, charac, cat, highlighted))
+        self.portraits.append(
+            Portrait(self.game.cache, charac, cat))
         return self.portraits[-1]
     
     def ask_choices(self):
