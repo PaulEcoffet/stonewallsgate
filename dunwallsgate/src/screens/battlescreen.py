@@ -4,13 +4,12 @@ import pygame
 
 from customsprites import Button, Portrait, LifeBar
 
-
 class BattleScreen():
     """
     The story screen of the game.
     """
 
-    battle_background = None
+    background = None
     combat_box = None
     info_box = None
     attack_btn = None
@@ -54,32 +53,34 @@ class BattleScreen():
 
     def draw(self):
         if self.start_battle:
-            self.surface.blit(self.battle_background, (0, 0))
+            self.surface.blit(self.background, (0, 0))
             self.start_battle = False
         else:
-            self.portraits_elements.clear(self.surface, self.battle_background)
+            self.portraits_elements.clear(self.surface, self.background)
             self.portraits_elements = pygame.sprite.RenderUpdates(
                 self.new_portraits)
-            self.lifebars_elements.clear(self.surface, self.battle_background)
+            self.lifebars_elements.clear(self.surface, self.background)
             self.lifebars_elements = pygame.sprite.OrderedUpdates(
                 [lifebar for lifebar in self.lifebars.values()])
             self.lifebars_elements.draw(self.surface)
             self.portraits_elements.draw(self.surface)
 
-            self.graphic_elements.clear(self.surface, self.battle_background)
+            self.graphic_elements.clear(self.surface, self.background)
             self.graphic_elements = pygame.sprite.OrderedUpdates(
                 self.combat_box, self.info_box)
             self.graphic_elements.draw(self.surface)
-            self.buttons.clear(self.surface, self.battle_background)
+            self.buttons.clear(self.surface, self.background)
             self.buttons.draw(self.surface)
 
     def init_sprites(self):
-        if not self.battle_background:
-            self.battle_background = pygame.image.load(
-                self.event.background).convert()
-            self.battle_background = (pygame.transform.scale(
-                self.battle_background, (1024, 574)))
-
+        if not self.background:
+            self.bg_ref = self.event.background
+            try:
+                self.background = self.game.cache.image_backgrounds[self.bg_ref]
+            except KeyError:
+                self.background = self.game.cache.image_backgrounds["default"]
+                print("Warning: images/scenes/%s.png does not exist ! Default BG has been set"%self.bg_ref)
+                
         if not self.combat_box:
             self.combat_box = pygame.sprite.DirtySprite()
             self.combat_box.image = pygame.Surface((924, 163), pygame.SRCALPHA)
