@@ -35,6 +35,10 @@ class Battle(object):
         else:
             return None
 
+    @property
+    def all_characters(self):
+        return self.team1 + self.team2
+
     def do_attack(self, target):
         if not self.has_played:
             if self.can_attack(target):

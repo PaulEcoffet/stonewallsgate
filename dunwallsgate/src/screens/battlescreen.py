@@ -2,7 +2,7 @@
 
 import pygame
 
-from customsprites import Button
+from customsprites import Button, Portrait, LifeBar
 
 
 class BattleScreen():
@@ -49,18 +49,20 @@ class BattleScreen():
         self.lifebars_elements = pygame.sprite.OrderedUpdates()
         self.portraits_elements = pygame.sprite.RenderUpdates()
 
+    def update(self):
+            self.lifebars_elements.update()
+
     def draw(self):
         if self.start_battle:
             self.surface.blit(self.battle_background, (0, 0))
             self.start_battle = False
         else:
-            self.lifebars_elements.update()
             self.portraits_elements.clear(self.surface, self.battle_background)
             self.portraits_elements = pygame.sprite.RenderUpdates(
                 self.new_portraits)
             self.lifebars_elements.clear(self.surface, self.battle_background)
             self.lifebars_elements = pygame.sprite.OrderedUpdates(
-                self.new_lifebars)
+                [lifebar for lifebar in self.lifebars.values()])
             self.lifebars_elements.draw(self.surface)
             self.portraits_elements.draw(self.surface)
 
@@ -102,27 +104,23 @@ class BattleScreen():
 
     def init_battle(self):
         self.characs = []
-        self.lifebars = []
+        self.lifebars = {character: LifeBar(character) for character
+                         in self.battle.all_characters}
         self.set_elements(self.battle.team1, "allies")
-        self.ennemies = [self.game.cache.get_charac(charac) for charac
-                         in self.event.battle.ennemies]
-        self.set_elements(self.ennemies, "ennemies")
+        self.set_elements(self.battle.team2, "ennemies")
         self.new_portraits = self.characs
-        self.new_lifebars = self.lifebars
 
-    def set_elements(self, characters, type):
-        if type == "allies":
+    def set_elements(self, characters, type_):
+        if type_ == "allies":
             position_portraits = lambda i: (190 * (i * 1.2 + 1), 217)
             position_bars = lambda i: (160 * (i * 1.4 + 1), 365)
         else:
             position_portraits = lambda i: (100 * (i * 1.2 + 1) + 775, 10)
             position_bars = lambda i: (100 * (i * 1.4 + 1) + 740, 160)
         for i, companion in enumerate(characters):
-            portrait = self.game.cache.get_charac(
-                companion.name).front_portrait["Highlighted"]
+            print(companion)
+            portrait = Portrait(self.game.cache, companion, "front", True)
             portrait.resize(300, 150)
             portrait.move(*position_portraits(i))
             self.characs.append(portrait)
-            lifebar = companion.lifebar
-            lifebar.move(*position_bars(i))
-            self.lifebars.append(lifebar)
+            self.lifebars[companion].move(*position_bars(i))

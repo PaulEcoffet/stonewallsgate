@@ -49,6 +49,7 @@ class Window():
         """
         self.eventmanager.on_quit(lambda x: self.set_do_run(False), "global")
         while self.do_run:
+            self._screen.update()
             self._screen.draw()
             if self.game:
                 self.game.game_event.update()
