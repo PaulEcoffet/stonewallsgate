@@ -152,7 +152,8 @@ class StoryScreen():
     
     def get_character_portrait(self, charac, cat, highlighted):
         for portrait in self.portraits:
-            if (charac, cat, highlighted) == portrait.id:
+            if (charac, cat) == portrait.id:
+                portrait.highlighted = highlighted
                 return portrait
         self.portraits.append(Portrait(
         self.game.cache, charac, cat, highlighted))
