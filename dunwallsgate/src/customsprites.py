@@ -76,6 +76,7 @@ class Portrait(pygame.sprite.Sprite):
     def __init__(self, cache, charact, position="front", highlighted=True):
         super().__init__()
         self.name = charact.name
+        self.id = (charact, position, highlighted)
         self.default_image = cache.get_portrait_image(charact.ref, position)
         self.transparent = pygame.Surface((300, 100), pygame.SRCALPHA)
         self.transparent.fill((0, 0, 0, 200))

@@ -26,13 +26,13 @@ class BattleScreen():
         self.window = None
         self.eventmanager = None
         self.game = game
+        self.portraits = []
         self.buttons = None
 
     def start(self, window, eventmanager):
         self.window = window
         self.surface = window.surface
         self.eventmanager = eventmanager
-        self.options_active = False
         self.init_sprites()
 
         # Sprites placement
@@ -122,8 +122,16 @@ class BattleScreen():
             position_bars = lambda i: (100 * (i * 1.4 + 1) + 740, 160)
         for i, companion in enumerate(characters):
             print(companion)
-            portrait = Portrait(self.game.cache, companion, "front", True)
+            portrait = self.get_character_portrait(companion, "front", True)
             portrait.resize(300, 150)
             portrait.move(*position_portraits(i))
             self.characs.append(portrait)
             self.lifebars[companion].move(*position_bars(i))
+            
+    def get_character_portrait(self, charac, cat, highlighted):
+        for portrait in self.portraits:
+            if (charac, cat, highlighted) == portrait.id:
+                return portrait
+        self.portraits.append(Portrait(
+        self.game.cache, charac, cat, highlighted))
+        return self.portraits[-1]

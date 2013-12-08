@@ -23,6 +23,7 @@ class StoryScreen():
         self.game = game
         self.event = event
         self.end = False
+        self.portraits = []
         self.choice_actions_cat = object()  # Event manager category
         self.next_dialogue_cat = object()  # Event manager category
 
@@ -40,7 +41,7 @@ class StoryScreen():
         self.eventmanager.on_key_down(self.show_dialogue,
                                       self.next_dialogue_cat, pg.K_SPACE)
         self.eventmanager.on_click_on(self.suite_box, self.show_dialogue,
-                                      self.next_dialogue_cat)
+                                      self.next_dialogue_cat)                           
         self.init_story()
 
     def smooth_update(self, event):
@@ -128,7 +129,7 @@ class StoryScreen():
     def set_portraits(self):
         """ Manage portraits (DirtySprite) to display, if there is.
         First charac to speak is always display on the left side."""
-        characs = []
+        portraits = []
         for _id in self.msg:
             if self.msg[_id] and _id in ["talker", "hearer"]:
                 charac = self.game.get_character(self.msg[_id])
@@ -137,17 +138,26 @@ class StoryScreen():
                     highlighted = True
                     if self.left_one != self.msg["hearer"]:
                         self.left_one = self.msg[_id]
-                characs.append(Portrait(
-                        self.game.cache, charac, "front", highlighted))
+                portrait = self.get_character_portrait(charac, 
+                    "front", highlighted)
                 if self.msg[_id] == self.left_one:
-                    characs[-1].rect = (characs[-1].image
+                    portrait.rect = (portrait.image
                                         .get_rect(midtop=(250, 160)))
                 else:
-                    characs[-1].rect = (characs[-1].image
+                    portrait.rect = (portrait.image
                                         .get_rect(midtop=(800, 160)))
-                characs[-1].resize()
-        return characs
-
+                portrait.resize()
+                portraits.append(portrait)
+        return portraits
+    
+    def get_character_portrait(self, charac, cat, highlighted):
+        for portrait in self.portraits:
+            if (charac, cat, highlighted) == portrait.id:
+                return portrait
+        self.portraits.append(Portrait(
+        self.game.cache, charac, cat, highlighted))
+        return self.portraits[-1]
+    
     def ask_choices(self):
         choices_sprite = []
         if self.msg["choices"]:
