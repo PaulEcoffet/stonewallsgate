@@ -23,8 +23,10 @@ class StoryScreen():
         self.game = game
         self.event = event
         self.end = False
+        self.portrait_update = False
         self.portraits = []
         self.highlighted_pending = []
+        self.old_portraits_element = None
         self.choice_actions_cat = object()  # Event manager category
         self.next_dialogue_cat = object()  # Event manager category
 
@@ -55,8 +57,7 @@ class StoryScreen():
         
     def update(self):
         if self.portrait_update or self.start_scene:
-            self.portraits_elements.clear(self.surface,
-                                          self.background)
+            self.old_portraits_element = self.portraits_elements 
             self.portraits_elements = pygame.sprite.RenderUpdates(
                 self.new_portraits)
             self.portraits_elements.update(self.highlighted_pending)
@@ -76,6 +77,8 @@ class StoryScreen():
                 self.dialogue_box, self.suite_box)
         self.graphic_elements.draw(self.surface)
         if self.portrait_update or self.start_scene:
+            self.old_portraits_element.clear(self.surface,
+                                          self.background)
             self.portraits_elements.draw(self.surface)
             self.portrait_update = False
 

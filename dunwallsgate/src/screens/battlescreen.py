@@ -27,7 +27,10 @@ class BattleScreen():
         self.eventmanager = None
         self.game = game
         self.portraits = []
+        self.highlighted_pending = []
+        self.portrait_update = False
         self.buttons = None
+        self.old_portraits_elements = None
 
     def start(self, window, eventmanager):
         self.window = window
@@ -52,15 +55,20 @@ class BattleScreen():
     def update(self):
             self.lifebars_elements.update()
             self.buttons.update()
+            if self.portrait_update or self.start_battle:
+                self.old_portraits_element = self.portraits_elements 
+                self.portraits_elements = pygame.sprite.RenderUpdates(
+                    self.new_portraits)
+                self.portraits_elements.update(self.highlighted_pending)
+                self.highlighted_pending = []
 
     def draw(self):
         if self.start_battle:
             self.surface.blit(self.background, (0, 0))
             self.start_battle = False
         else:
-            self.portraits_elements.clear(self.surface, self.background)
-            self.portraits_elements = pygame.sprite.RenderUpdates(
-                self.new_portraits)
+            if self.portrait_update:
+                self.old_portraits_elements.clear(self.surface, self.background)
             self.lifebars_elements.clear(self.surface, self.background)
             self.lifebars_elements = pygame.sprite.OrderedUpdates(
                 [lifebar for lifebar in self.lifebars.values()])
