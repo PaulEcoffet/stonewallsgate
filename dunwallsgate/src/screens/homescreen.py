@@ -81,6 +81,7 @@ class HomeScreen():
     def shutdown(self):
         self.surface.fill(0)
         soundmanager.stop_music(500)
+        self.eventmanager.purge_callbacks(self)
 
     def init_sprites(self):
         if not self.background:
