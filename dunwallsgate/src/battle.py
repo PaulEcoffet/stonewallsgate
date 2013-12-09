@@ -31,9 +31,9 @@ class Battle(object):
 
     @property
     def winner(self):
-        if not [charact for charact in self.team1 if charact.is_alive] or self.run[0]:
+        if not [charact for charact in self.team1 if charact.is_alive] or self.run[1]:
             return 2
-        elif not [charact for charact in self.team2 if charact.is_alive] or self.run[1]:
+        elif not [charact for charact in self.team2 if charact.is_alive] or self.run[0]:
             return 1
         else:
             return None
