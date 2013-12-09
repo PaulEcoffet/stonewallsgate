@@ -6,6 +6,7 @@ import pygame.locals as pg
 from screens.text_render import TextRender
 from customsprites import Portrait
 from character import Character
+from button import Button
 
 
 class StoryScreen():
@@ -56,6 +57,9 @@ class StoryScreen():
         self.init_story()
         
     def update(self):
+        if self.choices:
+            self.suite_box.click_time = 0
+        self.graphic_elements.update()
         if self.portrait_update or self.start_scene:
             self.old_portraits_element = self.portraits_elements 
             self.portraits_elements = pygame.sprite.RenderUpdates(
@@ -93,12 +97,7 @@ class StoryScreen():
             self.purge_textbox()
 
         if not self.suite_box:
-            self.suite_box = pygame.sprite.DirtySprite()
-            self.suite_box.image = pygame.Surface((77, 20), pygame.SRCALPHA)
-            self.suite_box.image.fill((0, 0, 0, 120))
-            text = TextRender((500, 500), "joystix", 14, (255, 158, 0),
-                              "SUITE")
-            self.suite_box.image.blit(text.next(), (6, 1))
+            self.suite_box = Button(self.eventmanager, self, "SUITE", (77, 20),"box_options")
 
     def purge_textbox(self):
         self.dialogue_box.image.fill((0, 0, 0, 140))
@@ -167,18 +166,19 @@ class StoryScreen():
         choices_sprite = []
         if self.msg["choices"]:
             self.eventmanager.lock_categories(self.next_dialogue_cat)
-            self.pass_dial_id = []
             for i, choice in enumerate(self.msg["choices"]):
-                choices_sprite.append(pygame.sprite.DirtySprite())
-                choices_sprite[-1].image = pygame.Surface((870, 34),
-                                                          pygame.SRCALPHA)
-                choices_sprite[-1].image.fill((180 - i * 30,
-                                               255 - i * 30, i * 15, 50))
-                choices_sprite[-1].rect = (choices_sprite[i].image
-                                           .get_rect(x=75, y=35 * i + 425))
-                text = TextRender((870, 130), "unispace_italic", 26,
-                                  (255, 158, 0), choice["txt"])
-                choices_sprite[-1].image.blit(text.next(), (0, 0))
+                if len(self.msg["choices"]) > 3:
+                    choices_sprite.append(Button(self.eventmanager, self,  choice["txt"], (435, 27),"dialogue_choices"))
+                    if len(choices_sprite) > 3:
+                        choices_sprite[-1].rect = (choices_sprite[i].image
+                                                   .get_rect(x=530, y=35 *i + 305))
+                    else:
+                        choices_sprite[-1].rect = (choices_sprite[i].image
+                                                   .get_rect(x=75, y=35 * i + 425))
+                else:
+                    choices_sprite.append(Button(self.eventmanager, self,  choice["txt"], (870, 27),"dialogue_choices"))
+                    choices_sprite[-1].rect = (choices_sprite[i].image
+                                               .get_rect(x=75, y=35 * i + 425))
                 if "triggers" in choice:
                     for trigger in choice["triggers"]:
                         self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(trigger.get("trigger_cat", "None"), trigger.get("params", None)), self.choice_actions_cat)
