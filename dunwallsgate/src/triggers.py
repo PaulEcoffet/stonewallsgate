@@ -25,8 +25,7 @@ def get_triggers_dict(game):
     return {
         "active_quest": lambda quest: active_quest(game, quest),
         "valid_quest": lambda quest: valid_quest(game, quest),
-        "add_item": lambda item: game.hero.inventory.add(
-            inventory.create_item(item)),
+        "add_item": lambda item: add_item(game, item),
         "inactive_quest": lambda quest: inactive_quest(game, quest),
         "switch_scene": lambda name: switch_scene(game, name),
         "modif_health": lambda hp: game.hero.health + hp,
@@ -34,6 +33,18 @@ def get_triggers_dict(game):
         "restart_event": lambda args: restart_event(game),
         "force_stop_event": lambda args: force_stop_event(game)
     }
+
+
+def add_item(game, item):
+    if isinstance(item, list):
+        args = item[1:]
+        item = item[0]
+    else:
+        args = []
+    try:
+        game.hero.inventory.add(inventory.create_item(item, *args))
+    except inventory.InventoryFullException:
+        print("Fail: {}".format(e))
 
 
 def def_next_scene(game, name):
