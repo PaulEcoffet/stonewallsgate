@@ -16,6 +16,7 @@ class Battle(object):
                                 key=lambda character: character.initiative)
         self.cur_player_index = 0
         self.has_played = False
+        self.last_action = ""
 
     @property
     def playing_char(self):
