@@ -62,7 +62,8 @@ class CacheSystem():
                                                 "img_txt": txt_sprite,
                                                 "talker": message["talker"],
                                                 "hearer": message["hearer"],
-                                                "choices": message["choices"]
+                                                "choices": message["choices"],
+                                                "msg": message["msg"]
                                                 })
                 txt_sprite = txt_object.next()
             message = dialogues.next()
