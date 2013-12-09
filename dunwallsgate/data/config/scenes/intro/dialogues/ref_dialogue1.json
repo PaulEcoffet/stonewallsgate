@@ -1,25 +1,50 @@
 [
-	{
+    {
         "message": "Astuce: Appuyez sur [Espace] pour avancer ou sur le boutton <SUITE>."
     },
     {
-	"transmitter": "sylvanas",
-	"receiver": "hero",
-	"message": "Salut le nouveau ! Quel branchement veux tu prendre ?"
+    "transmitter": "sylvanas",
+    "receiver": "hero",
+    "message": "Bonjour Gordon! Debout maintenant"
     },
     {
-	"transmitter": "hero",
-	"receiver": "sylvanas",
-	"message": "<Je souhaite explorer :>",
+    "transmitter": "sylvanas",
+    "receiver": "hero",
+    "message": "Gordon, nous avons besoin de toi."
+    },
+    {
+    "transmitter": "hero",
+    "receiver": "sylvanas",
+    "message": "Heiiiin ? *baille*"
+    },
+    {
+    "transmitter": "sylvanas",
+    "receiver": "hero",
+    "message": "On subit des attaques du clan des Amotoris. Nos barricades tiennent, mais cela ne risque pas de durer. Réveille-toi!"
+    },
+    {
+    "transmitter": "hero",
+    "receiver": "sylvanas",
+    "message": "QUOI!? C'est mort, ça va pas se passer comme ça, non mais oh! Allons les attaquer tout de suite!"
+    },
+    {
+    "transmitter": "sylvanas",
+    "receiver": "hero",
+    "message": "Ne devrions-nous pas aller chercher des armes avant?"
+    },
+    {
+    "transmitter": "hero",
+    "receiver": "sylvanas",
+    "message": "",
         "choices": [
-			{ "txt": "L'arc 'LIGHTNING'", "trigger_cat" : "def_next_scene", "params" : "lightning"}, 
-			{ "txt": "L'arc 'DYING'", "trigger_cat" : "def_next_scene", "params" : "dying"},
-			{ "txt": "Essayer un combat", "trigger_cat" : "def_next_scene", "params" : "combat_test"}
-		   ]
+            { "txt": "Non, attaquons-les avant qu'ils ne s'organisent", "trigger_cat" : "def_next_scene", "params" : "lightning"},
+            { "txt": "Tu as raison, allons-y", "trigger_cat" : "def_next_scene", "params" : "dying"},
+            { "txt": "Essayer un combat", "trigger_cat" : "def_next_scene", "params" : "combat_test"}
+           ]
     },
     {
-	"transmitter": "sylvanas",
-	"receiver": "hero",
-	"message": "Très bien, suis-moi dans ce cas."
+    "transmitter": "sylvanas",
+    "receiver": "hero",
+    "message": "Très bien, suis-moi dans ce cas."
     }
 ]
