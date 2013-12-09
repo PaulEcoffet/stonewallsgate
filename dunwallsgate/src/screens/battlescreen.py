@@ -7,6 +7,8 @@ from button import Button
 from screens.text_render import TextRender
 import battle
 
+ALLIES = 1
+ENNEMIES = 2
 
 class BattleScreen():
     """
@@ -61,10 +63,8 @@ class BattleScreen():
         self.portraits_elements = pygame.sprite.RenderUpdates([portrait for portrait in self.portraits.values()])
 
     def update(self):
-        if self.battle.winner == 1:
-            self.combat_state = "win"
-        elif self.battle.winner == 2:
-            self.combat_state = "loose"
+        if self.battle.winner:
+            self.end = True
         self.lifebars_elements.update()
         self.main_buttons.update()
         self.info_box_buttons.update()
