@@ -49,12 +49,12 @@ class BattleScreen():
         self.init_sprites()
 
         # Sprites placement
-        self.info_box.rect = self.info_box.image.get_rect(x=330, y=385)
+        self.info_box.rect = self.info_box.image.get_rect(x=500, y=385)
         self.combat_box.rect = self.combat_box.image.get_rect(x=50, y=380)
         self.attack_btn.rect = self.attack_btn.image.get_rect(x=60, y=385)
         self.switchwep_btn.rect = self.switchwep_btn.image.get_rect(x=60,
-                                                                    y=470)
-        self.run_btn.rect = self.switchwep_btn.image.get_rect(x=700, y=470)
+                                                                    y=435)
+        self.run_btn.rect = self.switchwep_btn.image.get_rect(x=60, y=485)
 
         self.graphic_elements = pygame.sprite.OrderedUpdates(self.combat_box,
                                                              self.info_box)
@@ -101,7 +101,7 @@ class BattleScreen():
             self.purge_box(self.combat_box)
         if not self.info_box:
             self.info_box = pygame.sprite.DirtySprite()
-            self.info_box.image = pygame.Surface((350, 163), pygame.SRCALPHA)
+            self.info_box.image = pygame.Surface((380, 163), pygame.SRCALPHA)
             self.purge_box(self.info_box, 195)
         if not self.attack_btn:
             self.attack_btn = Button(self.eventmanager, self, "ATTACK")
@@ -229,3 +229,7 @@ class BattleScreen():
             portrait.resize(300, 150)
             portrait.move(*position_portraits(i))
             self.lifebars[character].move(*position_bars(i))
+            
+    def shutdown(self):
+        self.eventmanager.purge_callbacks(self.info_box_cat)
+        self.eventmanager.purge_callbacks(self.atk_cat)

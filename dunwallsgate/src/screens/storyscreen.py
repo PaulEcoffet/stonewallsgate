@@ -130,6 +130,7 @@ class StoryScreen():
             self.dialogue_box.image.blit(self.msg["img_txt"], (10, 10))
             self.msg = None
         elif self.restart_event:
+            self.end = False
             self.game.cache.clear_dialogues()
             self.game.cache.format_dialogues(self.event.dialogues)
             self.restart_event = False

@@ -17,14 +17,14 @@ _button_style = {
         "overred": {
             "text_color": ORANGE_RGB,
             "background_color": BLACK_RGB,
-            "border_color": YELLOW_RGB
+            "border_color": (109, 130, 38)
         },
         "default": {
             "text_color": (255, 255, 255),
             "background_color": BLACK_RGB,
-            "border_color": GREEN_RGB
+            "border_color": (122,66,0)
         },
-        "fontsize": 40
+        "fontsize": 22
     },
     "box_options": {
         "clicked": {
@@ -63,17 +63,19 @@ def centering(size, k, i, center=True):
     a = b = 0
     if not center:
         k = size[0]-3
-    while 2*a != round(size[0]-k,0):
+    while 2*a != round(size[0]-k,0) and a <= 7000:
         a += 0.5
-    while 2*b != round(size[1]-i,0):
+    while 2*b != round(size[1]-i,0) and b <= 7000:
         b += 0.5
+    if a == 7000 or b == 7000:
+        print("Ce code est bien foireux")
     return (a, b)
 
 
 class Button(pygame.sprite.Sprite):
     """generic button which can be improved"""
 
-    def __init__(self, eventmanager, cat, text, size=(250, 70),
+    def __init__(self, eventmanager, cat, text, size=(380, 50),
                  style="default", customstyle=None):
         super().__init__()
         try:

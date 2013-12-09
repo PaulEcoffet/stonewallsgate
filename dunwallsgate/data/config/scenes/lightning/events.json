@@ -17,7 +17,7 @@
         "triggers":
             [
                 {
-                    "trigger": "switch_scene",
+                    "trigger_cat": "switch_scene",
 					"params": "end"
                 }
             ]
@@ -34,7 +34,7 @@
         "triggers":
             [
                 {
-                    "trigger": "switch_scene",
+                    "trigger_cat": "switch_scene",
 					"params": "dying"
                 }
             ]
@@ -52,7 +52,7 @@
         "triggers":
             [
 				{
-					"trigger" : "valid_quest", 
+					"trigger_cat" : "valid_quest", 
 					"params" : "jammer_quest"
 				}
             ]
@@ -79,7 +79,7 @@
         "triggers":
             [
                 {
-                    "trigger": "active_quest",
+                    "trigger_cat": "active_quest",
 					"params": "jammer_quest"
                 }
             ]

@@ -14,7 +14,7 @@
         "triggers":
             [
                 {
-                    "trigger": "switch_scene",
+                    "trigger_cat": "switch_scene",
 					"params": "awakening_0"
                 }
             ]
@@ -31,7 +31,7 @@
         "triggers":
             [
                 {
-                    "trigger": "switch_scene"
+                    "trigger_cat": "switch_scene"
                 }
             ]
     }

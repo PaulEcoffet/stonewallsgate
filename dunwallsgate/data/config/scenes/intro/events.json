@@ -10,7 +10,7 @@
         "triggers":
             [
                 {
-                    "trigger": "switch_scene"
+                    "trigger_cat": "switch_scene"
                 }
             ]
     }
