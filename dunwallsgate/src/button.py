@@ -68,8 +68,8 @@ def centering(size, k, i, center=True):
     while 2*b != round(size[1]-i,0):
         b += 0.5
     return (a, b)
-    
-    
+
+
 class Button(pygame.sprite.Sprite):
     """generic button which can be improved"""
 
@@ -89,7 +89,7 @@ class Button(pygame.sprite.Sprite):
         self.click_time = 0
         self.id = None
         self.events = []
-        self.rect = (0, 0, size[0], size[1])
+        self.rect = pygame.Rect(0, 0, size[0], size[1])
         self.default_image = pygame.surface.Surface(size, pygame.SRCALPHA)
         self.default_image.fill(self.style["default"]["background_color"])
         self.clicked_image = pygame.surface.Surface(size, pygame.SRCALPHA)

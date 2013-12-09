@@ -59,6 +59,7 @@ class GameEvent():
                     self.game.screen = StoryScreen(self.game, self.event)
                     self.game.change_screen()
             elif self.event.battle:
+                self.game.hero.inventory = Inventory("begining_inventory")
                 battle = Battle([self.game.hero] + self.game.hero_companions, [Character("klim")])
                 self.game.screen = BattleScreen(battle, self.event, self.game)
                 self.game.screen.init_battle()

@@ -13,7 +13,7 @@ class UnexistingCharacterException(Exception):
     pass
 
 
-class Character():
+class Character(object):
     """
     Define a character and its abilities
     """
@@ -48,11 +48,9 @@ class Character():
         self.abilities = self.operations(custom.get(
             "abilities", data["abilities"]))
         self.ref = reference
-        try:
-            self.weapon = self.inventory.weapons[0]  # Take the first
-                                                     # weapon found
-        except IndexError:
-            self.weapon = inventory.create_item("bare_hands")
+        self.inventory.add(inventory.create_item("bare_hands"))
+        self.weapon = self.inventory.weapons[0]  # Take the first
+                                                 # weapon found
 
     @property
     def is_alive(self):

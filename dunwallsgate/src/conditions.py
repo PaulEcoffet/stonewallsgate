@@ -13,7 +13,7 @@ def get_conditions_dict(game):
     """
     return {
         "hero_name": lambda args: game.hero_state["hero_name"],
-        "is_item": lambda item: inventory.create_item(item) in game.hero.inventory,
+        "is_item": lambda item: game.hero.inventory.ref_in(inventory.create_item(item)),
         "is_quest_valid": lambda quest: game.hero_state["quests"][quest] == VALIDATED,
         "is_quest_active": lambda quest: game.hero_state["quests"][quest] == ACTIVE,
         "is_quest_inactive": lambda quest: game.hero_state["quests"][quest] == INACTIVE,

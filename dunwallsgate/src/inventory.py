@@ -39,9 +39,11 @@ class Inventory(object):
             items_list = json.load(f)
         self.load_inventory_from_list(items_list)
 
-    def __contains__(self, other_item):
-        for item in self._items:
-            if item == other_item:
+        return False
+
+    def ref_in(self, ref):
+        for item in self.items:
+            if item.ref == ref.ref:
                 return True
         return False
 
@@ -93,6 +95,8 @@ class Inventory(object):
         for item in self.items:
             if isinstance(item, Ammo) and item.ref in weapon.compatible_ammo:
                 ammo_list.append(item)
+            if None in weapon.compatible_ammo:
+                ammo_list.append(None)
         return ammo_list
 
 
@@ -132,12 +136,6 @@ class Item(object):
                     item_caracts[caract] = random.randint(
                         caract["min"], caract["max"])
         self.caracts = item_caracts
-    
-    def __eq__(self, other):
-        if isinstance(other, Item):
-            return self.ref == other.ref
-        else:
-            return False
 
     @property
     def weight(self):
@@ -169,7 +167,9 @@ class Weapon(Item):
 
     @ammo.setter
     def ammo(self, ammo):
-        if ammo.ref in self.compatible_ammo:
+        if not ammo and None in self.compatible_ammo:
+            self._ammo = ammo
+        elif ammo.ref in self.compatible_ammo:
             self._ammo = ammo
         else:
             raise IncompatibleAmmoException()

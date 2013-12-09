@@ -10,6 +10,7 @@ class Battle(object):
     def __init__(self, team1, team2):
         self.team1 = team1
         self.team2 = team2
+        self.run = [False, False]
         self.turn_list = sorted(team1 + team2,
                                 key=lambda character: character.initiative)
         self.cur_player_index = 0
@@ -28,9 +29,9 @@ class Battle(object):
 
     @property
     def winner(self):
-        if not [charact for charact in self.team1 if charact.is_alive]:
+        if not [charact for charact in self.team1 if charact.is_alive] or self.run[0]:
             return 2
-        elif not [charact for charact in self.team2 if charact.is_alive]:
+        elif not [charact for charact in self.team2 if charact.is_alive] or self.run[1]:
             return 1
         else:
             return None
@@ -48,11 +49,11 @@ class Battle(object):
                          + self.playing_char.weapon.use_weapon()
                          - target.defense) * random.gauss(1, 0.05))
                 except inventory.IncompatibleAmmoException:
-                    raise CantAttackException()
+                    raise CantAttackException("Plus de munitions")
                 else:
                     self.has_played = True
             else:
-                raise CantAttackException()
+                raise CantAttackException("Cible impossible")
         else:
             raise AlreadyPlayedException()
 
@@ -69,6 +70,24 @@ class Battle(object):
             return [character for character in self.team1
                     if character.is_alive]
 
+    def change_weapon(self, weapon, ammo):
+        if not self.has_played:
+            if weapon in self.playing_char.inventory.items:
+                if ammo in self.playing_char.inventory.items or not ammo:
+                    try:
+                        weapon.ammo = ammo
+                        self.playing_char.weapon = weapon
+                    except inventory.IncompatibleAmmoException as e:
+                        raise e
+                    else:
+                        self.has_played = True
+                else:
+                    raise CantChangeWeaponException("Ces munitions ne sont pas dans votre sac")
+            else:
+                raise CantChangeWeaponException("Cette arme n'est pas dans votre sac")
+        else:
+            raise AlreadyPlayedException()
+
     def end_turn(self):
         self.has_played = False
         self.cur_player_index = ((self.cur_player_index + 1)
@@ -80,6 +99,10 @@ class Battle(object):
 
 
 class CantAttackException(Exception):
+    pass
+
+
+class CantChangeWeaponException(Exception):
     pass
 
 
