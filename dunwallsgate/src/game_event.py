@@ -53,14 +53,20 @@ class GameEvent():
                 else:
                     self.game.screen = StoryScreen(self.game, self.event)
                     self.game.change_screen()
-            elif self.event.battle:
-                self.game.hero.inventory = Inventory("begining_inventory")
-                battle = Battle([self.game.hero] + self.game.hero_companions, [Character("klim")])
+            elif self.event.battle_ennemies:
+                ennemies = []
+                for ennemi_ref in self.event.battle_ennemies:
+                    ennemies.append(self.game.get_character(ennemi_ref))
+                if not self.game.hero.inventory:
+                    self.game.hero.inventory = Inventory("begining_inventory")
+                battle = Battle([self.game.hero] + self.game.hero_companions, ennemies)
                 self.game.screen = BattleScreen(battle, self.event, self.game)
                 self.game.screen.init_battle()
                 self.game.change_screen()
             elif self.event.triggers:
                 self.execute_triggers(self.event) #si l'evenement contient uniquement des triggers
                 self.event_done = True
+            else:
+                raise Exception("Neither event.battle or event.dialogues are set. It is the end of the game ?")
             if self.start:
                 self.start = False

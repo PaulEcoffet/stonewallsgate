@@ -18,10 +18,12 @@ class CacheSystem():
         self.load_backgrounds()
         
     def get_portrait_image(self, ref, position):
-        try:
-            return self.image_portraits[ref][position]
-        except KeyError:
-            return self.image_portraits[ref]["front"]
+        if ref in self.image_portraits:
+            if position in self.image_portraits[ref]:
+                return self.image_portraits[ref][position]
+            elif "front" in self.image_portraits[ref]:
+                return self.image_portraits[ref]["front"]
+        raise Exception("Character Image (%s) not found ! (Verify your images)"%ref)
 
     def load_backgrounds(self):
         self.image_backgrounds["default"] = pygame.Surface((1024, 574)) #Default BG

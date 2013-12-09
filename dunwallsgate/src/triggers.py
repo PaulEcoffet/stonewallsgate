@@ -26,6 +26,7 @@ def get_triggers_dict(game):
         "active_quest": lambda quest: active_quest(game, quest),
         "valid_quest": lambda quest: valid_quest(game, quest),
         "add_item": lambda item: add_item(game, item),
+        "add_fellow": lambda ref: game.hero_companions.append(game.get_character(ref)),
         "inactive_quest": lambda quest: inactive_quest(game, quest),
         "switch_scene": lambda name: switch_scene(game, name),
         "modif_health": lambda hp: game.hero.health + hp,

@@ -15,14 +15,6 @@ class Event():
         self.triggers = {}
         self.done = False
         self.background = None
-    def __str__(self):
-        return "C:%s\nT:%s\nDone:%s\nBattle:%s\nBG:%s\nMessages:%s"%(self.conditions, self.triggers, self.done, self.battle, self.background, self.dialogues.messages)
-######
-
-class Battle():
-    def __init__(self):
-        self.allies = []
-        self.ennemies = []
 
 ######
 

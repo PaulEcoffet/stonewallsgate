@@ -53,8 +53,7 @@ def get_events(scene_name):
             event = Event()
             event.conditions = json_event.get('conditions', [])
             if 'battle' in json_event:
-                event.battle = Battle()
-                event.battle.ennemies = json_event['battle']['ennemies']
+                event.battle_ennemies = [ref.lower() for ref in json_event['battle']['ennemies']]
             elif 'dialogs' in json_event:
                 event.dialogues = get_dialogues(current_folder,
                                                 json_event['dialogs'])
