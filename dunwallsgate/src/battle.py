@@ -45,14 +45,28 @@ class Battle(object):
         if not self.has_played:
             if self.can_attack(target):
                 try:
-                    target.health -= round(
+                    damage = round(
                         (self.playing_char.attack
                          + self.playing_char.weapon.use_weapon()
                          - target.defense) * random.gauss(1, 0.05))
+                    target.health -= damage
                 except inventory.IncompatibleAmmoException:
                     raise CantAttackException("Plus de munitions")
                 else:
                     self.has_played = True
+                    if self.playing_char.weapon.ammo:
+                        self.last_action = "{} a attaqué {} avec {} et {}."\
+                            " Cela lui a infligé {} dégats.".format(
+                                self.playing_char.name, target.name,
+                                self.playing_char.weapon.caracts["name"],
+                                self.playing_char.weapon.ammo.caracts["name"],
+                                damage)
+                    else:
+                        self.last_action = "{} a attaqué {} avec {}."\
+                            " Cela lui a infligé {} dégats.".format(
+                                self.playing_char.name, target.name,
+                                self.playing_char.weapon.caracts["name"],
+                                damage)
             else:
                 raise CantAttackException("Cible impossible")
         else:
@@ -77,11 +91,24 @@ class Battle(object):
                 if ammo in self.playing_char.inventory.items or not ammo:
                     try:
                         weapon.ammo = ammo
+                        old_weapon = self.playing_char.weapon
                         self.playing_char.weapon = weapon
                     except inventory.IncompatibleAmmoException as e:
                         raise e
                     else:
                         self.has_played = True
+                        if old_weapon.ammo:
+                            self.last_action = "{} change son {} avec {} pour ".format(
+                                self.playing_char.name,
+                                old_weapon.caracts["name"],
+                                old_weapon.ammo.caracts["name"])
+                        else:
+                            self.last_action = "{} change son {} pour ".format(
+                                self.playing_char.name,
+                                old_weapon.caracts["name"])
+                        if weapon.ammo:
+                            self.last_action += "{} avec {}".format(
+                                weapon.caracts["name"], weapon.ammo.caracts["name"])
                 else:
                     raise CantChangeWeaponException("Ces munitions ne sont pas dans votre sac")
             else:
@@ -102,7 +129,7 @@ class Battle(object):
         while self.playing_char.is_dead:
             self.cur_player_index = ((self.cur_player_index + 1)
                                      % len(self.turn_list))
-        return self.winner
+        return self.last_action
 
 
 class CantAttackException(Exception):
@@ -129,7 +156,7 @@ def test():
         ia.play()
         print("klim health: {}".format(klim.health))
         print("gordon health: {}".format(gordon.health))
-        battle.end_turn()
+        print(battle.end_turn())
     print("The team {} has won".format(battle.winner))
 
 
