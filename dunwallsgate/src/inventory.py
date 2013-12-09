@@ -196,10 +196,14 @@ class Weapon(Item):
 
     @property
     def weapon_power(self):
-        if self.ammo:
-            return self.caracts["power"] * self.ammo.caracts["coef"]
+        return self.weapon_power_with(self.ammo)
+
+    def weapon_power_with(self, ammo=None):
+        if ammo:
+            coef = ammo.caracts["coef"]
         else:
-            return self.caracts["power"]
+            coef = 1
+        return self.caracts["power"] * coef
 
 
 class Stackable(Item):

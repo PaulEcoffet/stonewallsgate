@@ -32,6 +32,7 @@ class Character(object):
         else:
             data = get_character_data("unknown")
         self._health = 0
+        self._inventory = inventory.Inventory()
         self.name = self.operations(custom.get("name", data["name"]))
         self.maxhealth = self.operations(custom.get(
             "maxhealth", data["maxhealth"]))
@@ -51,6 +52,16 @@ class Character(object):
         self.inventory.add(inventory.create_item("bare_hands"))
         self.weapon = self.inventory.weapons[0]  # Take the first
                                                  # weapon found
+
+    @property
+    def inventory(self):
+        return self._inventory
+
+    @inventory.setter
+    def inventory(self, value):
+        self._inventory = value
+        if not self.inventory.ref_in(inventory.create_item("bare_hands")):
+            self.inventory.add(inventory.create_item("bare_hands"))
 
     @property
     def is_alive(self):

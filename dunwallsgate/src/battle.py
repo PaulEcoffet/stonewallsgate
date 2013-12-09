@@ -2,6 +2,7 @@ import random
 
 import inventory
 from character import Character
+from ia import IA
 
 
 class Battle(object):
@@ -119,13 +120,13 @@ class AlreadyPlayedException(Exception):
 def test():
     gordon = Character("hero")
     gordon.inventory = inventory.Inventory("begining_inventory")
-    gordon.weapon = gordon.inventory.get_first("gun")
-    gordon.weapon.ammo = gordon.inventory.get_compatible_ammo(
-        gordon.weapon)[0]
+    gordon.inventory.get_first("gun_ammo").amount = 3
     klim = Character("klim")
     battle = Battle([gordon], [klim])
+    ia = IA(battle)
     while not battle.winner:
-        battle.do_attack(battle.possible_targets_attack()[0])
+        print("It's {} turn".format(battle.playing_char.name))
+        ia.play()
         print("klim health: {}".format(klim.health))
         print("gordon health: {}".format(gordon.health))
         battle.end_turn()
