@@ -1,4 +1,3 @@
-from screens.storyscreen import StoryScreen
 import quest
 from inventory import Inventory
 from character import Character
@@ -20,18 +19,18 @@ class Game():
         self.hero_state = {"quests": self.quests, "hero_name": "Gordon"}
         self.hero_location = "intro"
         self.characters = [self.hero, Character("klim"), Character("sylvanas")]
-        self.hero_companions = [x for x in self.characters if x.name != "Gordon"]
+        self.hero_companions = [x for x in self.characters if x.ref != "hero"]
         self.combat_state = ""
         self.cache = CacheSystem()
         self.next_scene = "intro"
         self.restart_event = False
-    
+
     def get_character(self, ref):
         for charac in self.characters:
             if ref == charac.ref:
                 return charac
-        raise Exception("Character (%s) not found !"%ref)
-        
+        raise Exception("Character (%s) not found !" % ref)
+
     def start(self, window):
         self.window = window
         self.game_event = GameEvent(self)
@@ -44,6 +43,7 @@ class Game():
             scene_name = self.next_scene
         self.game_event.scene = decoder.get_scene(scene_name)
         self.next_scene = None
+
 
 class Base():
     """
