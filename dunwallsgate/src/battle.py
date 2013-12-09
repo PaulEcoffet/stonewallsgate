@@ -46,10 +46,10 @@ class Battle(object):
         if not self.has_played:
             if self.can_attack(target):
                 try:
-                    damage = round(
+                    damage = max(0, round(
                         (self.playing_char.attack
                          + self.playing_char.weapon.use_weapon()
-                         - target.defense) * random.gauss(1, 0.05))
+                         - target.defense) * random.gauss(1, 0.05)))
                     target.health -= damage
                 except inventory.IncompatibleAmmoException:
                     raise CantAttackException("Plus de munitions")
@@ -110,6 +110,9 @@ class Battle(object):
                         if weapon.ammo:
                             self.last_action += "{} avec {}".format(
                                 weapon.caracts["name"], weapon.ammo.caracts["name"])
+                        else:
+                            self.last_action += "{}".format(
+                                weapon.caracts["name"])
                 else:
                     raise CantChangeWeaponException("Ces munitions ne sont pas dans votre sac")
             else:

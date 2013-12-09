@@ -49,7 +49,6 @@ class Character(object):
         self.abilities = self.operations(custom.get(
             "abilities", data["abilities"]))
         self.ref = reference
-        self.inventory.add(inventory.create_item("bare_hands"))
         self.weapon = self.inventory.weapons[0]  # Take the first
                                                  # weapon found
 
