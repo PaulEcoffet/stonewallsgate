@@ -22,12 +22,14 @@ class StoryScreen():
     def __init__(self, game, event):
         self.start_scene = True
         self.game = game
+        self.game_event = game.game_event
         self.event = event
         self.end = False
         self.portrait_update = False
         self.portraits = []
         self.highlighted_pending = []
         self.old_portraits_element = None
+        self.restart_event = False
         self.choice_actions_cat = object()  # Event manager category
         self.next_dialogue_cat = object()  # Event manager category
 
@@ -127,6 +129,10 @@ class StoryScreen():
             self.purge_textbox()
             self.dialogue_box.image.blit(self.msg["img_txt"], (10, 10))
             self.msg = None
+        elif self.restart_event:
+            self.game.cache.clear_dialogues()
+            self.game.cache.format_dialogues(self.event.dialogues)
+            self.restart_event = False
         else:
             self.end = True
             self.game.cache.clear_dialogues()
@@ -168,7 +174,9 @@ class StoryScreen():
             self.eventmanager.lock_categories(self.next_dialogue_cat)
             for i, choice in enumerate(self.msg["choices"]):
                 if len(self.msg["choices"]) > 3:
-                    choices_sprite.append(Button(self.eventmanager, self,  choice["txt"], (435, 27),"dialogue_choices"))
+                    choices_sprite.append(
+                        Button(self.eventmanager, self,  choice["txt"], 
+                            (435, 27),"dialogue_choices"))
                     if len(choices_sprite) > 3:
                         choices_sprite[-1].rect = (choices_sprite[i].image
                                                    .get_rect(x=530, y=35 *i + 305))
@@ -176,19 +184,40 @@ class StoryScreen():
                         choices_sprite[-1].rect = (choices_sprite[i].image
                                                    .get_rect(x=75, y=35 * i + 425))
                 else:
-                    choices_sprite.append(Button(self.eventmanager, self,  choice["txt"], (870, 27),"dialogue_choices"))
+                    choices_sprite.append(
+                        Button(self.eventmanager, self,  choice["txt"], 
+                            (870, 27),"dialogue_choices"))
                     choices_sprite[-1].rect = (choices_sprite[i].image
                                                .get_rect(x=75, y=35 * i + 425))
                 if "triggers" in choice:
                     for trigger in choice["triggers"]:
-                        self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(trigger.get("trigger_cat", "None"), trigger.get("params", None)), self.choice_actions_cat)
+                        self.eventmanager.on_click_on(choices_sprite[-1], 
+                            (lambda trigger_cat, params: \
+                                lambda e: self.add_trigger(trigger_cat, params)) \
+                                    (trigger.get("trigger_cat", None), 
+                                        trigger.get("params", None)), 
+                                        self.choice_actions_cat)
                 elif "trigger_cat" in choice:
-                        self.eventmanager.on_click_on(choices_sprite[-1], (lambda trigger_cat, params: lambda x: self.game.game_event.game_triggers[trigger_cat](params))(choice.get("trigger_cat", "None"), choice.get("params", None)), self.choice_actions_cat)
-                self.eventmanager.on_click_on(choices_sprite[-1], lambda e: self.activate_dialogue_events(), self.choice_actions_cat)
-                self.eventmanager.on_click_on(choices_sprite[-1], lambda e: self.purge_choice_actions(), self.choice_actions_cat)
-                self.eventmanager.on_click_on(choices_sprite[-1], self.show_dialogue, self.choice_actions_cat)
+                    self.eventmanager.on_click_on(choices_sprite[-1], 
+                            (lambda trigger_cat, params: \
+                                lambda e: self.add_trigger(trigger_cat, params)) \
+                                    (choice.get("trigger_cat", None), 
+                                        choice.get("params", None)), 
+                                        self.choice_actions_cat)
+                self.eventmanager.on_click_on(choices_sprite[-1], 
+                    lambda e: self.activate_dialogue_events(), 
+                        self.choice_actions_cat)
+                self.eventmanager.on_click_on(choices_sprite[-1], 
+                    lambda e: self.purge_choice_actions(),
+                        self.choice_actions_cat)
+                self.eventmanager.on_click_on(choices_sprite[-1], 
+                    self.show_dialogue, self.choice_actions_cat)
         return choices_sprite
-
+    
+    def add_trigger(self, trigger_cat, params=None):
+        if trigger_cat:
+            self.game.game_event.game_triggers[trigger_cat](params)
+        
     def activate_dialogue_events(self):
         self.eventmanager.unlock_categories(self.next_dialogue_cat)
 

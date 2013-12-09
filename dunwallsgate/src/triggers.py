@@ -63,7 +63,7 @@ def inactive_quest(game, quest):
 
 
 def restart_event(game):
-    game.restart_event = True
+    game.screen.restart_event= True
 
 
 def force_stop_event(game):
