@@ -12,10 +12,14 @@ class Event():
         self.conditions = {}
         self.dialogues = Dialogues()
         self.battle = None
+        self.triggers_team1 = None
+        self.triggers_team2 = None
+        self.battle_ennemies = None
         self.triggers = {}
         self.done = False
         self.background = None
-
+    def __str__(self):
+        return "C:%s\nT:%s\nDone:%s\nBattleE:%s\nBG:%s\nMessages:%s"%(self.conditions, self.triggers, self.done, self.battle_ennemies, self.background, self.dialogues.messages)
 ######
 
 class Dialogues():

@@ -36,15 +36,19 @@ class GameEvent():
                 return False
         return True
 
-    def execute_triggers(self, event):
-        for trigger in event.triggers:
-            self.game_triggers[trigger["trigger"]](trigger.get("params", None))
+    def execute_triggers(self, triggers):
+        for trigger in triggers:
+            self.game_triggers[trigger["trigger_cat"]](trigger.get("params", None))
 
     def update(self):
         """Update every 30sec the screen to be sure that it correspond with the current event (check window.py)"""
         if self.game.screen and self.game.screen.end:
             self.event_done = True
-            self.execute_triggers(self.event)
+            if isinstance(self.game.screen, BattleScreen) and self.game.screen.battle.winner == 1:
+                self.execute_triggers(self.event.triggers_team1_win)
+            elif isinstance(self.game.screen, BattleScreen) and self.game.screen.battle.winner == 2:
+                self.execute_triggers(self.event.triggers_team2_win)
+            self.execute_triggers(self.event.triggers)
         #If it's the first update or if previous event are done, search new event and execute it (with triggers)
         if (self.start or self.event_done) and self.search_event():
             if self.event.dialogues and self.event.dialogues.messages:
@@ -64,7 +68,7 @@ class GameEvent():
                 self.game.screen.init_battle()
                 self.game.change_screen()
             elif self.event.triggers:
-                self.execute_triggers(self.event) #si l'evenement contient uniquement des triggers
+                self.execute_triggers(self.event.triggers) #si l'evenement contient uniquement des triggers
                 self.event_done = True
             else:
                 raise Exception("Neither event.battle or event.dialogues are set. It is the end of the game ?")
