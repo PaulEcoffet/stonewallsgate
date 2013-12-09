@@ -88,6 +88,12 @@ class Battle(object):
         else:
             raise AlreadyPlayedException()
 
+    def do_run(self):
+        if self.playing_char in self.team1:
+            self.run[0] = True
+        else:
+            self.run[1] = True
+
     def end_turn(self):
         self.has_played = False
         self.cur_player_index = ((self.cur_player_index + 1)

@@ -64,7 +64,7 @@ class BattleScreen():
         if self.battle.winner == 1:
             self.combat_state = "win"
         elif self.battle.winner == 2:
-            self.combat_state == "loose"
+            self.combat_state = "loose"
         self.lifebars_elements.update()
         self.main_buttons.update()
         self.info_box_buttons.update()
@@ -111,7 +111,7 @@ class BattleScreen():
             self.switchwep_btn.on_click(lambda e: self.set_action_mode("change_weapon"))
         if not self.run_btn:
             self.run_btn = Button(self.eventmanager, self, "RUN")
-            self.run_btn.on_click(lambda e: self.set_action_mode("run_btn"))
+            self.run_btn.on_click(lambda e: self.set_action_mode("run"))
         self.main_buttons = pygame.sprite.RenderUpdates(self.attack_btn, self.switchwep_btn,
                                                    self.run_btn)
         self.info_box_buttons = pygame.sprite.RenderPlain()
@@ -128,6 +128,8 @@ class BattleScreen():
             self.show_attack_action()
         elif mode == "change_weapon":
             self.show_ch_weapon_action()
+        elif mode == "run":
+            self.show_run_action()
 
     def show_attack_action(self):
         self.set_info_box_text("Choisissez votre cible")
@@ -175,6 +177,12 @@ class BattleScreen():
             self.set_info_box_text(str(e))
         else:
             self.end_turn()
+
+    def show_run_action(self):
+        button = Button(self.eventmanager, self.info_box_cat, "Fuir comme un couard", (320, 30), "dialogue_choices")
+        button.rect.move_ip(self.info_box.rect.x + 10, self.info_box.rect.y + 10)
+        button.on_click(lambda e: self.battle.do_run())
+        self.info_box_buttons.add(button)
 
     def set_info_box_text(self, text):
         panel = TextRender((self.info_box.image.get_width() - 20,
