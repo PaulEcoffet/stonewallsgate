@@ -33,12 +33,6 @@ class CacheSystem():
             image = pygame.image.load(image_path).convert()
             image = pygame.transform.scale(
                 image, (1024, 574))
-            transparent = pygame.Surface((205, 25), pygame.SRCALPHA)
-            transparent.fill((0, 0, 0, 140))
-            note = TextRender((320, 50), "joystix", 16, (255, 50, 10),
-                              "ALPHA version 2")
-            transparent.blit(note.next(), (5, 3))
-            image.blit(transparent, (10, 10))
             self.image_backgrounds[scene_ref] = image
             
     def load_image_portraits(self):

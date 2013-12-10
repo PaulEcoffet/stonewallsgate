@@ -17,6 +17,7 @@ class Battle(object):
         self.cur_player_index = 0
         self.has_played = False
         self.last_action = ""
+        self.target = None
 
     @property
     def playing_char(self):
@@ -43,6 +44,7 @@ class Battle(object):
         return self.team1 + self.team2
 
     def do_attack(self, target):
+        self.target = target
         if not self.has_played:
             if self.can_attack(target):
                 try:
