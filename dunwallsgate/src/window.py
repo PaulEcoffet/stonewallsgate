@@ -12,9 +12,7 @@ FPS = 30
 class Window():
     def __init__(self,):
         """
-        Define a new window with a given screen
-
-        For now, only one Window object should exist
+        Définit une Window et un screen qui y est dessiné
         """
         self.surface = pygame.display.set_mode((1024, 574), pg.DOUBLEBUF)
         pygame.display.set_caption("Dunwall's Gate")
@@ -27,7 +25,7 @@ class Window():
 
     def set_screen(self, screen):
         """
-        Define the screen to be displayed in the window
+        Définit l'écran affiché dans la Window
         """
         if self._screen is not None:
             self._screen.surface.fill(0)
@@ -45,7 +43,7 @@ class Window():
 
     def run(self):
         """
-        Run the game
+        Lance le jeu
         """
         self.eventmanager.on_quit(lambda x: self.set_do_run(False), "global")
         while self.do_run:
