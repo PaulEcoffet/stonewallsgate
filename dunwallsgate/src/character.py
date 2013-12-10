@@ -45,7 +45,7 @@ class Character(object):
             "defense", data["defense"]))
         self.initiative = self.operations(custom.get(
             "initiative", data["initiative"]))
-        self.inventory = Inventory(custom.get("inventory", None))
+        self.inventory = Inventory(custom.get("inventory", data.get("inventory", None)))
         self.abilities = self.operations(custom.get(
             "abilities", data["abilities"]))
         self.ref = reference

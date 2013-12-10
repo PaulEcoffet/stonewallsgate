@@ -60,9 +60,7 @@ class GameEvent():
             elif self.event.battle_ennemies:
                 ennemies = []
                 for ennemi_ref in self.event.battle_ennemies:
-                    ennemies.append(self.game.get_character(ennemi_ref))
-                if not self.game.hero.inventory:
-                    self.game.hero.inventory = Inventory("begining_inventory")
+                    ennemies.append(Character(ennemi_ref))
                 battle = Battle([self.game.hero] + self.game.hero_companions, ennemies)
                 self.game.screen = BattleScreen(battle, self.event, self.game)
                 self.game.screen.init_battle()
