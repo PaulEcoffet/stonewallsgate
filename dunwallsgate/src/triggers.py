@@ -29,12 +29,14 @@ def get_triggers_dict(game):
         "add_fellow": lambda ref: game.hero_companions.append(game.get_character(ref)),
         "inactive_quest": lambda quest: inactive_quest(game, quest),
         "switch_scene": lambda name: switch_scene(game, name),
-        "modif_health": lambda hp: game.hero.health + hp,
+        "modif_health": lambda args: add_health(game.get_character(args[0]), args[1]),
         "def_next_scene": lambda name: def_next_scene(game, name),
         "restart_event": lambda args: restart_event(game),
         "force_stop_event": lambda args: force_stop_event(game)
     }
-
+    
+def add_health(charac, hp):
+    charac.health += hp
 
 def add_item(game, item):
     if isinstance(item, list):
