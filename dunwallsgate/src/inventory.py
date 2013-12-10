@@ -35,7 +35,7 @@ class Inventory(object):
 
     def load_inventory_from_ref(self, ref):
         with open(data.get_config_path(os.path.join(
-                "inventories", ref + ".json")), encoding="utf8") as f:
+                "inventories", ref + ".json"))) as f:
             items_list = json.load(f)
         self.load_inventory_from_list(items_list)
 
@@ -48,6 +48,7 @@ class Inventory(object):
         return False
 
     def add(self, item):
+        found = False
         if self.size + item.weight > self.maxsize:
             raise InventoryFullException()
         if isinstance(item, Stackable):
@@ -55,7 +56,10 @@ class Inventory(object):
                 if item.ref == current.ref:
                     current.amount += item.amount
                     item = current
+                    found = True
                     break
+            if not found:
+                self._items.append(item)
         else:
             self._items.append(item)
         item.inventory = self
@@ -145,7 +149,7 @@ class Item(object):
 
     @classmethod
     def _load_items_dict(cls):
-        with open(data.get_config_path("items.json"), encoding="utf8") as f:
+        with open(data.get_config_path("items.json")) as f:
             cls._items_dict = json.load(f)
 
     @classmethod
