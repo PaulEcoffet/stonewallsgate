@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1 id="dunwalls-gate">Dunwall's Gate</h1>
+<p>Le jeu se lance en exécutant le fichier <code>src/dunwallsgate.py</code></p>
+<h2 id="fonctionnement-ihm">Fonctionnement IHM</h2>
+<p>Le jeu lance une <code>Window</code>. la <code>window</code> charge un screen, qui est soit un <code>HomeScreen</code>, l'écran d'accueil, un <code>StoryScreen</code>, l'écran &quot;histoire&quot; ou &quot;cinématique&quot; ou bien un <code>BattleScreen</code> l'écran de combat.</p>
+<p>Le screen dessine sur la surface de <code>window</code> des sprites, soit directement soit à l'aide de classes personnalisées héritées de <code>pygame.Sprite</code>, situé dans <code>src/customsprite.py</code> et <code>src/button.py</code>.</p>
+<p>Les évènements pygame (les entrées utilisateurs) sont géré par un <code>EventManager</code> situé dans <code>src/event_manager.py</code>. Il enregistre l'ensemble des actions possibles et appelle des <em>callbacks</em> quand un évènement est vérifié. Il est possible de verrouiller ces <em>callbacks</em> afin de bloquer leur déclenchement.</p>
+<h2 id="fonctionnement-gameplay">Fonctionnement Gameplay</h2>
+<p>Lorsque l'utilisateur clique sur <em>NEW GAME</em>, un nouvel objet <code>Game</code> est crée. Il déclenche un <code>StoryScreen</code> qui va déclencher un évènement situé dans la scène <code>intro</code>.</p>
+<p>Le déroulement du programme se fait par un système d'<em>évènement de jeu</em> et de <em>scène</em>. Pour chaque scène, une liste d'évènements est disponible. Cette liste se situe dans <code>data/scenes/&lt;nom_scene&gt;/events.json</code>. Un évènement ne peut être déclenché que s'il respecte que toutes ses conditions (par exemple, le héros a plus de 50hp). Il doit y toujours y avoir au moins un évènement qui peut être déclenché. Les évènements sont gérés par <code>src/game_event.py</code></p>
+<p>Dans la version actuel du programme rendu, toutes les scènes ne contiennent qu'un unique évènement, il n'est donc pas nécessaire de leur donner de conditions particulières.</p>
+<p>Un évènement déroule soit une <em>cinématique</em>, avec dialogue et choix, soit un combat. Durant un évènement, des <em>déclencheurs</em> (<em>triggers</em>) peuvent être déclenchés. Ils peuvent être soit déclenché par défaut ou peuvent varier en fonction des choix du joueur, ou bien de la réussite du combat ou non. Ces triggers peuvent modifier l'état du joueur, des quêtes qu'il a en cours, ou bien forcer un déplacement sur une nouvelle scène.</p>
+</body>
+</html>
