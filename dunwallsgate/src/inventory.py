@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+"""
+Défini la class Inventory et les class Item et sous-class d'Item
+"""
+
 import os.path
 import random
 import copy
