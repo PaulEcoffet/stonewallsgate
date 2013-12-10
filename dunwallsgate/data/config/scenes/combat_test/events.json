@@ -3,7 +3,7 @@
 		"background_ref": "combat_test"
 	},
     {
-        "battle" : {"ennemies": ["Bandit"]},
+        "battle" : {"ennemies": ["Bandit", "sylvanas"]},
 	"triggers_team1_win": [{"trigger_cat": "def_next_scene", "params": "lightning"}],
 	"triggers_team2_win": [{"trigger_cat": "def_next_scene", "params": "dying"}],
     "triggers": [{"trigger_cat": "switch_scene"}]
