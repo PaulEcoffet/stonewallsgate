@@ -52,7 +52,7 @@ class Inventory(object):
             raise InventoryFullException()
         if isinstance(item, Stackable):
             for current in self.items:
-                if item["ref"] == current["ref"]:
+                if item.ref == current.ref:
                     current.amount += item.amount
                     item = current
                     break
@@ -124,6 +124,8 @@ class Item(object):
         if isinstance(ref, str):
             self.ref = ref
             self._compute_caracts(Item.get_item_base(ref))
+        else:
+            self.ref = None
 
     def _compute_caracts(self, base_item):
         item_caracts = copy.copy(base_item)
@@ -253,6 +255,7 @@ class IncompatibleAmmoException(Exception):
 
 def test():
     inventory = Inventory("begining_inventory", 50)
+    inventory.add(create_item("gun_ammo", 2))
     print("inventory.size = {}".format(inventory.size))
     print(inventory.items)
     for item in inventory.items:
