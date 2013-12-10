@@ -2,7 +2,7 @@
     {
         "transmitter": "taylor",
         "receiver": "hero",
-        "message": "Klim m'envoit vers toi pour t'aider à affronter Zibla, le chef du clan des Amotoris, l'acceptes-tu ?"
+        "message": "Klim m'envoit vers toi pour t'aider a affronter Zibla, le chef du clan des Amotoris, l'acceptes-tu ?"
     },
      {
         "transmitter": "taylor",
@@ -15,7 +15,7 @@
         "message": "",
         "choices": [
 							{
-								"txt": "Oui, ton aide serait grandement appreciée !", 
+								"txt": "Oui, ton aide serait grandement utile !", 
 								"trigger_cat" : "add_fellow", 
 								"params" : "taylor"
 							},

@@ -48,9 +48,9 @@ class Battle(object):
         L'indice de la team qui a gagné le combat. Si personne n'a gagné, alors
         winner vaut None
         """
-        if not [charact for charact in self.team1 if charact.is_alive] or self.run[1]:
+        if not [charact for charact in self.team1 if charact.is_alive] or self.run[0]:
             return 2
-        elif not [charact for charact in self.team2 if charact.is_alive] or self.run[0]:
+        elif not [charact for charact in self.team2 if charact.is_alive] or self.run[1]:
             return 1
         else:
             return None

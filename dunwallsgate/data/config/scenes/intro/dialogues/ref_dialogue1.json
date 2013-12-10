@@ -38,8 +38,7 @@
     "message": "",
         "choices": [
             { "txt": "Non, attaquons-les avant qu'ils ne s'organisent", "trigger_cat" : "def_next_scene", "params" : "combat_low"},
-            { "txt": "Tu as raison, allons-y", "trigger_cat" : "def_next_scene", "params" : "ammo_scene"},
-            { "txt": "Test companion", "trigger_cat" : "def_next_scene", "params" : "companion_scene"}
+            { "txt": "Tu as raison, allons-y", "trigger_cat" : "def_next_scene", "params" : "ammo_scene"}
            ]
     },
     {

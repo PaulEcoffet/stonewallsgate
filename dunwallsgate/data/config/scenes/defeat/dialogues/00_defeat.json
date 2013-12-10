@@ -1,22 +1,5 @@
 [
     {
-        "message": "GAME OVER!"
-    },
-    {
-        "message": "Voulez-vous recommencer au début ?",
-        "choices": [
-							{
-								"txt": "Oui", 
-								"triggers": [
-													{
-														"trigger_cat" : "def_next_scene", 
-														"params" : "intro"
-													}
-											]
-							},
-							{
-								"txt": "Non"
-							}
-					  ]
+        "message": "GAME OVER! Vous avez le droit de relancer le jeu!"
     }
 ]

@@ -7,9 +7,6 @@
             [
             ],
         "dialogs": "ref_dialogue1"
-    },
-    {
-        "battle" : {"allies": ["Gordon", "Sylvanas"], "ennemies": ["Klim"]}
     }
 ]
 
