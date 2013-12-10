@@ -47,7 +47,7 @@ class Character(object):
             "initiative", data["initiative"]))
         self.inventory = Inventory(custom.get("inventory", data.get("inventory", None)))
         self.abilities = self.operations(custom.get(
-            "abilities", data["abilities"]))
+            "abilities", data["abilities"]))  # Not used in this version
         self.ref = reference
         self.weapon = self.inventory.weapons[0]  # Take the first
                                                  # weapon found
@@ -79,6 +79,7 @@ class Character(object):
         self._health = max(0, min(value, self.maxhealth))
 
     def operations(self, caract):
+        """Calcule les valeurs aléatoire d'un Character"""
         if isinstance(caract, dict) and "_random_" in caract:
             if caract["_random_"] == "gauss":
                 result = -1
