@@ -178,7 +178,6 @@ class BattleScreen():
 
     def show_ch_ammo_action(self, weapon):
         self.purge_info_box()
-        print(self.battle.playing_char.inventory.weapons)
         for i, ammo in enumerate(self.battle.playing_char.inventory.get_compatible_ammo(weapon)):
             if ammo is None:
                 button =  Button(self.eventmanager, self.info_box_cat, "Pas de munition", (320, 30), "dialogue_choices")

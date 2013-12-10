@@ -37,10 +37,9 @@ class LifeBar(pygame.sprite.Sprite):
         if health != 0:
             a = self.pg_font.render("%d/%d" % (health, self.charac.maxhealth),
                                     1, (200, 80, 15))
-            self.image.blit(a, (147, 1))
         else:
             a = self.pg_font.render("DEAD", 1, RED_RGB)
-            self.image.blit(a, (75, 1))
+        self.image.blit(a, ((self.image.get_rect().centerx - a.get_rect().width/2), 1))
 
     def get_color(self, hppercent):
         if hppercent == 0:
@@ -59,7 +58,7 @@ class LifeBar(pygame.sprite.Sprite):
             color = self.get_color(self.percent)
             if self.percent != self.oldpercent or color != self.old_color:
                 pygame.draw.rect(self.image, BLACK_RGB,
-                                 (0, 0, 200 - 2, 15))  # fill black
+                                 (0, 0, 200, 15))  # fill black
                 self.draw_greenbar(self.smooth_revision, color)
                 self.oldpercent = self.percent
                 self.old_color = color

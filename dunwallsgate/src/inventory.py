@@ -189,9 +189,9 @@ class Weapon(Item):
             raise IncompatibleAmmoException()
 
     def can_use_weapon(self):
-        if not self.ammo and self.ammo in self.compatible_ammo:
+        if not self.ammo:
         # No ammo needed
-            return True
+            return self.ammo in self.compatible_ammo
         elif self.ammo.ref in self.compatible_ammo:
             if self.ammo:
                 return self.ammo.amount > 0
