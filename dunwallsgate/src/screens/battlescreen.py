@@ -69,6 +69,8 @@ class BattleScreen():
         self.begin_turn()
 
     def begin_turn(self):
+        """Démarre le combat
+        """
         self.main_buttons.empty()
         self.main_buttons.add(self.attack_btn, self.switchwep_btn, self.run_btn)
         self.eventmanager.lock_categories(self.next_cat)
@@ -78,6 +80,12 @@ class BattleScreen():
             self.end_turn()
 
     def update(self):
+        """
+        Met à jour des elements graphiques de l'écran 
+        (Barres de vie, Bouttons, Portraits)
+        Si un gagant est déclaré, l'écran de combat 
+        est déclaré comme terminé
+        """
         if self.battle.winner:
             self.end = True
         self.lifebars_elements.update()
@@ -86,6 +94,9 @@ class BattleScreen():
         self.portraits_elements.update(self.highlighted)
 
     def draw(self):
+        """
+        Efface puis (re)déssine les elements graphiques
+        """
         if self.start_battle:
             self.surface.blit(self.background, (0, 0))
             self.start_battle = False
@@ -101,6 +112,10 @@ class BattleScreen():
         self.info_box_buttons.draw(self.surface)
 
     def init_sprites(self):
+        """
+        Initialise les elements graphiques et 
+        recherche du fond d'écran dans le cache
+        """
         if not self.background:
             self.bg_ref = self.event.background
             try:
@@ -134,6 +149,10 @@ class BattleScreen():
         self.info_box_buttons = pygame.sprite.RenderPlain()
 
     def set_action_mode(self, mode):
+        """
+            Réponses aux actions utilisateurs
+            mode - action demandé
+        """
         self._action_mode = mode
         self.purge_info_box()
         self.info_box_buttons.empty()
@@ -150,6 +169,10 @@ class BattleScreen():
             self.set_info_box_text(self.battle.last_action)
 
     def show_attack_action(self):
+        """
+            Réponse à la demande d'une attaque
+            Affichage en surbrillance des ennemis éligibles
+        """
         self.set_info_box_text("Choisissez votre cible")
         portrait_targets = [(char, self.portraits[char])
                             for char in
@@ -159,6 +182,9 @@ class BattleScreen():
         self.highlighted = [portrait for char, portrait in portrait_targets]
 
     def do_attack(self, char):
+        """
+            Actionne une attaque
+        """
         if self._action_mode == "attack":
             self.eventmanager.purge_callbacks(self.atk_cat)
             try:
@@ -170,6 +196,10 @@ class BattleScreen():
                 self.end_turn()
 
     def show_ch_weapon_action(self):
+        """
+            Réponse à la demande d'un changement d'arme
+            Affichage dans l'info_box des armes disponnibles
+        """
         for i, weapon in enumerate(self.battle.playing_char.inventory.weapons):
             button =  Button(self.eventmanager, self.info_box_cat, weapon.caracts["name"][:20], (320, 30), "dialogue_choices")
             button.on_click((lambda weapon_ :lambda e: self.show_ch_ammo_action(weapon_))(weapon))
@@ -177,6 +207,10 @@ class BattleScreen():
             self.info_box_buttons.add(button)
 
     def show_ch_ammo_action(self, weapon):
+        """
+            Réponse à la demande d'un changement de munition
+            Affichage dans l'info_box des munitions et de leur disponibilité
+        """
         self.purge_info_box()
         for i, ammo in enumerate(self.battle.playing_char.inventory.get_compatible_ammo(weapon)):
             if ammo is None:
@@ -188,6 +222,9 @@ class BattleScreen():
             self.info_box_buttons.add(button)
 
     def do_change_weapon(self, weapon, ammo):
+        """
+            Actionne un changement d'arme
+        """
         try:
             self.battle.change_weapon(weapon, ammo)
         except battle.CantChangeWeaponException as e:
@@ -197,17 +234,31 @@ class BattleScreen():
             self.end_turn()
 
     def show_run_action(self):
+        """
+            Réponse à la demande d'une fuite
+            Demande d'une confirmation dans l'info_box 
+            Fin du combat si confirmation
+        """
         button = Button(self.eventmanager, self.info_box_cat, "Fuir comme un couard", (320, 30), "dialogue_choices")
         button.rect.move_ip(self.info_box.rect.x + 10, self.info_box.rect.y + 10)
         button.on_click(lambda e: self.battle.do_run())
         self.info_box_buttons.add(button)
 
     def show_end(self):
+        """
+            Déclanché à la fin d'une attaque
+            Affichage dans l'info_box de la dernière action du combat
+            Remise en place des bouttons de départ
+        """
         self.set_info_box_text(self.battle.last_action)
         self.main_buttons.empty()
         self.main_buttons.add(self.next_btn)
 
     def set_info_box_text(self, text):
+        """
+            Formatte le texte pour l'afficher dans info_box
+            Affiche dans info_box le text
+        """
         panel = TextRender((self.info_box.image.get_width() - 20,
                            self.info_box.image.get_height() - 20),
                           "larabiefont", 21, (255, 158, 0), text)
@@ -215,20 +266,34 @@ class BattleScreen():
         self.info_box.image.blit(panel.next(), (10, 10))
 
     def end_turn(self):
+        """
+            Déclanche la fin du tour dans le combat
+        """
         self.eventmanager.lock_categories(self)
         self.eventmanager.unlock_categories(self.next_cat)
         self.battle.end_turn()
         self.set_action_mode("end")
 
     def purge_info_box(self):
+        """
+             Info_box est vidé de son contenu
+        """
         self.purge_box(self.info_box)
         self.eventmanager.purge_callbacks(self.info_box_cat)
         self.info_box_buttons.empty()
 
     def purge_box(self, sprite, alphakey=140):
+        """
+            Application d'un film noir sur l'element graphique
+            alphakey - Transparence du film
+        """
         sprite.image.fill((0, 0, 0, alphakey))
 
     def init_battle(self):
+        """
+            Met en place les barres de vie, portraits pour chaque personnage du combat
+            Met en surbrillance le joueur qui joue en premier
+        """
         self.lifebars = {character: LifeBar(character) for character
                          in self.battle.all_characters}
         self.portraits = {character: Portrait(self.game.cache, character) for character
@@ -237,6 +302,9 @@ class BattleScreen():
         self.highlighted = [self.portraits[self.battle.playing_char]]
 
     def place_elements(self):
+        """
+            Place les portraits et les barres de vie sur la surface
+        """
         i_team1 = -1  # Correct padding
         i_team2 = -1  # Correct padding
         i = -1
@@ -256,6 +324,9 @@ class BattleScreen():
             self.lifebars[character].move(*position_bars(i))
 
     def shutdown(self):
+        """
+            Supression complète des actions enregistrées
+        """
         self.eventmanager.purge_callbacks(self.atk_cat)
         self.eventmanager.purge_callbacks(self.info_box_cat)
         self.eventmanager.purge_callbacks(self)
