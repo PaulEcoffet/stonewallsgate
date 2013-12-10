@@ -1,5 +1,5 @@
 """
-Contains data for the quests
+Contient les données des quests, n'est pas utilisé ici
 """
 
 INACTIVE = 0
