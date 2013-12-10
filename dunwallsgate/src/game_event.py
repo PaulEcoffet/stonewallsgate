@@ -7,7 +7,7 @@ from battle import Battle
 
 
 class GameEvent():
-    """Define what to do and when during the game"""
+    """Définit ce que le jeu fait au bon moment"""
 
     def __init__(self, game, current_scene=decoder.get_scene("intro")):
         self.scene = current_scene
@@ -19,6 +19,7 @@ class GameEvent():
         self.triggers_pending = []
 
     def search_event(self):
+        """Recherche l'evenement qui est compatible avec l'etat du jeu, retourne vrai si trouvé"""
         for event in self.scene.events:
             #Look if event have been done and if it is valid (PS: event.done is set True in the end of StoryScreen)
             if self.is_valid(event):
@@ -30,7 +31,7 @@ class GameEvent():
         return False
 
     def is_valid(self, event):
-        """Check if event valid all conditions (with game data)"""
+        """Vérifie si les conditions de l'evenement sont respectés"""
         for condition in event.conditions:
             if not self.game_conditions[condition["test"]](condition["params"]):
                 return False
