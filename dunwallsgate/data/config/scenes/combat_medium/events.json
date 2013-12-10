@@ -1,0 +1,11 @@
+[
+	{ 
+		"background_ref": "combat_test"
+	},
+    {
+		"battle" : {"ennemies": ["Bandit", "sylvanas"]},
+		"triggers_team1_win": [{"trigger_cat": "def_next_scene", "params": "companion_scene"}],
+		"triggers_team2_win": [{"trigger_cat": "def_next_scene", "params": "defeat"}],
+		"triggers": [{"trigger_cat" : "modif_health", "params" : ["hero", 50]},{"trigger_cat": "switch_scene"}]
+    }
+]

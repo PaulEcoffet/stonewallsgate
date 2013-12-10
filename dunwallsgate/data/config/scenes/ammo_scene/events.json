@@ -1,0 +1,15 @@
+[
+	{ 
+		"background_ref": "dying"
+	},
+    {
+        "dialogs": "00_ammo",
+        "triggers":
+            [
+				{
+					"trigger_cat" : "switch_scene", 
+					"params" : "combat_medium"
+				}
+            ]
+    }
+]

@@ -16,7 +16,7 @@ def _module_path():
 
 
 def get_data_path():
-    """Donne le chemin du dossier data comlet"
+    """Donne le chemin du dossier data comlet"""
     return os.path.abspath(
         os.path.join(_module_path(), '../data/'))
 

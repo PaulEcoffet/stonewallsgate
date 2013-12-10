@@ -3,48 +3,47 @@
         "message": "Astuce: Appuyez sur [Espace] pour avancer ou sur le boutton <SUITE>."
     },
     {
-    "transmitter": "sylvanas",
+    "transmitter": "klim",
     "receiver": "hero",
     "message": "Bonjour Gordon! Debout maintenant"
     },
     {
-    "transmitter": "sylvanas",
+    "transmitter": "klim",
     "receiver": "hero",
     "message": "Gordon, nous avons besoin de toi."
     },
     {
     "transmitter": "hero",
-    "receiver": "sylvanas",
+    "receiver": "klim",
     "message": "Heiiiin ? *baille*"
     },
     {
-    "transmitter": "sylvanas",
+    "transmitter": "klim",
     "receiver": "hero",
     "message": "On subit des attaques du clan des Amotoris. Nos barricades tiennent, mais cela ne risque pas de durer. Réveille-toi!"
     },
     {
     "transmitter": "hero",
-    "receiver": "sylvanas",
+    "receiver": "klim",
     "message": "QUOI!? C'est mort, ça va pas se passer comme ça, non mais oh! Allons les attaquer tout de suite!"
     },
     {
-    "transmitter": "sylvanas",
+    "transmitter": "klim",
     "receiver": "hero",
     "message": "Ne devrions-nous pas aller chercher des armes avant?"
     },
     {
     "transmitter": "hero",
-    "receiver": "sylvanas",
+    "receiver": "klim",
     "message": "",
         "choices": [
-            { "txt": "Non, attaquons-les avant qu'ils ne s'organisent", "trigger_cat" : "def_next_scene", "params" : "lightning"},
-            { "txt": "Tu as raison, allons-y", "trigger_cat" : "def_next_scene", "params" : "dying"},
-            { "txt": "Essayer un combat", "trigger_cat" : "def_next_scene", "params" : "combat_test"}
+            { "txt": "Non, attaquons-les avant qu'ils ne s'organisent", "trigger_cat" : "def_next_scene", "params" : "combat_low"},
+            { "txt": "Tu as raison, allons-y", "trigger_cat" : "def_next_scene", "params" : "ammo_scene"}
            ]
     },
     {
-    "transmitter": "sylvanas",
+    "transmitter": "klim",
     "receiver": "hero",
-    "message": "Très bien, suis-moi dans ce cas."
+    "message": "On est d'accord ! Allons-y !"
     }
 ]

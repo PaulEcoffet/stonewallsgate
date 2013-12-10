@@ -1,0 +1,31 @@
+[
+    {
+        "transmitter": "taylor",
+        "receiver": "hero",
+        "message": "Klim m'envoit vers toi pour t'aider à affronter Zibla, le chef du clan des Amotoris, l'acceptes-tu ?"
+    },
+    {
+        "transmitter": "hero",
+        "receiver": "taylor",
+        "message": "",
+        "choices": [
+							{
+								"txt": "Oui, ton aide serait grandement appreciée !", 
+								"triggers": [
+													{
+														"trigger_cat" : "add_fellow", 
+														"params" : "taylor"
+													}
+											]
+							},
+							{
+								"txt": "Non merci, je suis un solitaire"
+							}
+					  ]
+    },
+    {
+        "transmitter": "taylor",
+        "receiver": "hero",
+        "message": "C'est ton choix ! Je vais soigner tes blessures."
+    }
+]

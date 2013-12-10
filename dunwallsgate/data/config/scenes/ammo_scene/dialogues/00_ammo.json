@@ -1,0 +1,55 @@
+[
+    {
+        "transmitter": "dante",
+        "receiver": "hero",
+        "message": "Bienvenue dans l'armurerie de Dante, que cherches-tu?"
+    },
+    {
+        "transmitter": "hero",
+        "receiver": "dante",
+        "message": "<Il me faut :>",
+        "choices": [
+							{
+								"txt": "1x hâche", 
+								"triggers": [
+													{
+														"trigger_cat" : "add_item", 
+														"params" : "ax"
+													}
+											]
+							}, 
+							{
+								"txt": "1x batte", 
+								"triggers": [
+													{
+														"trigger_cat" : "add_item", 
+														"params" : "bat"
+													}
+											]
+							}, 
+							{
+								"txt": "1x Arbalète", 
+								"triggers": [
+													{
+														"trigger_cat" : "add_item", 
+														"params" : ["bolt", 10]
+													},			
+													{
+														"trigger_cat" : "add_item", 
+														"params" : "crossbow"
+													}
+
+											]
+							},
+							{
+								"txt": "100x Balles de revolver", 
+								"triggers": [
+													{
+														"trigger_cat" : "add_item", 
+														"params" : ["gun_ammo", 100]
+													}			
+											]
+							}
+					  ]
+    }
+]

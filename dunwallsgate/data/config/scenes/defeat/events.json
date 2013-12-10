@@ -1,0 +1,11 @@
+[
+	{ 
+		"background_ref": "intro"
+	},
+    {
+        "dialogs": "00_defeat",
+        "triggers":
+            [
+            ]
+    }
+]

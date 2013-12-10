@@ -22,6 +22,21 @@
     "weight": 0.75,
     "coef": 1
   },
+  "crossbow": {
+    "type": "weapon",
+    "name": "Arbalete",
+    "weight": 6,
+    "power": 12,
+    "compatible_ammo": [
+      "bolt"
+    ]
+  },
+  "bolt": {
+    "type": "ammo",
+    "name": "Ammo for Arbalete",
+    "weight": 0.20,
+    "coef": 1
+  },
   "junk": {
     "type": "ammo",
     "name": "Metal junk",
@@ -32,7 +47,7 @@
     "type": "weapon",
     "name": "M-16",
     "weight": 10,
-    "power": 43,
+    "power": 27,
     "compatible_ammo": [
       "piercing_bullet",
       "m16_ammo"

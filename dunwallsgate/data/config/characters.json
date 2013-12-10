@@ -4,7 +4,7 @@
         "name": "Gordon",
         "maxhealth": 100,
         "range_attack": 10,
-        "attack": 15,
+        "attack": 27,
         "defense": 12,
         "initiative": 13,
         "inventory": "begining_inventory",
@@ -13,12 +13,12 @@
     {
         "ref": "klim",
         "name": "Klim",
-        "maxhealth": {"_random_" : "gauss", "mean" : 100, "deviation": 20, "min" : 100, "max" : 200},
+        "maxhealth": {"_random_" : "gauss", "mean" : 100, "deviation": 25, "min" : 100, "max" : 200},
         "range_attack": 10,
         "attack": 15,
         "defense": 12,
         "initiative": 13,
-        "inventory": "",
+        "inventory": null,
         "abilities": ["attack", "heal"]
     },
     {
@@ -26,8 +26,8 @@
         "name": "Sylvanas",
         "maxhealth": 100,
         "range_attack": 10,
-        "attack": 15,
-        "defense": 12,
+        "attack": 12,
+        "defense": 9,
         "initiative": 13,
         "inventory": null,
         "abilities": ["attack", "heal"]
@@ -35,13 +35,13 @@
     {
         "ref": "bandit",
         "name" : "Bandit",
-        "maxhealth": {"_random_" : "gauss", "mean" :  100, "deviation": 100, "min" : 70, "max" : 200},
-        "range_attack": 0,
-        "attack": 0,
-        "defense": 0,
-        "initiative": 0,
+        "maxhealth": {"_random_" : "gauss", "mean" :  100, "deviation": 25, "min" : 70, "max" : 200},
+        "range_attack": 10,
+        "attack": 12,
+        "defense": 9,
+        "initiative": 3,
         "inventory": null,
-        "abilities": []
+        "abilities": ["attack", "heal"]
     },
     {
         "ref": "dante",
@@ -100,13 +100,13 @@
     },
     {
         "ref": "chef",
-        "name": "Tricker",
-        "maxhealth": {"_random_" : "gauss", "mean" :  100, "deviation": 100, "min" : 70, "max" : 200},
+        "name": "Zibla",
+        "maxhealth": 250,
         "range_attack": 0,
-        "attack": 0,
-        "defense": 0,
-        "initiative": 0,
-        "inventory": null,
+        "attack": 12,
+        "defense": 20,
+        "initiative": 20,
+        "inventory": "chief_inventory",
         "abilities": []
     },
     {
@@ -131,5 +131,4 @@
         "inventory": null,
         "abilities": []
     }
-
 ]

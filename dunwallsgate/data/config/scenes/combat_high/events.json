@@ -1,0 +1,11 @@
+[
+	{ 
+		"background_ref": "combat_test"
+	},
+    {
+		"battle" : {"ennemies": ["chef", "Bandit", "Thief"]},
+		"triggers_team1_win": [{"trigger_cat": "def_next_scene", "params": "end"}],
+		"triggers_team2_win": [{"trigger_cat": "def_next_scene", "params": "defeat"}],
+		"triggers": [{"trigger_cat": "switch_scene"}]
+    }
+]

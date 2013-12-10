@@ -1,0 +1,15 @@
+[
+	{ 
+		"background_ref": "end"
+	},
+    {
+        "dialogs": "00_companion",
+        "triggers":
+            [
+				{
+					"trigger_cat" : "switch_scene", 
+					"params" : "combat_high"
+				}
+            ]
+    }
+]
