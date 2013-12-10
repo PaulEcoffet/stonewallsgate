@@ -76,7 +76,7 @@ class Battle(object):
                          - target.defense) * random.gauss(1, 0.05)))
                     target.health -= damage
                 except inventory.IncompatibleAmmoException:
-                    raise CantAttackException("Plus de munitions")
+                    raise CantAttackException("Le chargeur est vide. Rechargez ou changez d'arme")
                 else:
                     self.has_played = True
                     if self.playing_char.weapon.ammo:

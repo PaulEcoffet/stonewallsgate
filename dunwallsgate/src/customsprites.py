@@ -108,12 +108,12 @@ class Portrait(pygame.sprite.Sprite):
 
     def init_attenuated(self):
         label = TextRender((300, 100), "joystix", 35, (200, 80, 15),
-                           ">" + self.name)
+                           " " + self.name)
         self.attenuated_image = pygame.Surface.copy(self.default_image)
         self.attenuated_image.fill((255, 255, 255, 140), None,
                                    pygame.BLEND_RGBA_MULT)
-        self.attenuated_image.blit(self.transparent, (20, 185))
         self.attenuated_image.blit(label.next(), (25, 181))
+        self.attenuated_image.blit(self.transparent, (20, 185))
 
     @property
     def image(self):
