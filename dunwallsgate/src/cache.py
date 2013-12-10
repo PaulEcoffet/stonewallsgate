@@ -3,12 +3,12 @@ import glob
 import os.path
 
 from screens.text_render import TextRender
-from character import Character
 import data
+
 
 class CacheSystem():
     """
-    Define a character and its abilities
+    Le système de cache du programme
     """
     def __init__(self):
         self.image_portraits = {}
@@ -16,17 +16,26 @@ class CacheSystem():
         self.rendered_dialogues = []
         self.load_image_portraits()
         self.load_backgrounds()
-        
+
     def get_portrait_image(self, ref, position):
+        """
+        Retourne l'image du portrait correspondant à un character
+        ref - La reference du character
+        position - "front", "back"
+        """
         if ref in self.image_portraits:
             if position in self.image_portraits[ref]:
                 return self.image_portraits[ref][position]
             elif "front" in self.image_portraits[ref]:
                 return self.image_portraits[ref]["front"]
-        raise Exception("Character Image (%s) not found ! (Verify your images)"%ref)
+        raise Exception("Character Image (%s) not found !"\
+                        "(Check your images)" % ref)
 
     def load_backgrounds(self):
-        self.image_backgrounds["default"] = pygame.Surface((1024, 574)) #Default BG
+        """
+        Charge l'ensemble des backgrounds du jeu
+        """
+        self.image_backgrounds["default"] = pygame.Surface((1024, 574))  # Default BG
         for image_path in glob.glob(os.path.join(
                 data.get_image_path("scenes"), "*.png")):
             scene_ref = os.path.splitext(os.path.basename(image_path))[0]
@@ -40,8 +49,11 @@ class CacheSystem():
             transparent.blit(note.next(), (5, 3))
             image.blit(transparent, (10, 10))
             self.image_backgrounds[scene_ref] = image
-            
+
     def load_image_portraits(self):
+        """
+        Charge l'ensemble des images des portraits des personnages du jeu
+        """
         for image_path in glob.glob(os.path.join(
                 data.get_image_path("characters"), "*.png")):
             filename = os.path.splitext(os.path.basename(image_path))[0]
@@ -50,14 +62,17 @@ class CacheSystem():
             if not charact_ref in self.image_portraits:
                 self.image_portraits[charact_ref] = {}
             self.image_portraits[charact_ref][position] = image
-    
+
     def format_dialogues(self, dialogues):
+        """
+        Génère tous les TextPanel correspondant à `dialogues`.
+        """
         self.begin = True
         dialogues.restore_messages()
         message = dialogues.next()
         while message is not None:
             txt_object = TextRender((904,163), "larabiefont", 25,
-                (255,158,0), message["msg"])
+                                    (255, 158, 0), message["msg"])
             txt_sprite = txt_object.next()
             while txt_sprite is not None:
                 self.rendered_dialogues.append({
@@ -71,6 +86,9 @@ class CacheSystem():
             message = dialogues.next()
 
     def next_panel(self):
+        """
+            Retourne le panel qui suit pour un dialogue
+        """
         if len(self.rendered_dialogues) > 1 or self.begin:
             if not self.begin:
                 del self.rendered_dialogues[0]
@@ -81,8 +99,10 @@ class CacheSystem():
             self.clear_dialogues()
         return None
 
-
     def clear_dialogues(self):
+        """
+        Supprime les panels générés pour le dialogue chargé
+        """
         self.rendered_dialogues = []
 
     def clear_all(self):
