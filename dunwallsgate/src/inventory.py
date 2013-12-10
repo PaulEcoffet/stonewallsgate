@@ -24,6 +24,11 @@ class Inventory(object):
             self.load_inventory_from_ref(inventory)
 
     def load_inventory_from_list(self, items):
+        """
+        Charge un inventaire à partir d'une liste de ref et leurs arguments
+        items - La liste de references et paramètres.
+                ex : [["crossbow"], ["bolt", 30]]
+        """
         for item in items:
             if isinstance(item, list):
                 args = item[1:]
@@ -34,6 +39,10 @@ class Inventory(object):
             self._items.append(item_object)
 
     def load_inventory_from_ref(self, ref):
+        """
+        Charge un inventaire depuis une référence d'inventaire situé dans
+        data/config/inventories/
+        """
         with open(data.get_config_path(os.path.join(
                 "inventories", ref + ".json"))) as f:
             items_list = json.load(f)
@@ -42,12 +51,19 @@ class Inventory(object):
         return False
 
     def ref_in(self, ref):
+        """
+        Détermine si un objet ayant la même référence se situe dans
+        l'inventaire
+        """
         for item in self.items:
             if item.ref == ref.ref:
                 return True
         return False
 
     def add(self, item):
+        """
+        Ajoute un item dans l'inventaire
+        """
         found = False
         if self.size + item.weight > self.maxsize:
             raise InventoryFullException()
@@ -66,6 +82,9 @@ class Inventory(object):
         return item
 
     def remove(self, item):
+        """
+        Supprime l'item `item` de l'inventaire
+        """
         try:
             self._items.remove(item)
         except ValueError:
@@ -73,21 +92,30 @@ class Inventory(object):
 
     @property
     def items(self):
+        """
+        Retourne la liste de tous les items de l'inventory
+        """
         return self._items
 
     @property
     def weapons(self):
+        """
+        Retourne la liste de toutes les armes de l'inventory
+        """
         return [weapon for weapon in self.items if isinstance(weapon, Weapon)]
 
     @property
     def size(self):
+        """
+        Retourne la taille actuelle de l'inventaire
+        """
         if self._items:
             return sum((item.weight for item in self._items))
         else:
             return 0
 
     def get_first(self, ref):
-        """Returns the first occurence of the item with the ref"""
+        """Retourne la première occurence de l'item ayant pour ref `ref`"""
         for item in self.items:
             if item.ref == ref:
                 return item
@@ -95,6 +123,10 @@ class Inventory(object):
                          "inventory")
 
     def get_compatible_ammo(self, weapon):
+        """
+        Retourne la liste de munitions compatible avec `weapon` présentes
+        dans l'inventaire
+        """
         ammo_list = []
         for item in self.items:
             if isinstance(item, Ammo) and item.ref in weapon.compatible_ammo:
@@ -105,6 +137,10 @@ class Inventory(object):
 
 
 def create_item(ref, *args):
+    """
+    Crée un item avec la sous-class adapté en fonction de sa référence
+    et des paramètres donnés
+    """
     a = Item.get_item_base(ref)
     if a["type"] == "weapon":
         return Weapon(ref)
@@ -118,7 +154,7 @@ def create_item(ref, *args):
 
 class Item(object):
 
-    """Represent an item."""
+    """Represente un item."""
 
     _items_dict = None
 
@@ -132,6 +168,10 @@ class Item(object):
             self.ref = None
 
     def _compute_caracts(self, base_item):
+        """
+        Calcule les caractéristique variable d'un item, notamment
+        ceux aléatoire
+        """
         item_caracts = copy.copy(base_item)
         for caract in item_caracts.keys():
             if isinstance(caract, dict) and "_random_" in caract:
@@ -145,15 +185,25 @@ class Item(object):
 
     @property
     def weight(self):
+        """
+        Retourne le poids de l'item
+        """
         return self.caracts["weight"]
 
     @classmethod
     def _load_items_dict(cls):
+        """
+        Charge l'ensemble des caractéristiques générales des items, avant
+        quelles ne soient "calculées"
+        """
         with open(data.get_config_path("items.json")) as f:
             cls._items_dict = json.load(f)
 
     @classmethod
     def get_item_base(cls, ref):
+        """
+        Retourne l'item général correspondant à la référence `ref`
+        """
         if not Item._items_dict:
             Item._load_items_dict()
         return Item._items_dict[ref]
@@ -173,6 +223,9 @@ class Weapon(Item):
 
     @ammo.setter
     def ammo(self, ammo):
+        """
+        Défini les munitions à utiliser
+        """
         if not ammo and None in self.compatible_ammo:
             self._ammo = ammo
         elif ammo.ref in self.compatible_ammo:
@@ -181,6 +234,9 @@ class Weapon(Item):
             raise IncompatibleAmmoException()
 
     def use_weapon(self):
+        """
+        Utilise l'arme et consomme une munition
+        """
         if self.can_use_weapon():
             if self.ammo:
                 self.ammo.amount -= 1
@@ -189,6 +245,9 @@ class Weapon(Item):
             raise IncompatibleAmmoException()
 
     def can_use_weapon(self):
+        """
+        Permet de savoir si l'arme peut être utilisé
+        """
         if not self.ammo:
         # No ammo needed
             return self.ammo in self.compatible_ammo
@@ -205,6 +264,9 @@ class Weapon(Item):
         return self.weapon_power_with(self.ammo)
 
     def weapon_power_with(self, ammo=None):
+        """
+        Retourne la force de l'arme en fonction des munitions utilisées
+        """
         if ammo:
             coef = ammo.caracts["coef"]
         else:
@@ -222,10 +284,12 @@ class Stackable(Item):
 
     @property
     def amount(self):
+        """Retourne la quantité d'items stackables dans l'objet"""
         return max(0, self._amount)
 
     @amount.setter
     def amount(self, value):
+        """Défini la quantité d'items stackables dans l'objet"""
         if value < 0:
             raise BelowZeroAmountException()
         if (self.inventory and self.inventory.size +
@@ -242,6 +306,7 @@ class Stackable(Item):
 
 
 class Ammo(Stackable):
+    """Classe de munition, équivalente à Stackable"""
     pass
 
 
