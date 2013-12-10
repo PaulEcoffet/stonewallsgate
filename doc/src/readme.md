@@ -76,3 +76,14 @@ vivant.  Le joueur peut aussi décider de terminer le combat en s'échappant. Ce
 faisant, il perd le combat.  L'IA  ne peut pas s'échapper. A la fin du combat,
 les triggers adéquats sont déclanchés en fonction de quelle équipe a gagné, ces
 triggers sont définis en même temps que la déclaration du battle.
+
+Remerciements
+------------------
+Nous tennons à remercier Clément Maliet pour nous avoir composé la musique
+d'ambiance du jeu. La musique est disponnible à l'écoute dans l'acceuil du jeu.
+Merci également à nos professeurs, Phillipe Blasi et Christopher Schlick pour nous
+avoir guidé et enseigné de nouveaux savoirs et pour nous avoir permis de réaliser 
+notre tout premier jeu video.
+Nous comptons faire évoluer le jeu après la remise du programme.
+Pour suivre son développement un site a été mis en place : www.cognicorn.com
+Le développement sera toutefois moins soutenu et régulier que jusqu'alors.
