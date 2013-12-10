@@ -115,19 +115,19 @@ class BattleScreen():
             self.purge_box(self.combat_box)
         if not self.info_box:
             self.info_box = pygame.sprite.DirtySprite()
-            self.info_box.image = pygame.Surface((350, 163), pygame.SRCALPHA)
+            self.info_box.image = pygame.Surface((350, 158), pygame.SRCALPHA)
             self.purge_box(self.info_box, 195)
         if not self.attack_btn:
-            self.attack_btn = Button(self.eventmanager, self, "ATTACK")
+            self.attack_btn = Button(self.eventmanager, self, "ATTACK", (250, 65))
             self.attack_btn.on_click(lambda e: self.set_action_mode("attack"))
         if not self.switchwep_btn:
-            self.switchwep_btn = Button(self.eventmanager, self, "WEAPONS")
+            self.switchwep_btn = Button(self.eventmanager, self, "WEAPONS", (250, 65))
             self.switchwep_btn.on_click(lambda e: self.set_action_mode("change_weapon"))
         if not self.run_btn:
-            self.run_btn = Button(self.eventmanager, self, "RUN")
+            self.run_btn = Button(self.eventmanager, self, "RUN", (250, 65))
             self.run_btn.on_click(lambda e: self.set_action_mode("run"))
         if not self.next_btn:
-            self.next_btn = Button(self.eventmanager, self.next_cat, "SUITE")
+            self.next_btn = Button(self.eventmanager, self.next_cat, "SUITE", (250, 65))
             self.next_btn.on_click(lambda e: self.begin_turn())
         self.main_buttons = pygame.sprite.RenderUpdates(self.attack_btn, self.switchwep_btn,
                                                    self.run_btn)
@@ -159,8 +159,8 @@ class BattleScreen():
         self.highlighted = [portrait for char, portrait in portrait_targets]
 
     def do_attack(self, char):
-        self.eventmanager.purge_callbacks(self.atk_cat)
         if self._action_mode == "attack":
+            self.eventmanager.purge_callbacks(self.atk_cat)
             try:
                 self.battle.do_attack(char)
             except battle.CantAttackException as e:
@@ -205,19 +205,19 @@ class BattleScreen():
 
     def show_end(self):
         self.set_info_box_text(self.battle.last_action)
-        self.eventmanager.lock_categories(self)
-        self.eventmanager.unlock_categories(self.next_cat)
         self.main_buttons.empty()
         self.main_buttons.add(self.next_btn)
 
     def set_info_box_text(self, text):
         panel = TextRender((self.info_box.image.get_width() - 20,
                            self.info_box.image.get_height() - 20),
-                          "larabiefont", 25, (255, 158, 0), text)
+                          "larabiefont", 21, (255, 158, 0), text)
         self.purge_info_box()
         self.info_box.image.blit(panel.next(), (10, 10))
 
     def end_turn(self):
+        self.eventmanager.lock_categories(self)
+        self.eventmanager.unlock_categories(self.next_cat)
         self.battle.end_turn()
         self.set_action_mode("end")
 
@@ -248,8 +248,8 @@ class BattleScreen():
                 i_team1 += 1
                 i = i_team1
             else:
-                position_portraits = lambda i: (100 * (i * 1.2 + 1) + 775, 10)
-                position_bars = lambda i: (100 * (i * 1.4 + 1) + 740, 160)
+                position_portraits = lambda i: (-200 * (i * 1.2 + 1) + 975, 10)
+                position_bars = lambda i: (-200 * (i * 1.4 + 1) + 975, 160)
                 i_team2 += 1
                 i = i_team2
             portrait.resize(300, 150)
