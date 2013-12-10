@@ -56,6 +56,22 @@ différentes, ces statistiques peuvent être fixé arbitrairement ou selon une l
 Le combat se déroule en 4 phases dont 2 potentiellement discrètes. 
 Le programme tache de trouver l'arme de base et de la mettre dans 
 la "main" du joueur, si l'arme nécessite des munitions mais qu'aucune 
-munition n'est trouvé alors le joueur doit changer d'arme avant d'attaquer.
-Cette étape de faite, le joueur doit maintenant choisir l'adversaire qui 
-recevra le coup.
+munition n'est trouvé alors le joueur doit changer d'arme avant d'attaquer en
+cliquant sur le boutton attribué `WEAPONS` pour trouver une arme convenable
+(avec des munitions ou sans munitions). Le joueur peut dans tout les cas utiliser
+ses mains s'il se retrouve sans munition.
+Cette étape de faite, le joueur doit maintenant attaquer, il doit cliquer sur `ATTACK`
+puis doit choisir l'adversaire qui recevra le coup en cliquant sur un des portraits. 
+Le joueur ne peut pas choisir un adversaire mort. Une attaque peut potentiellement
+faire baisser la vie du receveur, cela depend de sa défense et de la puissance 
+de l'arme adverse. De plus si l'attaque a nécessité une munition, 
+cette munition est dégradé.
+Une IA minimaliste se charge de produire un comportement similaire au
+joueur, en l'attaquant lui ou ses compagnons selon les même critères.
+L'IA cherche néanmoins à utiliser l'arme la plus puissante du joueur qu'elle
+contrôle.
+Le combat se termine si l'une des deux équipes n'a plus de joueur vivant,
+ou si le héro meurt. Il peut aussi se terminer si le joueur décide de s'échapper.
+L'IA  ne peut pas s'échapper. Est alors déclanché les triggers adéquats en
+fonction de quelle équipe a gagné, ces triggers sont définis en même temps que
+ la déclaration du battle.
