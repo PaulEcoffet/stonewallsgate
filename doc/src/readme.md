@@ -44,34 +44,35 @@ fonction des choix du joueur, ou bien de la réussite du combat ou non. Ces
 triggers peuvent modifier l'état du joueur, des quêtes qu'il a en cours, ou bien
 forcer un déplacement sur une nouvelle scène.
 
-Lorsque l'evenement est un combat, le joueur doit affronter au maximum
-4 adversaires avec l'aide d'au maximum 3 compagnons. Dans le cas des 
-compagnons, le programme se base sur la liste de personnage `hero_compagnon`,
-cette liste peut être modifié au cours du jeu grâce à d'autres évenements.
-Dans l'autre cas, les adversaires sont déterminés dans la déclaration du battle.
-Les capacités initiales d'un personnage au combat sont introduites dans le fichier 
-`characters.json`. En fonction de ce fichier, les personnages auront des statistiques
-différentes, ces statistiques peuvent être fixé arbitrairement ou selon une loi de probabilité.
+Lorsque l'evenement est un combat, le joueur doit affronter au maximum 4
+adversaires avec l'aide d'au maximum 3 compagnons. Dans le cas des compagnons,
+le programme se base sur la liste de personnage `hero_compagnon`, cette liste
+peut être modifié au cours du jeu grâce à d'autres évenements.  Dans l'autre
+cas, les adversaires sont déterminés dans la déclaration du battle.  Les
+capacités initiales d'un personnage au combat sont introduites dans le fichier
+`characters.json`. En fonction de ce fichier, les personnages auront des
+statistiques différentes, ces statistiques peuvent être fixé arbitrairement ou
+selon une loi de probabilité.
 
-Le combat se déroule en 4 phases dont 2 potentiellement discrètes. 
-Le programme tache de trouver l'arme de base et de la mettre dans 
-la "main" du joueur. Si cette arme nécessite des munitions mais qu'aucune 
-munition n'est trouvé alors le joueur doit changer d'arme avant d'attaquer. 
-Il doit pour ce faire cliquer sur le boutton `WEAPONS` qui lui permettra forcemment
-de trouver une arme convenable (avec ou sans munitions). 
-Le joueur peut dans tout les cas utiliser ses mains s'il se retrouve sans munition.
-Cette étape de faite, le joueur doit maintenant attaquer. Pour ce faire il faut cliquer 
-sur `ATTACK`puis choisir l'adversaire qui recevra le coup en cliquant sur un des portraits. 
-Le joueur ne peut pas choisir un adversaire mort. Une attaque peut potentiellement
-faire baisser la vie du receveur, cela depend de sa défense et de la puissance 
-de l'arme adverse. De plus si l'attaque a nécessité une munition, 
-cette munition est dégradé.
-Une IA minimaliste se charge de produire un comportement similaire au
-joueur, en l'attaquant lui ou ses compagnons selon les même critères.
-L'IA cherche néanmoins à utiliser l'arme la plus puissante du joueur qu'elle
-contrôle.
-Le combat se termine si l'une des deux équipes se retrouve sans aucun joueur vivant. 
-Le joueur peut aussi décider de terminer le combat en s'échappant. Ce faisant, il perd le combat.
-L'IA  ne peut pas s'échapper. A la fin du combat, les triggers adéquats sont déclanchés en
-fonction de quelle équipe a gagné, ces triggers sont définis en même temps que
- la déclaration du battle.
+Le combat se déroule en 4 phases dont 2 potentiellement discrètes.  Le programme
+tache de trouver l'arme de base et de la mettre dans la "main" du joueur. Si
+cette arme nécessite des munitions mais qu'aucune munition n'est trouvé alors le
+joueur doit changer d'arme avant d'attaquer.  Il doit pour ce faire cliquer sur
+le boutton `WEAPONS` qui lui permettra forcemment de trouver une arme convenable
+(avec ou sans munitions).  Le joueur peut dans tout les cas utiliser ses mains
+s'il se retrouve sans munition.  Cette étape de faite, le joueur doit maintenant
+attaquer. Pour ce faire il faut cliquer sur `ATTACK`puis choisir l'adversaire
+qui recevra le coup en cliquant sur un des portraits.  Le joueur ne peut pas
+choisir un adversaire mort. Une attaque peut potentiellement faire baisser la
+vie du receveur, cela depend de sa défense et de la puissance de l'arme adverse.
+De plus si l'attaque a nécessité une munition, cette munition est dégradée.
+
+Une IA minimaliste se charge de produire un comportement similaire au joueur, en
+l'attaquant lui ou ses compagnons selon les même critères.  L'IA cherche
+néanmoins à utiliser l'arme la plus puissante du joueur qu'elle contrôle.
+
+Le combat se termine si l'une des deux équipes se retrouve sans aucun joueur
+vivant.  Le joueur peut aussi décider de terminer le combat en s'échappant. Ce
+faisant, il perd le combat.  L'IA  ne peut pas s'échapper. A la fin du combat,
+les triggers adéquats sont déclanchés en fonction de quelle équipe a gagné, ces
+triggers sont définis en même temps que la déclaration du battle.
