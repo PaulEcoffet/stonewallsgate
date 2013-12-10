@@ -271,7 +271,7 @@ class StoryScreen():
     def exec_trigger(self, trigger_cat, params=None):
         """
         Déclanchement du trigger
-        trigger_cat - trigger à enclancher
+        trigger_cat - trigger à enclencher
         params - paramètres du trigger
         """
         if trigger_cat:

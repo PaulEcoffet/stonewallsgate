@@ -325,7 +325,7 @@ class BattleScreen():
 
     def shutdown(self):
         """
-            Supression complète des actions enregistrées
+            Supression complète des evenements enregistrées
         """
         self.eventmanager.purge_callbacks(self.atk_cat)
         self.eventmanager.purge_callbacks(self.info_box_cat)
