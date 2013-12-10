@@ -35,7 +35,7 @@ class Inventory(object):
 
     def load_inventory_from_ref(self, ref):
         with open(data.get_config_path(os.path.join(
-                "inventories", ref + ".json"))) as f:
+                "inventories", ref + ".json")), encoding="utf8") as f:
             items_list = json.load(f)
         self.load_inventory_from_list(items_list)
 
@@ -145,7 +145,7 @@ class Item(object):
 
     @classmethod
     def _load_items_dict(cls):
-        with open(data.get_config_path("items.json")) as f:
+        with open(data.get_config_path("items.json"), encoding="utf8") as f:
             cls._items_dict = json.load(f)
 
     @classmethod
