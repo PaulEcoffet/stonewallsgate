@@ -59,18 +59,11 @@ _button_style = {
     }
 }
 
-def centering(size, k, i, center=True):
-    a = b = 0
-    if not center:
-        k = size[0]-3
-    while 2*a != round(size[0]-k,0) and a <= 7000:
-        a += 0.5
-    while 2*b != round(size[1]-i,0) and b <= 7000:
-        b += 0.5
-    if a == 7000 or b == 7000:
-        print("Ce code est bien foireux")
-    return (a, b)
-
+def center(size, width, height, center=True):
+    if center:
+        return (size[0] - width) // 2, (size[1] - height) // 2
+    else:
+        return 3, (size[1] - height) // 2
 
 class Button(pygame.sprite.Sprite):
     """generic button which can be improved"""
@@ -104,21 +97,21 @@ class Button(pygame.sprite.Sprite):
                              (0, 0, size[0], size[1]), 3)
         text_img = TextRender(size, "joystix", self.style["fontsize"],
                               self.style["default"]["text_color"], self.text)
-        self.default_image.blit(text_img.next(), centering(size, text_img.width, text_img.height, self.style.get("center", True)))
+        self.default_image.blit(text_img.next(), center(size, text_img.width, text_img.height, self.style.get("center", True)))
         if "border_color" in self.style["clicked"]:
             pygame.draw.rect(self.clicked_image,
                              self.style["clicked"]["border_color"],
                              (0, 0, size[0], size[1]), 3)
         text_img = TextRender(size, "joystix", self.style["fontsize"],
                               self.style["clicked"]["text_color"], self.text)
-        self.clicked_image.blit(text_img.next(), centering(size, text_img.width, text_img.height, self.style.get("center", True)))
+        self.clicked_image.blit(text_img.next(), center(size, text_img.width, text_img.height, self.style.get("center", True)))
         if "border_color" in self.style["overred"]:
             pygame.draw.rect(self.overred_image,
                              self.style["overred"]["border_color"],
                              (0, 0, size[0], size[1]), 3)
         text_img = TextRender(size, "joystix", self.style["fontsize"],
                               self.style["overred"]["text_color"], self.text)
-        self.overred_image.blit(text_img.next(), centering(size, text_img.width, text_img.height, self.style.get("center", True)))
+        self.overred_image.blit(text_img.next(), center(size, text_img.width, text_img.height, self.style.get("center", True)))
         self._register_events()
 
     def _register_events(self):
