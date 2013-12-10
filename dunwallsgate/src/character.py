@@ -32,10 +32,7 @@ class Character(object):
         else:
             data = get_character_data("unknown")
         self._health = 0
-        if data["inventory"]:
-            self._inventory = inventory.Inventory(data["inventory"])
-        else:
-            self._inventory = inventory.Inventory()
+        self._inventory = inventory.Inventory()
         self.name = self.operations(custom.get("name", data["name"]))
         self.maxhealth = self.operations(custom.get(
             "maxhealth", data["maxhealth"]))
