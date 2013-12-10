@@ -101,10 +101,10 @@
     {
         "ref": "chef",
         "name": "Zibla",
-        "maxhealth": 250,
+        "maxhealth": 140,
         "range_attack": 0,
-        "attack": 12,
-        "defense": 20,
+        "attack": 10,
+        "defense": 15,
         "initiative": 20,
         "inventory": "chief_inventory",
         "abilities": []

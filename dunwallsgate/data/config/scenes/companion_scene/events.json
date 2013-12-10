@@ -9,7 +9,11 @@
 				{
 					"trigger_cat" : "switch_scene", 
 					"params" : "combat_high"
-				}
+				},
+				{
+					"trigger_cat" : "modif_health", 
+					"params" : ["hero", 50]
+				}       
             ]
     }
 ]
