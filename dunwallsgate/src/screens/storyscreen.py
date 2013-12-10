@@ -152,10 +152,10 @@ class StoryScreen():
                         self.left_one = self.msg[_id]
                 if self.msg[_id] == self.left_one:
                     portrait.rect = (portrait.image
-                                     .get_rect(midtop=(250, 160)))
+                                     .get_rect(midtop=(250, 159)))
                 else:
                     portrait.rect = (portrait.image
-                                     .get_rect(midtop=(800, 160)))
+                                     .get_rect(midtop=(800, 159)))
                 portrait.resize()
                 portraits.append(portrait)
         return portraits
