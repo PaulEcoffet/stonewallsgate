@@ -8,7 +8,7 @@ import decoder
 
 
 class Game():
-    """Contains the current state of the game"""
+    """Contient l'état actuel du jeu"""
 
     def __init__(self):
         self.window = None
@@ -24,22 +24,31 @@ class Game():
         self.combat_state = ""
         self.cache = CacheSystem()
         self.next_scene = "intro"
-    
+
     def get_character(self, ref):
+        """
+        Retourne le character demandé s'il existe, sinon, il le crée
+        et le retourne
+        """
         for charac in self.characters:
             if ref == charac.ref:
                 return charac
         self.characters.append(Character(ref))
         return self.characters[-1]
-        
+
     def start(self, window):
+        """
+        Démarre le jeu
+        """
         self.window = window
         self.game_event = GameEvent(self)
 
     def change_screen(self):
+        """Change l'écran de jeu"""
         self.window.set_screen(self.screen)
 
     def change_scene(self, scene_name=None):
+        """Change la scene en cours"""
         if not scene_name:
             scene_name = self.next_scene
         self.game_event.scene = decoder.get_scene(scene_name)
@@ -47,7 +56,8 @@ class Game():
 
 class Base():
     """
-    Contains the state of the base of the hero.
+    Contient l'état de la base du hero
+    Cet élément du jeu n'a pas encore été développé
     """
 
     def __init__(self, food=0, water=0, energy=0, inventory=None):
