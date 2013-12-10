@@ -45,14 +45,10 @@ class HomeScreen():
         self.exit_btn.rect = self.exit_btn.image.get_rect(
             bottomleft=(30,
                         self.surface.get_height() - 83))
-        self.continue_btn.rect = self.continue_btn.image.get_rect(
-            bottomleft=(30,
-                        self.surface.get_height() - 170))
         self.new_btn.rect = self.new_btn.image.get_rect(
             bottomleft=(30,
                         self.surface.get_height() - 125))
         self.buttons = pygame.sprite.RenderPlain(self.exit_btn,
-                                                 self.continue_btn,
                                                  self.new_btn)
         # Events registration
         self.eventmanager.on_click_on(self.exit_btn,
