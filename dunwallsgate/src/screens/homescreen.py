@@ -24,6 +24,10 @@ class HomeScreen():
         self.first_draw = False
 
     def start(self, window, eventmanager):
+        """Démarre l'écran
+        window - La fenêtre du jeu
+        eventmanager - Le gestionnaire d'évènement
+        """
         self.window = window
         self.surface = window.surface
         self.eventmanager = eventmanager
@@ -60,12 +64,18 @@ class HomeScreen():
             self.new_btn, lambda e: self.window.start_game(Game()), self)
 
     def toggle_theme(self, event):
+        """
+        Démarre ou eteint la musique avec 500ms de fondu
+        """
         soundmanager.toggle_music(500)
 
     def update(self):
         pass
 
     def draw(self):
+        """
+        Efface puis (re)déssine les elements graphiques
+        """
         if self.first_draw:
             self.surface.blit(self.background, (0, 0))
             self.first_draw = False

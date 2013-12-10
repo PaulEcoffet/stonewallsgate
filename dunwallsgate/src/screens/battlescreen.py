@@ -151,7 +151,7 @@ class BattleScreen():
     def set_action_mode(self, mode):
         """
             Réponses aux actions utilisateurs
-            mode - action demandé
+            mode - action demandée
         """
         self._action_mode = mode
         self.purge_info_box()

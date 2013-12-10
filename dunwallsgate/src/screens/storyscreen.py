@@ -32,6 +32,10 @@ class StoryScreen():
         self.next_dialogue_cat = object()  # Event manager category
 
     def start(self, window, eventmanager):
+        """Démarre l'écran
+        window - La fenêtre du jeu
+        eventmanager - Le gestionnaire d'évènement
+        """
         self.window = window
         self.surface = window.surface
         self.eventmanager = eventmanager
@@ -49,6 +53,11 @@ class StoryScreen():
         self.init_story()
 
     def smooth_update(self, event):
+        """
+        Récupère un nouvel evenement 
+        Actualise l'écran avec ses nouveautés
+        (nouveau fond ou nouveaux dialogues)
+        """
         self.event = event
         self.end = False
         if self.bg_ref != self.event.background:
@@ -57,6 +66,10 @@ class StoryScreen():
         self.init_story()
 
     def update(self):
+        """
+        Met à jour des elements graphiques de l'écran 
+        (Bouttons, Portraits) si besoin est
+        """
         if self.choices:
             self.suite_box.click_time = 0
         self.graphic_elements.update()
@@ -68,6 +81,9 @@ class StoryScreen():
             self.highlighted_pending = []
 
     def draw(self):
+        """
+        Efface puis (re)déssine les elements graphiques
+        """
         if self.start_scene or self.new_background:
             self.surface.blit(self.background, (0, 0))
             self.start_scene = False
@@ -87,6 +103,10 @@ class StoryScreen():
             self.portrait_update = False
 
     def init_sprites(self):
+        """
+        Initialise les elements graphiques de base
+        (Fond, boite de dialogue et boutton 'suite')
+        """
         if not self.background:
             self.set_background(self.event.background)
 
@@ -101,9 +121,16 @@ class StoryScreen():
                                     self, "SUITE", (77, 20), "box_options")
 
     def purge_textbox(self):
+        """
+            Vidage du contenu de la boite de dialogue via
+            Application d'un film noir transparent
+        """
         self.dialogue_box.image.fill((0, 0, 0, 140))
 
     def set_background(self, background):
+        """
+            Récupère le fond depuis le cache
+        """
         self.bg_ref = background
         try:
             self.background = self.game.cache.image_backgrounds[self.bg_ref]
@@ -113,6 +140,11 @@ class StoryScreen():
                   "Default BG has been set") % self.bg_ref)
 
     def init_story(self):
+        """
+            Démarre la cinématique
+            Formatte depuis le cache les dialogues 
+            (Le cache contiendra les panneaux)
+        """
         self.game.cache.clear_dialogues()
         self.game.cache.format_dialogues(self.event.dialogues)
         self.left_one = ""
@@ -121,6 +153,15 @@ class StoryScreen():
         self.show_dialogue()
 
     def show_dialogue(self, *args):
+        """
+            Enclanche l'apparition des dialogues sur l'ecran
+            Si un redémarrage de l'evenement est demandé:
+                on reformatte les dialogues via les messages 
+                stockés dans l'evenement
+            Si aucun panneau de message trouvé:
+                Déclaration de l'écran comme terminé
+                Effacement des dialogues du cache
+        """
         self.msg = self.game.cache.next_panel()
         if self.msg and isinstance(self.msg, dict):
             self.choices = self.ask_choices()
@@ -139,8 +180,11 @@ class StoryScreen():
             self.game.cache.clear_dialogues()
 
     def set_portraits(self):
-        """ Manage portraits (DirtySprite) to display, if there is.
-        First charac to speak is always display on the left side."""
+        """ 
+        Place les portraits aux bons emplacement.
+        Le premier personnage qui parle se situra toujours 
+        à gauche tant qu'il est présent.
+        """
         portraits = []
         for _id in self.msg:
             if self.msg[_id] and _id in ["talker", "hearer"]:
@@ -161,6 +205,9 @@ class StoryScreen():
         return portraits
 
     def get_character_portrait(self, charac, cat):
+        """Récupère le portait du personnage 
+        depuis le cache, sinon création d'un portrait
+        """
         for portrait in self.portraits:
             if (charac, cat) == portrait.id:
                 return portrait
@@ -169,6 +216,10 @@ class StoryScreen():
         return self.portraits[-1]
 
     def ask_choices(self):
+        """
+        Placement des bouttons de choix si choix dans le dialogue
+        Prépare au déclanchement des triggers à l'appui du boutton
+        """
         choices_sprite = []
         if self.msg["choices"]:
             self.eventmanager.lock_categories(self.next_dialogue_cat)
@@ -196,14 +247,14 @@ class StoryScreen():
                     for trigger in choice["triggers"]:
                         self.eventmanager.on_click_on(
                             choices_sprite[-1], (lambda trigger_cat, params:
-                                lambda e: self.add_trigger(trigger_cat, params))
+                                lambda e: self.exec_trigger(trigger_cat, params))
                                     (trigger.get("trigger_cat", None),
                                      trigger.get("params", None)),
                                      self.choice_actions_cat)
                 elif "trigger_cat" in choice:
                     self.eventmanager.on_click_on(choices_sprite[-1],
                             (lambda trigger_cat, params: \
-                                lambda e: self.add_trigger(trigger_cat, params)) \
+                                lambda e: self.exec_trigger(trigger_cat, params)) \
                                     (choice.get("trigger_cat", None),
                                      choice.get("params", None)),
                                      self.choice_actions_cat)
@@ -217,16 +268,30 @@ class StoryScreen():
                     self.show_dialogue, self.choice_actions_cat)
         return choices_sprite
 
-    def add_trigger(self, trigger_cat, params=None):
+    def exec_trigger(self, trigger_cat, params=None):
+        """
+        Déclanchement du trigger
+        trigger_cat - trigger à enclancher
+        params - paramètres du trigger
+        """
         if trigger_cat:
             self.game.game_event.game_triggers[trigger_cat](params)
 
     def activate_dialogue_events(self):
+        """
+            Déblocage des evenements enregistrées
+        """
         self.eventmanager.unlock_categories(self.next_dialogue_cat)
 
     def purge_choice_actions(self):
+        """
+            Supression des evenements enregistrées
+        """
         self.eventmanager.purge_callbacks(self.choice_actions_cat)
 
     def shutdown(self):
+        """
+            Supression complète des evenements enregistrées
+        """
         self.eventmanager.purge_callbacks(self.choice_actions_cat)
         self.eventmanager.purge_callbacks(self.next_dialogue_cat)
