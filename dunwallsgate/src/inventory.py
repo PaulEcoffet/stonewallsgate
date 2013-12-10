@@ -99,8 +99,8 @@ class Inventory(object):
         for item in self.items:
             if isinstance(item, Ammo) and item.ref in weapon.compatible_ammo:
                 ammo_list.append(item)
-            if None in weapon.compatible_ammo:
-                ammo_list.append(None)
+        if None in weapon.compatible_ammo:
+            ammo_list.append(None)
         return ammo_list
 
 
