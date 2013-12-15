@@ -72,6 +72,11 @@ class TestTextPanel(unittest.TestCase):
                           " elit. Praesent tristique, turpis vitae facilisis"
                           " condimentum, libero libero venenatis ipsum,"
                           " id commodo lorem ante in eros.\nDonec elementum,"
+                          " nisi ut ornare rutrum."
+                          " Lorem ipsum dolor sit amet, consectetur adipiscing"
+                          " elit. Praesent tristique, turpis vitae facilisis"
+                          " condimentum, libero libero venenatis ipsum,"
+                          " id commodo lorem ante in eros.\nDonec elementum,"
                           " nisi ut ornare rutrum.", font=("larabiefont", 18),
                           width=self.surface.get_rect().width - 20,
                           height=self.surface.get_rect().height - 20)
@@ -80,4 +85,7 @@ class TestTextPanel(unittest.TestCase):
             self.surface.blit(panel.image, (10, 10))
             panel.update()
             fpsclock.tick(30)
+            if panel.anim_has_ended and panel.has_next:
+                panel.next()
             pygame.display.flip()
+        self.fail()

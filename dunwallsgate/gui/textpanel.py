@@ -58,6 +58,8 @@ class TextPanel(pygame.sprite.DirtySprite):
 
     def __init__(self, text, **options):
         self.realtext = text
+        self.rect = pygame.Rect(0, 0, 0, 0)
+        self.image = None
         self.cursor_char = 0
         self.cursor_line = 0
         self.panel_first_line_index = 0
@@ -100,10 +102,19 @@ class TextPanel(pygame.sprite.DirtySprite):
             raise ValueError("There is only one panel when the height of the"
                              " surface is not provided")
         if value >= 0:
-            self.panel_first_line_index = value * self.lines_per_panel
+            self.panel_first_line_index = min(value * self.lines_per_panel,
+                                              len(self.lines) - 1)
         else:
-            self.panel_first_line_index = (len(self.lines) -
-                                          (value * self.lines_per_panel))
+            self.panel_first_line_index = max(0, len(self.lines) -
+                                              (value * self.lines_per_panel))
+        self.cursor_line = self.panel_first_line_index
+        self.cursor_char = 1
+
+    def next(self):
+        self.current_panel_index += 1
+
+    def prev(self):
+        self.current_panel_index = max(0, self.current_panel_index - 1)
 
     def update(self, **options):
         to_end = options.get("to_end", False)
@@ -127,17 +138,10 @@ class TextPanel(pygame.sprite.DirtySprite):
             lines_to_draw = self.lines[self.panel_first_line_index:]
         else:
             lines_to_draw = self.lines[self.panel_first_line_index:
-                                       self.panel_first_line_index
-                                       + self.lines_per_panel]
-        if self.box[0] != INF:
-            width = self.box[0]
-        else:
-            width = max([self.font.get_rect(text).width
-                         for text in lines_to_draw])
-        if self.box[1] != INF:
-            height = self.box[1]
-        else:
-            height = self.line_interval * len(lines_to_draw)
+                                       self.panel_last_line_index + 1]
+        width = max([self.font.get_rect(text).width
+                     for text in lines_to_draw])
+        height = self.line_interval * len(lines_to_draw)
         bg = pygame.Surface((width, height)).convert_alpha()
         bg.fill((255, 255, 255, 0))
         for i, line in enumerate(lines_to_draw):
@@ -145,10 +149,11 @@ class TextPanel(pygame.sprite.DirtySprite):
             if i + self.panel_first_line_index > self.cursor_line:
                 break
             elif i + self.panel_first_line_index == self.cursor_line:
-                self.font.render_to(bg, pos, line[:self.cursor_char])
+                self.font.render_to(bg, pos, line[:self.cursor_char + 1])
             else:
                 self.font.render_to(bg, pos, line)
         self.image = bg
+        self.rect.size = (width, height)
 
     @property
     def anim_has_ended(self):
@@ -158,8 +163,12 @@ class TextPanel(pygame.sprite.DirtySprite):
 
     @property
     def panel_last_line_index(self):
-        return min(self.panel_first_line_index + self.lines_per_panel,
+        return min(self.panel_first_line_index + self.lines_per_panel - 1,
                    len(self.lines) - 1)
+
+    @property
+    def has_next(self):
+        return self.panel_last_line_index < len(self.lines) - 1
 
     @classmethod
     def _load_font(cls, font_tuple):
