@@ -63,6 +63,7 @@ class TextPanel(pygame.sprite.DirtySprite):
         self.cursor_char = 0
         self.cursor_line = 0
         self.panel_first_line_index = 0
+        self.color = pygame.Color(*options.get("color", (0, 0, 0)))
         font_tuple = options.get("font", ("larabiefont", 15))
         self.font = TextPanel._font_cache.get(font_tuple,
                                               TextPanel._load_font(font_tuple))
@@ -110,8 +111,9 @@ class TextPanel(pygame.sprite.DirtySprite):
         self.cursor_line = self.panel_first_line_index
         self.cursor_char = 1
 
-    def next(self):
+    def next(self, to_end=False):
         self.current_panel_index += 1
+        self.update_image(to_end)
 
     def prev(self):
         self.current_panel_index = max(0, self.current_panel_index - 1)
@@ -149,9 +151,10 @@ class TextPanel(pygame.sprite.DirtySprite):
             if i + self.panel_first_line_index > self.cursor_line:
                 break
             elif i + self.panel_first_line_index == self.cursor_line:
-                self.font.render_to(bg, pos, line[:self.cursor_char + 1])
+                stop = self.cursor_char + 1
             else:
-                self.font.render_to(bg, pos, line)
+                stop = len(line)
+            self.font.render_to(bg, pos, line[:stop], self.color)
         self.image = bg
         self.rect.size = (width, height)
 

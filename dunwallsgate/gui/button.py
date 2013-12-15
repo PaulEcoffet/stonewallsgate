@@ -1,5 +1,5 @@
 import pygame
-from screens.text_render import TextRender
+from gui.textpanel import TextPanel
 
 GREEN_RGB = (0, 255, 0)
 YELLOW_RGB = (255, 215, 0)
@@ -22,7 +22,7 @@ _button_style = {
         "default": {
             "text_color": (255, 255, 255),
             "background_color": BLACK_RGB,
-            "border_color": (122,66,0)
+            "border_color": (122, 66, 0)
         },
         "fontsize": 22
     },
@@ -54,16 +54,11 @@ _button_style = {
             "text_color": (255, 158, 0),
             "background_color": (0, 0, 0, 120)
         },
-        "center" : False,
+        "center": False,
         "fontsize": 17
     }
 }
 
-def center(size, width, height, center=True):
-    if center:
-        return (size[0] - width) // 2, (size[1] - height) // 2
-    else:
-        return 3, (size[1] - height) // 2
 
 class Button(pygame.sprite.Sprite):
     """generic button which can be improved"""
@@ -85,33 +80,25 @@ class Button(pygame.sprite.Sprite):
         self.id = None
         self.events = []
         self.rect = pygame.Rect(0, 0, size[0], size[1])
-        self.default_image = pygame.surface.Surface(size, pygame.SRCALPHA)
-        self.default_image.fill(self.style["default"]["background_color"])
-        self.clicked_image = pygame.surface.Surface(size, pygame.SRCALPHA)
-        self.clicked_image.fill(self.style["clicked"]["background_color"])
-        self.overred_image = pygame.surface.Surface(size, pygame.SRCALPHA)
-        self.overred_image.fill(self.style["overred"]["background_color"])
-        if "border_color" in self.style["default"]:
-            pygame.draw.rect(self.default_image,
-                             self.style["default"]["border_color"],
-                             (0, 0, size[0], size[1]), 3)
-        text_img = TextRender(size, "joystix", self.style["fontsize"],
-                              self.style["default"]["text_color"], self.text)
-        self.default_image.blit(text_img.next(), center(size, text_img.width, text_img.height, self.style.get("center", True)))
-        if "border_color" in self.style["clicked"]:
-            pygame.draw.rect(self.clicked_image,
-                             self.style["clicked"]["border_color"],
-                             (0, 0, size[0], size[1]), 3)
-        text_img = TextRender(size, "joystix", self.style["fontsize"],
-                              self.style["clicked"]["text_color"], self.text)
-        self.clicked_image.blit(text_img.next(), center(size, text_img.width, text_img.height, self.style.get("center", True)))
-        if "border_color" in self.style["overred"]:
-            pygame.draw.rect(self.overred_image,
-                             self.style["overred"]["border_color"],
-                             (0, 0, size[0], size[1]), 3)
-        text_img = TextRender(size, "joystix", self.style["fontsize"],
-                              self.style["overred"]["text_color"], self.text)
-        self.overred_image.blit(text_img.next(), center(size, text_img.width, text_img.height, self.style.get("center", True)))
+        self._image = {"clicked": None, "overred": None, "default": None}
+        for key in self._image:
+            self._image[key] = pygame.surface.Surface(size, pygame.SRCALPHA)
+            self._image[key].fill(self.style[key]["background_color"])
+            if "border_color" in self.style[key]:
+                pygame.draw.rect(self._image[key],
+                                 self.style[key]["border_color"],
+                                 (0, 0, size[0], size[1]), 3)
+            text_img = TextPanel(self.text, font=("joystix",
+                                                  self.style["fontsize"]),
+                                 color=self.style[key]["text_color"],
+                                 box=size)
+            pos = pygame.Rect()
+            if self.style.get("center", True):
+                pos.center = self.rect.center
+            else:
+                pos.ycenter = self.rect.ycenter
+                pos.x = 3
+            self._image[key].blit(text_img.image, pos)
         self._register_events()
 
     def _register_events(self):
@@ -166,11 +153,11 @@ class Button(pygame.sprite.Sprite):
     @property
     def image(self):
         if self.is_clicked or self.click_time:
-            return self.clicked_image
+            return self._image["clicked"]
         elif self.overred:
-            return self.overred_image
+            return self._image["clicked"]
         else:
-            return self.default_image
+            return self._image["clicked"]
 
     @property
     def click_time(self):
