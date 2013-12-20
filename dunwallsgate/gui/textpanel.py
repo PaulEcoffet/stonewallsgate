@@ -21,25 +21,20 @@ def _wrap_word(line, font, box):
     elif font.get_rect(line).width <= box[0]:
         return [line]
     else:
-        run = True
         cur_line = ""
         next_line = line
-        while run:
+        while font.get_rect(cur_line).width <= box[0]:
             linesplit = next_line.split(" ", 1)
             cur_line += linesplit[0] + " "
             if len(linesplit) > 1:
                 next_line = linesplit[1]
             else:
                 next_line = ""
-            run = font.get_rect(cur_line).width <= box[0]\
-                and len(linesplit) > 1
         cur_line = cur_line.strip()  # Remove the " " at the end
-        if font.get_rect(cur_line).width > box[0]:  # if last word must be
-                                                    # removed
-            linesplit = cur_line.rsplit(" ", 1)
-            cur_line = linesplit[0].strip()
-            if len(linesplit) > 1:  # If it's not the word that's too big
-                next_line = linesplit[1] + " " + next_line
+        linesplit = cur_line.rsplit(" ", 1)
+        cur_line = linesplit[0].strip()
+        if len(linesplit) > 1:  # If it's not the word that's too big
+            next_line = linesplit[1] + " " + next_line
         next_line = next_line.strip()
         return [cur_line] + _wrap_word(next_line, font, box)
 
@@ -60,7 +55,7 @@ class TextPanel(pygame.sprite.DirtySprite):
         self.realtext = text
         self.rect = pygame.Rect(0, 0, 0, 0)
         self.image = None
-        self.cursor_char = 0
+        self._cursor_char = 0
         self.cursor_line = 0
         self.panel_first_line_index = 0
         self.color = pygame.Color(*options.get("color", (0, 0, 0)))
@@ -76,19 +71,16 @@ class TextPanel(pygame.sprite.DirtySprite):
         if self.lines_per_panel != INF:
             self.lines_per_panel = int(self.lines_per_panel)
         self._current_panel_index = 0
+        self.cursor_char = 0
         self.update_image()
 
     def _create_lines(self):
-        if not self.font:
+        if not self.font:  # pragma: no coverage
             raise TypeError("Current font is not valid")
         final_lines = []
         for line in self.realtext.splitlines():
             final_lines.extend(_wrap_word(line, self.font, self.box))
         return final_lines
-
-    def next_panel(self, to_end=False):
-        self.current_panel_index += 1
-        self.update_image(to_end)
 
     @property
     def current_panel_index(self):
@@ -99,43 +91,44 @@ class TextPanel(pygame.sprite.DirtySprite):
         if not isinstance(value, int):
             raise ValueError("Value for current_panel_index should be a int"
                              "not a {}".format(type(value)))
-        if self.lines_per_panel == INF and value != 0:
-            raise ValueError("There is only one panel when the height of the"
-                             " surface is not provided")
+        if value >= math.ceil(len(self.lines) / self.lines_per_panel):
+            raise ValueError("There is less than {} panels".format(value - 1))
         if value >= 0:
-            self.panel_first_line_index = min(value * self.lines_per_panel,
-                                              len(self.lines) - 1)
+            self.panel_first_line_index = value * self.lines_per_panel
         else:
-            self.panel_first_line_index = max(0, len(self.lines) -
-                                              (value * self.lines_per_panel))
+            self.panel_first_line_index = max(
+                0, len(self.lines) - (abs(value) * self.lines_per_panel))
         self.cursor_line = self.panel_first_line_index
-        self.cursor_char = 1
+        self.cursor_char = 0
 
     def next(self, to_end=False):
         self.current_panel_index += 1
-        self.update_image(to_end)
+        if to_end:
+            self.to_end()
+        else:
+            self.update_image()
 
-    def prev(self):
+    def prev(self, to_end=False):
         self.current_panel_index = max(0, self.current_panel_index - 1)
+        if to_end:
+            self.to_end()
+        else:
+            self.update_image()
+
+    def to_end(self):
+        self.cursor_line = self.panel_last_line_index
+        self.cursor_char = len(self.lines[self.panel_last_line_index]) - 1
+        self.update_image()
 
     def update(self, **options):
         to_end = options.get("to_end", False)
         if not to_end and not self.anim_has_ended:
             self.cursor_char += 1
-            if self.cursor_char == len(self.lines[self.cursor_line]):
-                self.cursor_line += 1
-                self.cursor_char = 1
-        self.update_image(to_end)
+            self.update_image()
+        elif to_end:
+            self.to_end()
 
-    def update_image(self, to_end=False):
-        if to_end:
-            self.cursor_line = min(self.panel_first_line_index
-                                   + self.lines_per_panel,
-                                   len(self.lines) - 1)
-            self.cursor_char = len(self.lines[self.cursor_line]) - 1
-        self._update_image()
-
-    def _update_image(self):
+    def update_image(self):
         if self.lines_per_panel == INF:
             lines_to_draw = self.lines[self.panel_first_line_index:]
         else:
@@ -172,6 +165,17 @@ class TextPanel(pygame.sprite.DirtySprite):
     @property
     def has_next(self):
         return self.panel_last_line_index < len(self.lines) - 1
+
+    @property
+    def cursor_char(self):
+        return self._cursor_char
+
+    @cursor_char.setter
+    def cursor_char(self, value):
+        self._cursor_char = value
+        while self._cursor_char >= len(self.lines[self.cursor_line]):
+                self.cursor_line += 1
+                self._cursor_char = 0
 
     @classmethod
     def _load_font(cls, font_tuple):
