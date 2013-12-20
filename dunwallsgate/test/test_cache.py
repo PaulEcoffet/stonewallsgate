@@ -21,3 +21,7 @@ class TestCache(unittest.TestCase):
         a = cache.get_portrait_image("hero", "front")
         b = cache.get_portrait_image("hero", "front")
         self.assertIs(a, b)
+
+    def test_portrait_get_unexisting(self):
+        self.assertRaises(ValueError, cache.get_portrait_image,
+                          "__unexisting__", "front")
