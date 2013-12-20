@@ -2,14 +2,13 @@ import unittest
 import pygame
 from gui.textpanel import TextPanel
 
-from fixtures import test_window
-
 
 class TestTextPanel(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.surface = test_window.window
+        pygame.init()
+        cls.surface = pygame.display.set_mode((200, 200))
 
     def test_line_number(self):
         panel = TextPanel("word\nword", height=2000)
@@ -84,8 +83,8 @@ class TestTextPanel(unittest.TestCase):
         self.assertRaises(ValueError, wrong_value, panel)
 
     def test_update(self):
-        panel = TextPanel("w " + "word" * 5, font=("larabiefont", 10), width=50,
-                          height=40)
+        panel = TextPanel("w " + "word" * 5, font=("larabiefont", 10),
+                          width=50, height=40)
         cur_line = panel.cursor_line
         cur_char = panel.cursor_char
         panel.update()
