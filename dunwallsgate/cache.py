@@ -31,10 +31,10 @@ def get_portrait_image(ref, position):
     if ref in _portrait_images:
         if position in _portrait_images[ref]:
             return _portrait_images[ref][position]
-        elif "front" in _portrait_images[ref]: # pragma: no cover
+        elif "front" in _portrait_images[ref]:  # pragma: no cover
             return _portrait_images[ref]["front"]
-    raise Exception("Character Image (%s) not found !"
-                    "(Check your images)" % ref)
+    raise ValueError("Character Image (%s) not found !"
+                     "(Check your images)" % ref)
 
 
 def load_backgrounds():
