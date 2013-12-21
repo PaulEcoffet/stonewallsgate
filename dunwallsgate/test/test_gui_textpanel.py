@@ -74,6 +74,14 @@ class TestTextPanel(unittest.TestCase):
         self.assertEqual(panel.cursor_char,
                          len(panel.lines[panel.panel_last_line_index]) - 1)
 
+    def test_has_next(self):
+        panel = TextPanel("word " * 6, font=("larabiefont", 10), width=100,
+                          height=20)
+        print(panel.lines)
+        self.assertEqual(panel.has_next, True)
+        panel.next()
+        self.assertEqual(panel.has_next, False)
+
     def test_current_panel_index_not_int(self):
         panel = TextPanel("word " * 5, font=("larabiefont", 10), width=50,
                           height=20)

@@ -232,7 +232,7 @@ class Weapon(Item):
         """
         if not ammo and None in self.compatible_ammo:
             self._ammo = ammo
-        elif ammo.ref in self.compatible_ammo:
+        elif ammo and ammo.ref in self.compatible_ammo:
             self._ammo = ammo
         else:
             raise IncompatibleAmmoException()

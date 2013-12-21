@@ -5,8 +5,6 @@ différentes exceptions qui peuvent se produire durant celui-ci.
 import random
 
 import inventory
-from character import Character
-from ia import IA
 
 
 class Battle(object):
@@ -20,7 +18,8 @@ class Battle(object):
         self.team2 = team2
         self.run = [False, False]
         self.turn_list = sorted(team1 + team2,
-                                key=lambda character: character.initiative)
+                                key=lambda character: character.initiative,
+                                reverse=True)
         self.cur_player_index = 0
         self.has_played = False
         self.last_action = ""
@@ -125,7 +124,7 @@ class Battle(object):
         AlreadyPlayedException.
         """
         if not self.has_played:
-            if weapon in self.playing_char.inventory.items:
+            if weapon in self.playing_char.inventory.weapons:
                 if ammo in self.playing_char.inventory.items or not ammo:
                     try:
                         weapon.ammo = ammo
@@ -198,21 +197,3 @@ class AlreadyPlayedException(Exception):
     pass
 
 
-def test():
-    gordon = Character("hero")
-    gordon.inventory = inventory.Inventory("begining_inventory")
-    gordon.inventory.get_first("gun_ammo").amount = 3
-    klim = Character("klim")
-    battle = Battle([gordon], [klim])
-    ia = IA(battle)
-    while not battle.winner:
-        print("It's {} turn".format(battle.playing_char.name))
-        ia.play()
-        print("klim health: {}".format(klim.health))
-        print("gordon health: {}".format(gordon.health))
-        print(battle.end_turn())
-    print("The team {} has won".format(battle.winner))
-
-
-if __name__ == "__main__":
-    test()
